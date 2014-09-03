@@ -1,0 +1,14 @@
+{
+  "name": "user-tenant-security",
+  "version": "0.0.1",
+  "description": "Signup and Manage Users and Tenants with Node.js and MongoDB.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mainul Islam",
+  "license": "ISC",
+  "dependencies": {
+    "hapi": "^6.7.1"
+  }
+}
