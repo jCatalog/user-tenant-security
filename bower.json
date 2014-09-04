@@ -1,0 +1,20 @@
+{
+  "name": "user-tenant-security",
+  "version": "0.0.1",
+  "authors": [
+    "mainul098 <mainul098@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.2.23",
+    "angular-route": "~1.2.23"
+  }
+}
