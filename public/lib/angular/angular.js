@@ -182,7 +182,7 @@ function minErr(module) {
  */
 
 // The name of a form control's ValidityState property.
-// This is used so that it's possible for internal tests to create mock ValidityStates.
+// This is used so that it's possible for internal test to create mock ValidityStates.
 var VALIDITY_STATE_PROPERTY = 'validity';
 
 /**
@@ -1378,7 +1378,7 @@ function angularInit(element, bootstrap) {
  *
  * See: {@link guide/bootstrap Bootstrap}
  *
- * Note that ngScenario-based end-to-end tests cannot use this function to bootstrap manually.
+ * Note that ngScenario-based end-to-end test cannot use this function to bootstrap manually.
  * They must use {@link ng.directive:ngApp ngApp}.
  *
  * Angular will detect if it has been loaded into the browser more than once and only allow the
@@ -4359,7 +4359,7 @@ function $$AsyncCallbackProvider(){
  * - hide all the global state in the browser caused by the window object
  * - abstract away all the browser specific features and inconsistencies
  *
- * For tests we provide {@link ngMock.$browser mock implementation} of the `$browser`
+ * For test we provide {@link ngMock.$browser mock implementation} of the `$browser`
  * service, which can be used for convenient testing of the application without the interaction with
  * the real browser apis.
  */
@@ -4418,7 +4418,7 @@ function Browser(window, document, $log, $sniffer) {
   self.notifyWhenNoOutstandingRequests = function(callback) {
     // force browser to execute all pollFns - this is needed so that cookies and other pollers fire
     // at some deterministic time in respect to the test runner's actions. Leaving things up to the
-    // regular poller would result in flaky tests.
+    // regular poller would result in flaky test.
     forEach(pollFns, function(pollFn){ pollFn(); });
 
     if (outstandingRequestCount === 0) {
@@ -4686,7 +4686,7 @@ function Browser(window, document, $log, $sniffer) {
    * Executes a fn asynchronously via `setTimeout(fn, delay)`.
    *
    * Unlike when calling `setTimeout` directly, in test this function is mocked and instead of using
-   * `setTimeout` in tests, the fns are queued in an array, which can be programmatically flushed
+   * `setTimeout` in test, the fns are queued in an array, which can be programmatically flushed
    * via `$browser.defer.flush()`.
    *
    */
@@ -7329,7 +7329,7 @@ function $DocumentProvider(){
  * The default implementation simply delegates to `$log.error` which logs it into
  * the browser console.
  *
- * In unit tests, if `angular-mocks.js` is loaded, this service is overridden by
+ * In unit test, if `angular-mocks.js` is loaded, this service is overridden by
  * {@link ngMock.$exceptionHandler mock $exceptionHandler} which aids in testing.
  *
  * ## Example:
@@ -8906,7 +8906,7 @@ function $IntervalProvider() {
       * number of iterations that have run.
       * To cancel an interval, call `$interval.cancel(promise)`.
       *
-      * In tests you can use {@link ngMock.$interval#flush `$interval.flush(millis)`} to
+      * In test you can use {@link ngMock.$interval#flush `$interval.flush(millis)`} to
       * move forward by `millis` milliseconds and trigger any functions scheduled to run in that
       * time.
       *
@@ -12432,7 +12432,7 @@ function $RootScopeProvider(){
        * you can register a `watchExpression` function with
        * {@link ng.$rootScope.Scope#$watch $watch()} with no `listener`.
        *
-       * In unit tests, you may need to call `$digest()` to simulate the scope life cycle.
+       * In unit test, you may need to call `$digest()` to simulate the scope life cycle.
        *
        * # Example
        * ```js
@@ -12534,7 +12534,7 @@ function $RootScopeProvider(){
             }
 
             // Insanity Warning: scope depth-first traversal
-            // yes, this code is a bit crazy, but it works and we have tests to prove it!
+            // yes, this code is a bit crazy, but it works and we have test to prove it!
             // this piece should be kept in sync with the traversal in $broadcast
             if (!(next = (current.$$childHead ||
                 (current !== target && current.$$nextSibling)))) {
@@ -12956,7 +12956,7 @@ function $RootScopeProvider(){
           }
 
           // Insanity Warning: scope depth-first traversal
-          // yes, this code is a bit crazy, but it works and we have tests to prove it!
+          // yes, this code is a bit crazy, but it works and we have test to prove it!
           // this piece should be kept in sync with the traversal in $digest
           // (though it differs due to having the extra check for $$listenerCount)
           if (!(next = ((current.$$listenerCount[name] && current.$$childHead) ||
@@ -14254,7 +14254,7 @@ function $TimeoutProvider() {
       *
       * To cancel a timeout request, call `$timeout.cancel(promise)`.
       *
-      * In tests you can use {@link ngMock.$timeout `$timeout.flush()`} to
+      * In test you can use {@link ngMock.$timeout `$timeout.flush()`} to
       * synchronously flush the queue of deferred functions.
       *
       * @param {function()} fn A function, whose execution should be delayed.
@@ -14320,7 +14320,7 @@ function $TimeoutProvider() {
 // NOTE:  The usage of window and document instead of $window and $document here is
 // deliberate.  This service depends on the specific behavior of anchor nodes created by the
 // browser (resolving and parsing URLs) that is unlikely to be provided by mock objects and
-// cause us to break tests.  In addition, when the browser resolves a URL for XHR, it
+// cause us to break test.  In addition, when the browser resolves a URL for XHR, it
 // doesn't know about mocked locations and resolves URLs to the real document - which is
 // exactly the behavior needed here.  There is little value is mocking these out for this
 // service.
