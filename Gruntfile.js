@@ -5,10 +5,10 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         lab: {
-            files: ['test/app/*.js'],
+            files: ['test/app/*.test.js'],
             color: true,
             coverage: true,
-            minCoverage: 100,
+            minCoverage: 90,
             parallel: true
         },
         karma: {

@@ -3,7 +3,7 @@
  */
 var requireDirectory = require('require-directory');
 
-module.exports = function(server) {
+module.exports.routes = function() {
     // Load the controllers into the controller name space. https://github.com/troygoode/node-require-directory
     var controller = requireDirectory(module, '../controllers');
 

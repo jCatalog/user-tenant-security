@@ -20,6 +20,7 @@
     "karma": "^0.12.23",
     "karma-chrome-launcher": "^0.1.4",
     "karma-jasmine": "^0.1.5",
-    "lab": "^4.2.0"
+    "lab": "^4.2.0",
+    "supertest": "^0.13.0"
   }
 }
