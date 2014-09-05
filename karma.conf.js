@@ -12,9 +12,6 @@ module.exports = function(config) {
 
         // List of files / patterns to load in the browser
         files: [
-            'public/lib/angular/angular.js',
-            'public/lib/angular-mocks/angular-mocks.js',
-            'public/js/**/*.js',
             'test/spec/**/*js'
         ],
 
@@ -34,7 +31,7 @@ module.exports = function(config) {
         logLevel: config.LOG_INFO,
 
         // Enable / disable watching file and executing test whenever any file changes
-        autoWatch: false,
+        autoWatch: true,
 
         // Start these browsers, currently available:
         // - Chrome
@@ -51,6 +48,6 @@ module.exports = function(config) {
 
         // Continuous Integration mode
         // If true, it capture browsers, run test and exit
-        singleRun: false
+        singleRun: true
     });
 };

@@ -5,7 +5,7 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         lab: {
-            files: ['app/test/*.js'],
+            files: ['test/app/*.js'],
             color: true,
             coverage: true,
             minCoverage: 100,
@@ -23,7 +23,5 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-karma');
 
     // Default task(s).
-    grunt.registerTask('default', ['lab']);
-    grunt.registerTask('lab', ['lab']);
-    grunt.registerTask('karma', ['karma:unit']);
+    grunt.registerTask('test', ['lab', 'karma:unit']);
 };

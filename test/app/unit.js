@@ -9,7 +9,7 @@ var expect = Lab.expect;
 
 describe('math', function () {
     it('return true when 1+1 equals to 2', function (done) {
-        expect(1 + 1).to.equal(2);
+        expect(1 + 1).to.equal(3);
         done();
     });
 });
