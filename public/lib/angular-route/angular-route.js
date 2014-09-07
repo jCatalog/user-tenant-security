@@ -31,7 +31,7 @@ var ngRouteModule = angular.module('ngRoute', ['ng']).
  *
  * @description
  *
- * Used for configuring config.
+ * Used for configuring settings.
  *
  * ## Example
  * See {@link ngRoute.$route#example $route} for an example of configuring and using `ngRoute`.
@@ -63,7 +63,7 @@ function $RouteProvider(){
    *        when the route matches.
    *    * `path` can contain optional named groups with a question mark: e.g.`:name?`.
    *
-   *    For example, config like `/color/:color/largecode/:largecode*\/edit` will match
+   *    For example, settings like `/color/:color/largecode/:largecode*\/edit` will match
    *    `/color/brown/largecode/code/with/slashes/edit` and extract:
    *
    *    * `color: brown`
@@ -135,7 +135,7 @@ function $RouteProvider(){
    *      If the option is set to `false` and url in the browser changes, then
    *      `$routeUpdate` event is broadcasted on the root scope.
    *
-   *    - `[caseInsensitiveMatch=false]` - {boolean=} - match config without being case sensitive
+   *    - `[caseInsensitiveMatch=false]` - {boolean=} - match settings without being case sensitive
    *
    *      If the option is set to `true`, then the particular route can be matched without being
    *      case sensitive
@@ -252,7 +252,7 @@ function $RouteProvider(){
      *     - `$scope` - The current route scope.
      *     - `$template` - The current route template HTML.
      *
-     * @property {Object} config Object with all route configuration Objects as its properties.
+     * @property {Object} settings Object with all route configuration Objects as its properties.
      *
      * @description
      * `$route` is used for deep-linking URLs to controllers and partials (HTML partials).
@@ -260,7 +260,7 @@ function $RouteProvider(){
      *
      * Requires the {@link ngRoute `ngRoute`} module to be installed.
      *
-     * You can define config through {@link ngRoute.$routeProvider $routeProvider}'s API.
+     * You can define settings through {@link ngRoute.$routeProvider $routeProvider}'s API.
      *
      * The `$route` service is typically used in conjunction with the
      * {@link ngRoute.directive:ngView `ngView`} directive and the
@@ -326,7 +326,7 @@ function $RouteProvider(){
      *          $scope.params = $routeParams;
      *      })
      *
-     *     .config(function($routeProvider, $locationProvider) {
+     *     .settings(function($routeProvider, $locationProvider) {
      *       $routeProvider
      *        .when('/Book/:bookId', {
      *         templateUrl: 'book.html',
@@ -757,7 +757,7 @@ ngRouteModule.directive('ngView', ngViewFillContentFactory);
 
       <file name="script.js">
         angular.module('ngViewExample', ['ngRoute', 'ngAnimate'])
-          .config(['$routeProvider', '$locationProvider',
+          .settings(['$routeProvider', '$locationProvider',
             function($routeProvider, $locationProvider) {
               $routeProvider
                 .when('/Book/:bookId', {

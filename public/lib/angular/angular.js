@@ -1638,7 +1638,7 @@ function setupModuleLoader(window) {
      * myModule.value('appName', 'MyCoolApp');
      *
      * // configure existing services inside initialization blocks.
-     * myModule.config(['$locationProvider', function($locationProvider) {
+     * myModule.settings(['$locationProvider', function($locationProvider) {
      *   // Configure existing providers
      *   $locationProvider.hashPrefix('!');
      * }]);
@@ -1658,7 +1658,7 @@ function setupModuleLoader(window) {
      * @param {!Array.<string>=} requires If specified then new module is being created. If
      *        unspecified then the module is being retrieved for further configuration.
      * @param {Function=} configFn Optional configuration function for the module. Same as
-     *        {@link angular.Module#config Module#config()}.
+     *        {@link angular.Module#config Module#settings()}.
      * @returns {module} new module with the {@link angular.Module} api.
      */
     return function module(name, requires, configFn) {
@@ -1844,7 +1844,7 @@ function setupModuleLoader(window) {
 
           /**
            * @ngdoc method
-           * @name angular.Module#config
+           * @name angular.Module#settings
            * @module ng
            * @param {Function} configFn Execute this function on module load. Useful for service
            *    configuration.
@@ -5437,7 +5437,7 @@ function $TemplateCacheProvider() {
  * A compile function can have a return value which can be either a function or an object.
  *
  * * returning a (post-link) function - is equivalent to registering the linking function via the
- *   `link` property of the config object when the compile function is empty.
+ *   `link` property of the settings object when the compile function is empty.
  *
  * * returning an object with function(s) registered via `pre` and `post` properties - allows you to
  *   control when a linking function should be called during the linking phase. See info about
@@ -7585,11 +7585,11 @@ function $HttpProvider() {
      *
      * ```js
      *   $http({method: 'GET', url: '/someUrl'}).
-     *     success(function(data, status, headers, config) {
+     *     success(function(data, status, headers, settings) {
      *       // this callback will be called asynchronously
      *       // when the response is available
      *     }).
-     *     error(function(data, status, headers, config) {
+     *     error(function(data, status, headers, settings) {
      *       // called asynchronously if an error occurs
      *       // or server returns response with an error status.
      *     });
@@ -7664,8 +7664,8 @@ function $HttpProvider() {
      * });
      * ```
      *
-     * In addition, you can supply a `headers` property in the config object passed when
-     * calling `$http(config)`, which overrides the defaults without changing them globally.
+     * In addition, you can supply a `headers` property in the settings object passed when
+     * calling `$http(settings)`, which overrides the defaults without changing them globally.
      *
      *
      * # Transforming Requests and Responses
@@ -7738,9 +7738,9 @@ function $HttpProvider() {
      *
      * There are two kinds of interceptors (and two kinds of rejection interceptors):
      *
-     *   * `request`: interceptors get called with a http `config` object. The function is free to
-     *     modify the `config` object or create a new one. The function needs to return the `config`
-     *     object directly, or a promise containing the `config` or a new `config` object.
+     *   * `request`: interceptors get called with a http `settings` object. The function is free to
+     *     modify the `settings` object or create a new one. The function needs to return the `settings`
+     *     object directly, or a promise containing the `settings` or a new `settings` object.
      *   * `requestError`: interceptor gets called when a previous interceptor threw an error or
      *     resolved with a rejection.
      *   * `response`: interceptors get called with http `response` object. The function is free to
@@ -7755,9 +7755,9 @@ function $HttpProvider() {
      *   $provide.factory('myHttpInterceptor', function($q, dependency1, dependency2) {
      *     return {
      *       // optional method
-     *       'request': function(config) {
+     *       'request': function(settings) {
      *         // do something on success
-     *         return config;
+     *         return settings;
      *       },
      *
      *       // optional method
@@ -7794,7 +7794,7 @@ function $HttpProvider() {
      *   // alternatively, register the interceptor via an anonymous factory
      *   $httpProvider.interceptors.push(function($q, dependency1, dependency2) {
      *     return {
-     *      'request': function(config) {
+     *      'request': function(settings) {
      *          // same as above
      *       },
      *
@@ -7903,11 +7903,11 @@ function $HttpProvider() {
      * for added security.
      *
      * The name of the headers can be specified using the xsrfHeaderName and xsrfCookieName
-     * properties of either $httpProvider.defaults at config-time, $http.defaults at run-time,
-     * or the per-request config object.
+     * properties of either $httpProvider.defaults at settings-time, $http.defaults at run-time,
+     * or the per-request settings object.
      *
      *
-     * @param {object} config Object describing the request to be made and how it should be
+     * @param {object} settings Object describing the request to be made and how it should be
      *    processed. The object has following properties:
      *
      *    - **method** – `{string}` – HTTP method (e.g. 'GET', 'POST', etc)
@@ -7953,10 +7953,10 @@ function $HttpProvider() {
      *     functions.
      *   - **status** – `{number}` – HTTP status code of the response.
      *   - **headers** – `{function([headerName])}` – Header getter function.
-     *   - **config** – `{Object}` – The configuration object that was used to generate the request.
+     *   - **settings** – `{Object}` – The configuration object that was used to generate the request.
      *   - **statusText** – `{string}` – HTTP status text of the response.
      *
-     * @property {Array.<Object>} pendingRequests Array of config objects for currently pending
+     * @property {Array.<Object>} pendingRequests Array of settings objects for currently pending
      *   requests. This is primarily meant to be used for debugging purposes.
      *
      *
@@ -8653,7 +8653,7 @@ var $interpolateMinErr = minErr('$interpolate');
 <script>
   var customInterpolationApp = angular.module('customInterpolationApp', []);
 
-  customInterpolationApp.config(function($interpolateProvider) {
+  customInterpolationApp.settings(function($interpolateProvider) {
     $interpolateProvider.startSymbol('//');
     $interpolateProvider.endSymbol('//');
   });
@@ -13198,7 +13198,7 @@ function adjustMatchers(matchers) {
  * Here is what a secure configuration for this scenario might look like:
  *
  * ```
- *  angular.module('myApp', []).config(function($sceDelegateProvider) {
+ *  angular.module('myApp', []).settings(function($sceDelegateProvider) {
  *    $sceDelegateProvider.resourceUrlWhitelist([
  *      // Allow same origin resource loads.
  *      'self',
@@ -13734,7 +13734,7 @@ function $SceDelegateProvider() {
  * That said, here's how you can completely disable SCE:
  *
  * ```
- * angular.module('myAppWithSceDisabledmyApp', []).config(function($sceProvider) {
+ * angular.module('myAppWithSceDisabledmyApp', []).settings(function($sceProvider) {
  *   // Completely disable SCE.  For demonstration purposes only!
  *   // Do not use in new projects.
  *   $sceProvider.enabled(false);
@@ -13831,7 +13831,7 @@ function $SceProvider() {
      * @kind function
      *
      * @return {Boolean} true if SCE is enabled, false otherwise.  If you want to set the value, you
-     * have to do it at module config time on {@link ng.$sceProvider $sceProvider}.
+     * have to do it at module settings time on {@link ng.$sceProvider $sceProvider}.
      *
      * @description
      * Returns a boolean indicating if SCE is enabled.
