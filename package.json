@@ -1,40 +1,42 @@
 {
-  "name": "user-tenant-security",
-  "version": "0.0.1",
-  "description": "Signup and Manage Users and Tenants with Node.js and MongoDB.",
-  "main": "server.js",
-  "scripts": {
-    "test": "make test"
-  },
-  "author": "Mainul Islam",
-  "license": "ISC",
-  "dependencies": {
-    "bcryptjs": "^2.0.2",
-    "boom": "^2.5.1",
-    "bower": "^1.3.9",
-    "hapi": "^6.7.1",
-    "joi": "^4.6.2",
-    "mongoose": "^3.8.15",
-    "require-directory": "^2.0.0"
-  },
-  "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-concurrent": "^1.0.0",
-    "grunt-contrib-csslint": "^0.2.0",
-    "grunt-contrib-cssmin": "^0.10.0",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-contrib-uglify": "^0.5.1",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-env": "^0.4.1",
-    "grunt-karma": "^0.8.3",
-    "grunt-lab": "^1.0.4",
-    "grunt-ngmin": "0.0.3",
-    "grunt-node-inspector": "^0.1.5",
-    "grunt-nodemon": "^0.3.0",
-    "karma": "^0.12.23",
-    "karma-chrome-launcher": "^0.1.4",
-    "karma-jasmine": "^0.1.5",
-    "lab": "^4.2.0",
-    "load-grunt-tasks": "^0.6.0"
-  }
+    "name": "user-tenant-security",
+    "version": "0.0.1",
+    "description": "Signup and Manage Users and Tenants with Node.js and MongoDB.",
+    "main": "server.js",
+    "scripts": {
+        "test": "make test",
+        "postinstall": "bower install --config.interactive=false"
+    },
+    "author": "Mainul Islam",
+    "license": "ISC",
+    "dependencies": {
+        "bcryptjs": "^2.0.2",
+        "boom": "^2.5.1",
+        "bower": "^1.3.9",
+        "hapi": "^6.7.1",
+        "joi": "^4.6.2",
+        "mongoose": "^3.8.15",
+        "require-directory": "^2.0.0"
+    },
+    "devDependencies": {
+        "grunt": "^0.4.5",
+        "grunt-concurrent": "^1.0.0",
+        "grunt-contrib-csslint": "^0.2.0",
+        "grunt-contrib-cssmin": "^0.10.0",
+        "grunt-contrib-jshint": "^0.10.0",
+        "grunt-contrib-uglify": "^0.5.1",
+        "grunt-contrib-watch": "^0.6.1",
+        "grunt-env": "^0.4.1",
+        "grunt-jsdoc": "^0.5.7",
+        "grunt-karma": "^0.8.3",
+        "grunt-lab": "^1.0.4",
+        "grunt-ngmin": "0.0.3",
+        "grunt-node-inspector": "^0.1.5",
+        "grunt-nodemon": "^0.3.0",
+        "karma": "^0.12.23",
+        "karma-chrome-launcher": "^0.1.4",
+        "karma-jasmine": "^0.1.5",
+        "lab": "^4.2.0",
+        "load-grunt-tasks": "^0.6.0"
+    }
 }

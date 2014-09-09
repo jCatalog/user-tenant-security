@@ -71,6 +71,14 @@ module.exports = function (grunt) {
             unit: {
                 configFile: 'karma.conf.js'
             }
+        },
+        jsdoc: {
+            dist: {
+                src: ['app/**/*.js', 'test/*.js'],
+                options: {
+                    destination: 'doc'
+                }
+            }
         }
     });
 
@@ -94,4 +102,6 @@ module.exports = function (grunt) {
 
     // Test task.
     grunt.registerTask('test', ['env:test', 'lab', 'karma:unit']);
+
+    grunt.registerTask('doc', ['jsdoc']);
 };

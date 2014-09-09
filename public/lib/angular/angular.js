@@ -7056,7 +7056,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
      * @param {JqLite=} $rootElement The root of the compile tree. Used so that we can replace nodes
      *                               in the root of the tree.
      * @param {JqLite} elementsToRemove The jqLite element which we are going to replace. We keep
-     *                                  the shell, but replace its DOM node reference.
+     *                                  the static, but replace its DOM node reference.
      * @param {Node} newNode The new DOM node.
      */
     function replaceWith($rootElement, elementsToRemove, newNode) {

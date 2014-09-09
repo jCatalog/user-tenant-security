@@ -7,7 +7,6 @@ module.exports.routes = function () {
     var controller = requireDirectory(module, '../controllers');
     var validate = requireDirectory(module, '../validate');
 
-    // Array of routes for Hapi
     var routeTable = [
         {
             method: 'GET',

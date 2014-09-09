@@ -2,6 +2,6 @@
 
 describe("hello", function () {
     it('it should work', function () {
-        expect(true).toBe(false);
+        expect(true).toBe(true);
     });
 });
