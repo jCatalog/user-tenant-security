@@ -3,7 +3,7 @@
 var Hapi = require('hapi');
 var port = process.env.PORT || 3000;
 
-var routes = require('./settings/routes').routes();
+var routes = require('./routes');
 var server = new Hapi.Server(port);
 server.route(routes);
 
