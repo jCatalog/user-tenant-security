@@ -1,9 +1,65 @@
 'use strict';
 
 module.exports = function (grunt) {
-
-    // Project configuration.
+    // Unified Watch Object
+    var watchFiles = {
+        serverJS: ['gruntfile.js', 'app/server.js', 'app/**/*.js'],
+        labTests: ['test/app/*.js']
+    };
     grunt.initConfig({
+        pkg: grunt.file.readJSON('package.json'),
+        watch: {
+            serverJS: {
+                files: watchFiles.serverJS,
+                tasks: ['jshint'],
+                options: {
+                    livereload: true
+                }
+            }
+        },
+        jshint: {
+            all: {
+                src: watchFiles.serverJS,
+                options: {
+                    jshintrc: true
+                }
+            }
+        },
+        nodemon: {
+            dev: {
+                script: 'app/server.js',
+                options: {
+                    nodeArgs: ['--debug'],
+                    ext: 'js,html',
+                    watch: watchFiles.serverJS
+                }
+            }
+        },
+        'node-inspector': {
+            custom: {
+                options: {
+                    'web-port': 1337,
+                    'web-host': 'localhost',
+                    'debug-port': 5858,
+                    'save-live-edit': true,
+                    'no-preload': true,
+                    'stack-trace-limit': 50,
+                    'hidden': []
+                }
+            }
+        },
+        concurrent: {
+            default: ['nodemon', 'watch'],
+            debug: ['nodemon', 'watch', 'node-inspector'],
+            options: {
+                logConcurrentOutput: true
+            }
+        },
+        env: {
+            test: {
+                NODE_ENV: 'test'
+            }
+        },
         lab: {
             files: ['test/app/*.test.js'],
             color: true,
@@ -18,10 +74,24 @@ module.exports = function (grunt) {
         }
     });
 
-    // Load the plugin that provides the "lab" task.
-    grunt.loadNpmTasks('grunt-lab');
-    grunt.loadNpmTasks('grunt-karma');
+    // Load NPM tasks
+    require('load-grunt-tasks')(grunt);
+
+    // Making grunt default to force in order not to break the project.
+    grunt.option('force', true);
 
     // Default task(s).
-    grunt.registerTask('test', ['lab', 'karma:unit']);
+    grunt.registerTask('default', ['lint', 'concurrent:default']);
+
+    // Debug task.
+    grunt.registerTask('debug', ['lint', 'concurrent:debug']);
+
+    // Lint task(s).
+    grunt.registerTask('lint', ['jshint', 'csslint']);
+
+    // Build task(s).
+    //grunt.registerTask('build', ['lint', 'loadConfig', 'ngmin', 'uglify', 'cssmin']);
+
+    // Test task.
+    grunt.registerTask('test', ['env:test', 'lab', 'karma:unit']);
 };

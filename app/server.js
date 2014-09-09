@@ -1,3 +1,5 @@
+'use strict';
+
 var Hapi = require('hapi');
 var port = process.env.PORT || 3000;
 
@@ -7,7 +9,7 @@ server.route(routes);
 
 if (!module.parent) {
     server.start(function() {
-        console.log("Server started", server.info.uri);
+        console.log('Server started', server.info.uri);
     });
 }
 

@@ -1,12 +1,11 @@
-/**
- * Dependencies.
- */
+'use strict';
+
 var requireDirectory = require('require-directory');
 
 module.exports.routes = function () {
     // Load the controllers into the controller name space. https://github.com/troygoode/node-require-directory
     var controller = requireDirectory(module, '../controllers');
-    var validate = requireDirectory(module, '../validate')
+    var validate = requireDirectory(module, '../validate');
 
     // Array of routes for Hapi
     var routeTable = [
@@ -29,6 +28,22 @@ module.exports.routes = function () {
             handler: controller.user.create,
             config: {
                 validate: validate.user.create
+            }
+        },
+        {
+            method: 'PUT',
+            path: '/user/{id}',
+            handler: controller.user.update,
+            config: {
+                validate: validate.user.update
+            }
+        },
+        {
+            method: 'DELETE',
+            path: '/user/{id}',
+            handler: controller.user.delete,
+            config: {
+                validate: validate.user.delete
             }
         },
         {
@@ -63,4 +78,4 @@ module.exports.routes = function () {
         }
     ];
     return routeTable;
-}
+};

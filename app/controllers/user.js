@@ -1,3 +1,5 @@
+'use strict';
+
 var Boom = require('boom');
 var Bcrypt = require('bcryptjs');
 var salt = Bcrypt.genSaltSync(10);
@@ -33,10 +35,10 @@ module.exports = {
         });
     },
     get: function (request, reply) {
-        User.findById(request.params.id).exec(function(err, user) {
+        User.findById(request.params.id).exec(function (err, user) {
             if (err) throw err;
 
-            if (user == null) {
+            if (user === null) {
                 var error = Boom.badRequest('No doc found in');
                 return reply(error);
             }
@@ -44,65 +46,30 @@ module.exports = {
                 return reply(user).type('application/json');
             }
         });
+    },
+    update: function (request, reply) {
+        var update = request.payload;
+        User.findByIdAndUpdate(request.params.id, update).exec(function (err, user) {
+            if (err) {
+                var error = Boom.badRequest('No data found');
+                return reply(error);
+            }
+            else {
+                return reply({error: null, message: 'Updated successfully'});
+            }
+        });
+    },
+    delete: function (request, reply) {
+        User.findByIdAndRemove(request.params.id).exec(function (err, user) {
+            if (err) {
+                return reply(Boom.badRequest(err));
+            } else if (!user) {
+                var error = Boom.notFound('No data found');
+                return reply(error);
+            }
+            else {
+                return reply({error: null, message: 'Deleted successfully'});
+            }
+        });
     }
-    /*
-     update: function (request, reply) {
-     // Resource ID from URL
-     var resourceId = request.params.id;
-     var validSchema = config.update.payload;
-
-     Joi.validate(request.payload, validSchema, config.validationOpts, function (err, value) {
-     if (err !== null) {
-     var error = Boom.badRequest(err);
-     return reply(error);
-     }
-     else {
-     var update = request.payload;
-
-     if (config.update.bcrypt && update[config.update.bcrypt]) {
-     // Hash password before update
-     update[config.update.bcrypt] = Bcrypt.hashSync(update[config.update.bcrypt], salt);
-     }
-     if (config.update.date) {
-     var ts = new Date();
-     update[config.update.date] = ts;
-     }
-
-     // Update Resource with payload
-     var collection = db.collection(coll);
-
-     // Check doc exists & uId matches doc
-     collection.findOne({"_id": ObjectId(request.params.id)}, function (err, doc) {
-     // doc exists
-     if (doc === null) {
-     var error = Boom.badRequest('No doc found in ' + coll);
-     return reply(error);
-     }
-     else {
-     collection.update({"_id": ObjectId(resourceId)}, {$set: update}, {}, function (err, doc) {
-     if (err) throw err;
-     return reply({error: null, message: 'Updated successfully'});
-     });
-     }
-     })
-     }
-     });
-     },
-     del: function (request, reply) {
-     var _del = {"_id": ObjectId(request.params.id)};
-
-     var collection = db.collection(coll);
-     collection.findOne({"_id": ObjectId(request.params.id)}, function (err, doc) {
-     if (doc === null) {
-     var error = Boom.badRequest('No doc found in ' + coll);
-     return reply(error);
-     }
-     else {
-     collection.remove(_del, function (err) {
-     if (err) throw err;
-     return reply({error: null, message: 'Deleted successfully'});
-     });
-     }
-     });
-     }*/
 };

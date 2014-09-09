@@ -1,3 +1,5 @@
+'use strict';
+
 // This is the assets controller. Goal is to serve css, js, partials, images, or bower package libs.
 module.exports = {
     partials: {
@@ -48,4 +50,4 @@ module.exports = {
             name: 'lib'
         }
     }
-}
+};

@@ -1,3 +1,5 @@
+'use strict';
+
 var Joi = require('joi');
 var Mongoose = require('../settings/database').Mongoose;
 
