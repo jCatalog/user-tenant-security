@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>User Tenant Security</title>
-</head>
-<body>
-    <h1> Congratulations Mainul!!! You have done it...</h1>
-    <script src="lib/angular/angular.js"></script>
-    <script src="lib/angular-route/angular-route.js"></script>
-    <script src="js/app.js"></script>
-    <script src="user/user.js"></script>
-</body>
+<html data-ng-app="app">
+    <head>
+        <meta charset="UTF-8">
+        <title>User Tenant Security</title>
+        <script src="lib/angular/angular.js"></script>
+        <script src="js/main.js"></script>
+    </head>
+    <body data-ng-controller="UserListController">
+        <ul>
+            <li data-ng-repeat="phone in phones">
+                {{phone.name}}
+                <p>{{phone.snippet}}</p>
+            </li>
+        </ul>
+    </body>
 </html>

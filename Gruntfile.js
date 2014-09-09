@@ -4,6 +4,9 @@ module.exports = function (grunt) {
     // Unified Watch Object
     var watchFiles = {
         serverJS: ['gruntfile.js', 'app/server.js', 'app/**/*.js'],
+        clientViews: ['public/*.html', 'public/js/**/partials/*.html'],
+        clientJS: ['public/js/*.js', 'public/js/**/*.js'],
+        clientCSS: ['public/modules/**/*.css'],
         labTests: ['test/app/*.js']
     };
     grunt.initConfig({
@@ -15,11 +18,31 @@ module.exports = function (grunt) {
                 options: {
                     livereload: true
                 }
+            },
+            clientViews: {
+                files: watchFiles.clientViews,
+                options: {
+                    livereload: true
+                }
+            },
+            clientJS: {
+                files: watchFiles.clientJS,
+                tasks: ['jshint'],
+                options: {
+                    livereload: true
+                }
+            },
+            clientCSS: {
+                files: watchFiles.clientCSS,
+                tasks: ['csslint'],
+                options: {
+                    livereload: true
+                }
             }
         },
         jshint: {
             all: {
-                src: watchFiles.serverJS,
+                src: watchFiles.clientJS.concat(watchFiles.serverJS),
                 options: {
                     jshintrc: true
                 }

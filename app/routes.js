@@ -6,12 +6,19 @@ var requireDirectory = require('require-directory');
  *
  * @returns {routeTable[]}
  */
-var routes = function(){
+var routes = function () {
     // Load the controllers into the controller name space.
     var controller = requireDirectory(module, './controllers');
     var validate = requireDirectory(module, './validate');
 
     var routeTable = [
+        {
+            method: 'GET',
+            path: '/',
+            handler: function (request, reply) {
+                reply.view('index');
+            }
+        },
         {
             method: 'GET',
             path: '/users',
