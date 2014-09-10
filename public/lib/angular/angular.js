@@ -182,7 +182,7 @@ function minErr(module) {
  */
 
 // The name of a form control's ValidityState property.
-// This is used so that it's possible for internal test to create mock ValidityStates.
+// This is used so that it's possible for internal tests to create mock ValidityStates.
 var VALIDITY_STATE_PROPERTY = 'validity';
 
 /**
@@ -1329,7 +1329,7 @@ function angularInit(element, bootstrap) {
   var elements = [element],
       appElement,
       module,
-      names = ['ng:app', 'ng-public', 'x-ng-public', 'data-ng-public'],
+      names = ['ng:app', 'ng-app', 'x-ng-app', 'data-ng-app'],
       NG_APP_CLASS_REGEXP = /\sng[:\-]app(:\s*([\w\d_]+);?)?\s/;
 
   function append(element) {
@@ -1378,7 +1378,7 @@ function angularInit(element, bootstrap) {
  *
  * See: {@link guide/bootstrap Bootstrap}
  *
- * Note that ngScenario-based end-to-end test cannot use this function to bootstrap manually.
+ * Note that ngScenario-based end-to-end tests cannot use this function to bootstrap manually.
  * They must use {@link ng.directive:ngApp ngApp}.
  *
  * Angular will detect if it has been loaded into the browser more than once and only allow the
@@ -1401,7 +1401,7 @@ function angularInit(element, bootstrap) {
  * </div>
  * </file>
  * <file name="controller.js">
- * var public = angular.module('multi-bootstrap', [])
+ * var app = angular.module('multi-bootstrap', [])
  *
  * .controller('BrokenTable', function($scope) {
  *     $scope.headings = ['One', 'Two', 'Three'];
@@ -1421,7 +1421,7 @@ function angularInit(element, bootstrap) {
  *     Each item in the array should be the name of a predefined module or a (DI annotated)
  *     function that will be invoked by the injector as a run block.
  *     See: {@link angular.module modules}
- * @returns {auto.$injector} Returns the newly created injector for this public.
+ * @returns {auto.$injector} Returns the newly created injector for this app.
  */
 function bootstrap(element, modules) {
   var doBootstrap = function() {
@@ -1638,7 +1638,7 @@ function setupModuleLoader(window) {
      * myModule.value('appName', 'MyCoolApp');
      *
      * // configure existing services inside initialization blocks.
-     * myModule.settings(['$locationProvider', function($locationProvider) {
+     * myModule.config(['$locationProvider', function($locationProvider) {
      *   // Configure existing providers
      *   $locationProvider.hashPrefix('!');
      * }]);
@@ -1658,7 +1658,7 @@ function setupModuleLoader(window) {
      * @param {!Array.<string>=} requires If specified then new module is being created. If
      *        unspecified then the module is being retrieved for further configuration.
      * @param {Function=} configFn Optional configuration function for the module. Same as
-     *        {@link angular.Module#config Module#settings()}.
+     *        {@link angular.Module#config Module#config()}.
      * @returns {module} new module with the {@link angular.Module} api.
      */
     return function module(name, requires, configFn) {
@@ -1844,7 +1844,7 @@ function setupModuleLoader(window) {
 
           /**
            * @ngdoc method
-           * @name angular.Module#settings
+           * @name angular.Module#config
            * @module ng
            * @param {Function} configFn Execute this function on module load. Useful for service
            *    configuration.
@@ -3224,7 +3224,7 @@ HashMap.prototype = {
  *   });
  * ```
  *
- * Sometimes you want to get access to the injector of a currently running Angular public
+ * Sometimes you want to get access to the injector of a currently running Angular app
  * from outside Angular. Perhaps, you want to inject and compile some markup after the
  * application has been bootstrapped. You can do this using the extra `injector()` added
  * to JQuery/jqLite elements. See {@link angular.element}.
@@ -4359,7 +4359,7 @@ function $$AsyncCallbackProvider(){
  * - hide all the global state in the browser caused by the window object
  * - abstract away all the browser specific features and inconsistencies
  *
- * For test we provide {@link ngMock.$browser mock implementation} of the `$browser`
+ * For tests we provide {@link ngMock.$browser mock implementation} of the `$browser`
  * service, which can be used for convenient testing of the application without the interaction with
  * the real browser apis.
  */
@@ -4418,7 +4418,7 @@ function Browser(window, document, $log, $sniffer) {
   self.notifyWhenNoOutstandingRequests = function(callback) {
     // force browser to execute all pollFns - this is needed so that cookies and other pollers fire
     // at some deterministic time in respect to the test runner's actions. Leaving things up to the
-    // regular poller would result in flaky test.
+    // regular poller would result in flaky tests.
     forEach(pollFns, function(pollFn){ pollFn(); });
 
     if (outstandingRequestCount === 0) {
@@ -4556,7 +4556,7 @@ function Browser(window, document, $log, $sniffer) {
    * The listener gets called with new url as parameter.
    *
    * NOTE: this api is intended for use only by the $location service. Please use the
-   * {@link ng.$location $location service} to monitor url changes in angular app.
+   * {@link ng.$location $location service} to monitor url changes in angular apps.
    *
    * @param {function(string)} listener Listener function to be called when url changes.
    * @return {function(string)} Returns the registered listener fn - handy if the fn is anonymous.
@@ -4686,7 +4686,7 @@ function Browser(window, document, $log, $sniffer) {
    * Executes a fn asynchronously via `setTimeout(fn, delay)`.
    *
    * Unlike when calling `setTimeout` directly, in test this function is mocked and instead of using
-   * `setTimeout` in test, the fns are queued in an array, which can be programmatically flushed
+   * `setTimeout` in tests, the fns are queued in an array, which can be programmatically flushed
    * via `$browser.defer.flush()`.
    *
    */
@@ -5100,7 +5100,7 @@ function $CacheFactoryProvider() {
  * ```
  *
  * **Note:** the `script` tag containing the template does not need to be included in the `head` of
- * the document, but it must be below the `ng-public` definition.
+ * the document, but it must be below the `ng-app` definition.
  *
  * Adding via the $templateCache service:
  *
@@ -5437,7 +5437,7 @@ function $TemplateCacheProvider() {
  * A compile function can have a return value which can be either a function or an object.
  *
  * * returning a (post-link) function - is equivalent to registering the linking function via the
- *   `link` property of the settings object when the compile function is empty.
+ *   `link` property of the config object when the compile function is empty.
  *
  * * returning an object with function(s) registered via `pre` and `post` properties - allows you to
  *   control when a linking function should be called during the linking phase. See info about
@@ -7056,7 +7056,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
      * @param {JqLite=} $rootElement The root of the compile tree. Used so that we can replace nodes
      *                               in the root of the tree.
      * @param {JqLite} elementsToRemove The jqLite element which we are going to replace. We keep
-     *                                  the static, but replace its DOM node reference.
+     *                                  the shell, but replace its DOM node reference.
      * @param {Node} newNode The new DOM node.
      */
     function replaceWith($rootElement, elementsToRemove, newNode) {
@@ -7329,7 +7329,7 @@ function $DocumentProvider(){
  * The default implementation simply delegates to `$log.error` which logs it into
  * the browser console.
  *
- * In unit test, if `angular-mocks.js` is loaded, this service is overridden by
+ * In unit tests, if `angular-mocks.js` is loaded, this service is overridden by
  * {@link ngMock.$exceptionHandler mock $exceptionHandler} which aids in testing.
  *
  * ## Example:
@@ -7564,7 +7564,7 @@ function $HttpProvider() {
      *
      * @description
      * The `$http` service is a core Angular service that facilitates communication with the remote
-     * HTTP app via the browser's [XMLHttpRequest](https://developer.mozilla.org/en/xmlhttprequest)
+     * HTTP servers via the browser's [XMLHttpRequest](https://developer.mozilla.org/en/xmlhttprequest)
      * object or via [JSONP](http://en.wikipedia.org/wiki/JSONP).
      *
      * For unit testing applications that use `$http` service, see
@@ -7585,11 +7585,11 @@ function $HttpProvider() {
      *
      * ```js
      *   $http({method: 'GET', url: '/someUrl'}).
-     *     success(function(data, status, headers, settings) {
+     *     success(function(data, status, headers, config) {
      *       // this callback will be called asynchronously
      *       // when the response is available
      *     }).
-     *     error(function(data, status, headers, settings) {
+     *     error(function(data, status, headers, config) {
      *       // called asynchronously if an error occurs
      *       // or server returns response with an error status.
      *     });
@@ -7664,8 +7664,8 @@ function $HttpProvider() {
      * });
      * ```
      *
-     * In addition, you can supply a `headers` property in the settings object passed when
-     * calling `$http(settings)`, which overrides the defaults without changing them globally.
+     * In addition, you can supply a `headers` property in the config object passed when
+     * calling `$http(config)`, which overrides the defaults without changing them globally.
      *
      *
      * # Transforming Requests and Responses
@@ -7738,9 +7738,9 @@ function $HttpProvider() {
      *
      * There are two kinds of interceptors (and two kinds of rejection interceptors):
      *
-     *   * `request`: interceptors get called with a http `settings` object. The function is free to
-     *     modify the `settings` object or create a new one. The function needs to return the `settings`
-     *     object directly, or a promise containing the `settings` or a new `settings` object.
+     *   * `request`: interceptors get called with a http `config` object. The function is free to
+     *     modify the `config` object or create a new one. The function needs to return the `config`
+     *     object directly, or a promise containing the `config` or a new `config` object.
      *   * `requestError`: interceptor gets called when a previous interceptor threw an error or
      *     resolved with a rejection.
      *   * `response`: interceptors get called with http `response` object. The function is free to
@@ -7755,9 +7755,9 @@ function $HttpProvider() {
      *   $provide.factory('myHttpInterceptor', function($q, dependency1, dependency2) {
      *     return {
      *       // optional method
-     *       'request': function(settings) {
+     *       'request': function(config) {
      *         // do something on success
-     *         return settings;
+     *         return config;
      *       },
      *
      *       // optional method
@@ -7794,7 +7794,7 @@ function $HttpProvider() {
      *   // alternatively, register the interceptor via an anonymous factory
      *   $httpProvider.interceptors.push(function($q, dependency1, dependency2) {
      *     return {
-     *      'request': function(settings) {
+     *      'request': function(config) {
      *          // same as above
      *       },
      *
@@ -7852,7 +7852,7 @@ function $HttpProvider() {
      *
      * # Security Considerations
      *
-     * When designing public applications, consider security threats from:
+     * When designing web applications, consider security threats from:
      *
      * - [JSON vulnerability](http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx)
      * - [XSRF](http://en.wikipedia.org/wiki/Cross-site_request_forgery)
@@ -7903,11 +7903,11 @@ function $HttpProvider() {
      * for added security.
      *
      * The name of the headers can be specified using the xsrfHeaderName and xsrfCookieName
-     * properties of either $httpProvider.defaults at settings-time, $http.defaults at run-time,
-     * or the per-request settings object.
+     * properties of either $httpProvider.defaults at config-time, $http.defaults at run-time,
+     * or the per-request config object.
      *
      *
-     * @param {object} settings Object describing the request to be made and how it should be
+     * @param {object} config Object describing the request to be made and how it should be
      *    processed. The object has following properties:
      *
      *    - **method** – `{string}` – HTTP method (e.g. 'GET', 'POST', etc)
@@ -7936,7 +7936,7 @@ function $HttpProvider() {
      *    - **timeout** – `{number|Promise}` – timeout in milliseconds, or {@link ng.$q promise}
      *      that should abort the request when resolved.
      *    - **withCredentials** - `{boolean}` - whether to set the `withCredentials` flag on the
-     *      XHR object. See [requests with credentials](https://developer.mozilla.org/docs/public/HTTP/Access_control_CORS#Requests_with_credentials)
+     *      XHR object. See [requests with credentials](https://developer.mozilla.org/docs/Web/HTTP/Access_control_CORS#Requests_with_credentials)
      *      for more information.
      *    - **responseType** - `{string}` - see
      *      [requestType](https://developer.mozilla.org/en-US/docs/DOM/XMLHttpRequest#responseType).
@@ -7953,10 +7953,10 @@ function $HttpProvider() {
      *     functions.
      *   - **status** – `{number}` – HTTP status code of the response.
      *   - **headers** – `{function([headerName])}` – Header getter function.
-     *   - **settings** – `{Object}` – The configuration object that was used to generate the request.
+     *   - **config** – `{Object}` – The configuration object that was used to generate the request.
      *   - **statusText** – `{string}` – HTTP status text of the response.
      *
-     * @property {Array.<Object>} pendingRequests Array of settings objects for currently pending
+     * @property {Array.<Object>} pendingRequests Array of config objects for currently pending
      *   requests. This is primarily meant to be used for debugging purposes.
      *
      *
@@ -8492,11 +8492,11 @@ function createHttpBackend($browser, createXhr, $browserDefer, callbacks, rawDoc
       });
 
       // In IE6 and 7, this might be called synchronously when xhr.send below is called and the
-      // response is in the cache. the promise api will ensure that to the public code the api is
+      // response is in the cache. the promise api will ensure that to the app code the api is
       // always async
       xhr.onreadystatechange = function() {
         // onreadystatechange might get called multiple times with readyState === 4 on mobile webkit caused by
-        // xhrs that are resolved while the public is in the background (see #5426).
+        // xhrs that are resolved while the app is in the background (see #5426).
         // since calling completeRequest sets the `xhr` variable to null, we just check if it's not null before
         // continuing
         //
@@ -8653,7 +8653,7 @@ var $interpolateMinErr = minErr('$interpolate');
 <script>
   var customInterpolationApp = angular.module('customInterpolationApp', []);
 
-  customInterpolationApp.settings(function($interpolateProvider) {
+  customInterpolationApp.config(function($interpolateProvider) {
     $interpolateProvider.startSymbol('//');
     $interpolateProvider.endSymbol('//');
   });
@@ -8663,7 +8663,7 @@ var $interpolateMinErr = minErr('$interpolate');
       this.label = "This binding is brought you by // interpolation symbols.";
   });
 </script>
-<div ng-public="App" ng-controller="DemoController as demo">
+<div ng-app="App" ng-controller="DemoController as demo">
     //demo.label//
 </div>
 </file>
@@ -8906,7 +8906,7 @@ function $IntervalProvider() {
       * number of iterations that have run.
       * To cancel an interval, call `$interval.cancel(promise)`.
       *
-      * In test you can use {@link ngMock.$interval#flush `$interval.flush(millis)`} to
+      * In tests you can use {@link ngMock.$interval#flush `$interval.flush(millis)`} to
       * move forward by `millis` milliseconds and trigger any functions scheduled to run in that
       * time.
       *
@@ -12087,7 +12087,7 @@ function $RootScopeProvider(){
        * - The `listener` is called only when the value from the current `watchExpression` and the
        *   previous call to `watchExpression` are not equal (with the exception of the initial run,
        *   see below). Inequality is determined according to reference inequality,
-       *   [strict comparison](https://developer.mozilla.org/en-US/docs/public/JavaScript/Reference/Operators/Comparison_Operators)
+       *   [strict comparison](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Comparison_Operators)
        *    via the `!==` Javascript operator, unless `objectEquality == true`
        *   (see next point)
        * - When `objectEquality == true`, inequality of the `watchExpression` is determined
@@ -12432,7 +12432,7 @@ function $RootScopeProvider(){
        * you can register a `watchExpression` function with
        * {@link ng.$rootScope.Scope#$watch $watch()} with no `listener`.
        *
-       * In unit test, you may need to call `$digest()` to simulate the scope life cycle.
+       * In unit tests, you may need to call `$digest()` to simulate the scope life cycle.
        *
        * # Example
        * ```js
@@ -12534,7 +12534,7 @@ function $RootScopeProvider(){
             }
 
             // Insanity Warning: scope depth-first traversal
-            // yes, this code is a bit crazy, but it works and we have test to prove it!
+            // yes, this code is a bit crazy, but it works and we have tests to prove it!
             // this piece should be kept in sync with the traversal in $broadcast
             if (!(next = (current.$$childHead ||
                 (current !== target && current.$$nextSibling)))) {
@@ -12956,7 +12956,7 @@ function $RootScopeProvider(){
           }
 
           // Insanity Warning: scope depth-first traversal
-          // yes, this code is a bit crazy, but it works and we have test to prove it!
+          // yes, this code is a bit crazy, but it works and we have tests to prove it!
           // this piece should be kept in sync with the traversal in $digest
           // (though it differs due to having the extra check for $$listenerCount)
           if (!(next = ((current.$$listenerCount[name] && current.$$childHead) ||
@@ -13190,7 +13190,7 @@ function adjustMatchers(matchers) {
  *
  * **Example**:  Consider the following case. <a name="example"></a>
  *
- * - your public is hosted at url `http://myapp.example.com/`
+ * - your app is hosted at url `http://myapp.example.com/`
  * - but some of your templates are hosted on other domains you control such as
  *   `http://srv01.assets.example.com/`,  `http://srv02.assets.example.com/`, etc.
  * - and you have an open redirect at `http://myapp.example.com/clickThru?...`.
@@ -13198,7 +13198,7 @@ function adjustMatchers(matchers) {
  * Here is what a secure configuration for this scenario might look like:
  *
  * ```
- *  angular.module('myApp', []).settings(function($sceDelegateProvider) {
+ *  angular.module('myApp', []).config(function($sceDelegateProvider) {
  *    $sceDelegateProvider.resourceUrlWhitelist([
  *      // Allow same origin resource loads.
  *      'self',
@@ -13734,7 +13734,7 @@ function $SceDelegateProvider() {
  * That said, here's how you can completely disable SCE:
  *
  * ```
- * angular.module('myAppWithSceDisabledmyApp', []).settings(function($sceProvider) {
+ * angular.module('myAppWithSceDisabledmyApp', []).config(function($sceProvider) {
  *   // Completely disable SCE.  For demonstration purposes only!
  *   // Do not use in new projects.
  *   $sceProvider.enabled(false);
@@ -13831,7 +13831,7 @@ function $SceProvider() {
      * @kind function
      *
      * @return {Boolean} true if SCE is enabled, false otherwise.  If you want to set the value, you
-     * have to do it at module settings time on {@link ng.$sceProvider $sceProvider}.
+     * have to do it at module config time on {@link ng.$sceProvider $sceProvider}.
      *
      * @description
      * Returns a boolean indicating if SCE is enabled.
@@ -14254,7 +14254,7 @@ function $TimeoutProvider() {
       *
       * To cancel a timeout request, call `$timeout.cancel(promise)`.
       *
-      * In test you can use {@link ngMock.$timeout `$timeout.flush()`} to
+      * In tests you can use {@link ngMock.$timeout `$timeout.flush()`} to
       * synchronously flush the queue of deferred functions.
       *
       * @param {function()} fn A function, whose execution should be delayed.
@@ -14320,7 +14320,7 @@ function $TimeoutProvider() {
 // NOTE:  The usage of window and document instead of $window and $document here is
 // deliberate.  This service depends on the specific behavior of anchor nodes created by the
 // browser (resolving and parsing URLs) that is unlikely to be provided by mock objects and
-// cause us to break test.  In addition, when the browser resolves a URL for XHR, it
+// cause us to break tests.  In addition, when the browser resolves a URL for XHR, it
 // doesn't know about mocked locations and resolves URLs to the real document - which is
 // exactly the behavior needed here.  There is little value is mocking these out for this
 // service.
@@ -14357,7 +14357,7 @@ var originUrl = urlResolve(window.location.href, true);
  * method and IE < 8 is unsupported.
  *
  * References:
- *   http://developer.mozilla.org/en-US/docs/public/API/HTMLAnchorElement
+ *   http://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement
  *   http://www.aptana.com/reference/html/api/HTMLAnchorElement.html
  *   http://url.spec.whatwg.org/#urlutils
  *   https://github.com/angular/angular.js/pull/2902
@@ -14992,7 +14992,7 @@ function formatNumber(number, pattern, groupSep, decimalSep, fractionSize) {
 
     // safely round numbers in JS without hitting imprecisions of floating-point arithmetics
     // inspired by:
-    // https://developer.mozilla.org/en-US/docs/public/JavaScript/Reference/Global_Objects/Math/round
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/round
     number = +(Math.round(+(number.toString() + 'e' + fractionSize)).toString() + 'e' + -fractionSize);
 
     var fraction = ('' + number).split(DECIMAL_SEP);
@@ -16332,7 +16332,7 @@ function FormController(element, attrs, $scope, $animate) {
  * # Submitting a form and preventing the default action
  *
  * Since the role of forms in client-side Angular applications is different than in classical
- * roundtrip app, it is desirable for the browser not to translate the form submission into a full
+ * roundtrip apps, it is desirable for the browser not to translate the form submission into a full
  * page reload that sends the data to the server. Instead some javascript logic should be triggered
  * to handle the form submission in an application-specific way.
  *
@@ -16981,7 +16981,7 @@ function textInputType(scope, element, attr, ctrl, $sniffer, $browser) {
 
   // In composition mode, users are still inputing intermediate text buffer,
   // hold the listener until composition is done.
-  // More about composition events: https://developer.mozilla.org/en-US/docs/public/API/CompositionEvent
+  // More about composition events: https://developer.mozilla.org/en-US/docs/Web/API/CompositionEvent
   if (!$sniffer.android) {
     var composing = false;
 
@@ -18835,7 +18835,7 @@ var ngCloakDirective = ngDirective({
  *     </ul>
  *    </div>
  *   </file>
- *   <file name="public.js">
+ *   <file name="app.js">
  *    angular.module('controllerAsExample', [])
  *      .controller('SettingsController1', SettingsController1);
  *
@@ -18918,7 +18918,7 @@ var ngCloakDirective = ngDirective({
  *    </ul>
  *   </div>
  *  </file>
- *  <file name="public.js">
+ *  <file name="app.js">
  *   angular.module('controllerExample', [])
  *     .controller('SettingsController2', ['$scope', SettingsController2]);
  *
@@ -18998,7 +18998,7 @@ var ngControllerDirective = [function() {
  *
  * This is necessary when developing things like Google Chrome Extensions.
  *
- * CSP forbids app to use `eval` or `Function(string)` generated functions (among other things).
+ * CSP forbids apps to use `eval` or `Function(string)` generated functions (among other things).
  * For Angular to be CSP compatible there are only two things that we need to do differently:
  *
  * - don't use `Function` constructor to generate optimized value getters
@@ -19032,7 +19032,7 @@ var ngControllerDirective = [function() {
  * This example shows how to apply the `ngCsp` directive to the `html` tag.
    ```html
      <!doctype html>
-     <html ng-public ng-csp>
+     <html ng-app ng-csp>
      ...
      ...
      </html>
@@ -20053,7 +20053,7 @@ var ngNonBindableDirective = ngDirective({ terminal: true, priority: 1000 });
  *
  * Notice that we are still using two plural categories(one, other), but we added
  * three explicit number rules 0, 1 and 2.
- * When one person, perhaps John, partials the document, "John is viewing" will be shown.
+ * When one person, perhaps John, views the document, "John is viewing" will be shown.
  * When three people view the document, no explicit number rule is found, so
  * an offset of 2 is taken off 3, and Angular uses 1 to decide the plural category.
  * In this case, plural category 'one' is matched and "John, Mary and one other person are viewing"

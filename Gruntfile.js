@@ -4,7 +4,7 @@ module.exports = function (grunt) {
     // Unified Watch Object
     var watchFiles = {
         serverJS: ['gruntfile.js', 'app/server.js', 'app/**/*.js'],
-        clientViews: ['public/*.html', 'public/js/**/partials/*.html'],
+        clientViews: ['public/templates/*.jade', 'public/templates/**/*.jade'],
         clientJS: ['public/js/*.js', 'public/js/**/*.js'],
         clientCSS: ['public/modules/**/*.css'],
         labTests: ['test/app/*.js']
