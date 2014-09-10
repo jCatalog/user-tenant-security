@@ -9,9 +9,9 @@ var routes = require('./routes');
 var serverOptions = {
     views: {
         engines: {
-            html: require('handlebars')
+            jade: require('jade')
         },
-        path: Path.join(__dirname, '../public')
+        path: Path.join(__dirname, '../public/templates')
     }
 };
 var server = new Hapi.Server(port, serverOptions);

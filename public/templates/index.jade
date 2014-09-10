@@ -1,0 +1,7 @@
+extends layout
+block content
+    div(ng-controller="UserListController")
+        ul
+            li(ng-repeat="phone in phones").
+                {{phone.name}}
+                {{phone.snippet}}

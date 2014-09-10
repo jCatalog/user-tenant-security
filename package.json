@@ -13,8 +13,8 @@
     "bcryptjs": "^2.0.2",
     "boom": "^2.5.1",
     "bower": "^1.3.9",
-    "handlebars": "^2.0.0",
     "hapi": "^6.7.1",
+    "jade": "^1.6.0",
     "joi": "^4.6.2",
     "mongoose": "^3.8.15",
     "require-directory": "^2.0.0"
