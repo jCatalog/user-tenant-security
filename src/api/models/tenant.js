@@ -16,7 +16,10 @@ var TenantSchema = new Schema({
     validTo: {type: Date},
 
     createdBy: {type: ObjectId},
-    updatedBy: {type: ObjectId}
+    updatedBy: {type: ObjectId},
+    users: [
+        {type: ObjectId, ref: 'User'}
+    ]
 });
 
 // timestamps

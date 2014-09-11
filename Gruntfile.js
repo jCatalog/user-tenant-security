@@ -1,13 +1,12 @@
 'use strict';
 
 module.exports = function (grunt) {
-    // Unified Watch Object
     var watchFiles = {
-        serverJS: ['gruntfile.js', 'app/server.js', 'app/**/*.js'],
-        clientViews: ['public/templates/*.jade', 'public/templates/**/*.jade'],
-        clientJS: ['public/js/*.js', 'public/js/**/*.js'],
-        clientCSS: ['public/modules/**/*.css'],
-        labTests: ['test/app/*.js']
+        serverJS: ['gruntfile.js', 'src/server.js', 'src/api/**/*.js'],
+        clientViews: ['src/web/views/*.html', 'src/web/views/partials/*.html'],
+        clientJS: ['src/web/js/*.js', 'src/web/js/**/*.js'],
+        clientCSS: ['src/web/static/css/*.css'],
+        labTests: ['test/api/*.js']
     };
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -84,7 +83,7 @@ module.exports = function (grunt) {
             }
         },
         lab: {
-            files: ['test/app/*.test.js'],
+            files: watchFiles.labTests,
             color: true,
             coverage: true,
             minCoverage: 90,
@@ -97,7 +96,7 @@ module.exports = function (grunt) {
         },
         jsdoc: {
             dist: {
-                src: ['app/**/*.js', 'test/*.js'],
+                src: [watchFiles.serverJS, watchFiles.clientJS],
                 options: {
                     destination: 'doc'
                 }
