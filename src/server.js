@@ -5,13 +5,13 @@ var Path = require('path');
 
 var port = process.env.PORT || 3000;
 
-var routes = require('./routes');
+var routes = require('./api/routes');
 var serverOptions = {
     views: {
         engines: {
             html: require('handlebars')
         },
-        path: Path.join(__dirname, '../public/views')
+        path: Path.join(__dirname, './web/views')
     }
 };
 var server = new Hapi.Server(port, serverOptions);

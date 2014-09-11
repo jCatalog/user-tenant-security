@@ -12,7 +12,7 @@ module.exports = function(config) {
 
         // List of files / patterns to load in the browser
         files: [
-            'test/spec/**/*js'
+            'test/web/**/*js'
         ],
 
         // Test results reporter to use

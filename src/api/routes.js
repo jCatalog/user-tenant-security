@@ -9,7 +9,6 @@ var requireDirectory = require('require-directory');
 var routes = function () {
     // Load the controllers into the controller name space.
     var controller = requireDirectory(module, './controllers');
-    var validate = requireDirectory(module, './validate');
 
     var routeTable = [
         {
@@ -27,34 +26,22 @@ var routes = function () {
         {
             method: 'GET',
             path: '/users/{id}',
-            handler: controller.user.get,
-            config: {
-                validate: validate.user.get
-            }
+            handler: controller.user.get
         },
         {
             method: 'POST',
             path: '/users',
-            handler: controller.user.create,
-            config: {
-                validate: validate.user.create
-            }
+            handler: controller.user.create
         },
         {
             method: 'PUT',
             path: '/users/{id}',
-            handler: controller.user.update,
-            config: {
-                validate: validate.user.update
-            }
+            handler: controller.user.update
         },
         {
             method: 'DELETE',
             path: '/users/{id}',
-            handler: controller.user.delete,
-            config: {
-                validate: validate.user.delete
-            }
+            handler: controller.user.delete
         },
         {
             method: 'GET',

@@ -1,7 +1,7 @@
 'use strict';
 
 var Mongoose = require('mongoose');
-var Config = require('../../config/env/all');
+var Config = require('../config/env/all');
 
 //load database
 Mongoose.connect('mongodb://localhost/'+ Config.mongo.database);

@@ -7,7 +7,7 @@
 module.exports = {
     partials: {
         handler: {
-            directory: { path: './public/views/partials' }
+            directory: { path: './src/web/views/partials' }
         },
         app: {
             name: 'partials'
@@ -15,7 +15,7 @@ module.exports = {
     },
     images: {
         handler: {
-            directory: { path: './public/static/img' }
+            directory: { path: './src/web/static/img' }
         },
         app: {
             name: 'images'
@@ -23,7 +23,7 @@ module.exports = {
     },
     css: {
         handler: {
-            directory: { path: './public/static/css' }
+            directory: { path: './src/web/static/css' }
         },
         app: {
             name: 'css'
@@ -31,7 +31,7 @@ module.exports = {
     },
     fonts: {
         handler: {
-            directory: { path: './public/static/fonts' }
+            directory: { path: './src/web/static/fonts' }
         },
         app: {
             name: 'fonts'
@@ -39,7 +39,7 @@ module.exports = {
     },
     js: {
         handler: {
-            directory: { path: './public/js' }
+            directory: { path: './src/web/js' }
         },
         app: {
             name: 'js'
@@ -47,7 +47,7 @@ module.exports = {
     },
     lib: {
         handler: {
-            directory: { path: './public/lib' }
+            directory: { path: './src/web/lib' }
         },
         app: {
             name: 'lib'
