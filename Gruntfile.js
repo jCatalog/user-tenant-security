@@ -49,7 +49,7 @@ module.exports = function (grunt) {
         },
         nodemon: {
             dev: {
-                script: 'app/server.js',
+                script: 'src/server.js',
                 options: {
                     nodeArgs: ['--debug'],
                     ext: 'js,html',

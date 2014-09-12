@@ -7,4 +7,4 @@ module.exports = {
         url: '',
         database: 'user_tenant_security_db'
     }
-}
+};
