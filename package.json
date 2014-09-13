@@ -38,7 +38,9 @@
     "karma": "^0.12.23",
     "karma-chrome-launcher": "^0.1.4",
     "karma-jasmine": "^0.1.5",
+    "karma-requirejs": "^0.2.2",
     "lab": "^4.2.0",
-    "load-grunt-tasks": "^0.6.0"
+    "load-grunt-tasks": "^0.6.0",
+    "requirejs": "^2.1.15"
   }
 }

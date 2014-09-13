@@ -7,9 +7,14 @@ require.config({
 
     paths: {
         'angular': '../lib/angular/angular',
-        'angular-route': '../lib/angular-route/angular-route',
+        'angularResource': '../lib/angular-resource/angular-resource',
+        'angularRoute': '../lib/angular-route/angular-route',
+        'ngTable':'../lib/ng-table/ng-table',
         'domReady': '../lib/requirejs-domready/domReady',
-        'user': './user'
+        'user': './user',
+        'userControllers':'./user/controllers',
+        'userServices':'./user/services',
+        'userDirectives':'./user/directives'
     },
 
     /**
@@ -20,7 +25,13 @@ require.config({
         'angular': {
             exports: 'angular'
         },
-        'angular-route': {
+        'angularResource': {
+            deps: ['angular']
+        },
+        'angularRoute': {
+            deps: ['angular']
+        },
+        'ngTable': {
             deps: ['angular']
         }
     },

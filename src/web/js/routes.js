@@ -7,8 +7,8 @@ define(['angular', 'app'], function(angular, app) {
             templateUrl: 'partials/user-list.html',
             controller: 'UserListController'
         });
-        $routeProvider.when('/view2', {
-            templateUrl: 'partials/user-list.html',
+        $routeProvider.when('/signin', {
+            templateUrl: 'partials/signin.html',
             controller: 'UserListController'
         });
         $routeProvider.otherwise({redirectTo: '/'});

@@ -1,13 +1,17 @@
-define(['user/user-module'], function (userModule) {
+define(['user/user-module', 'userServices/user-list-service'], function (userModule) {
     'use strict';
-    userModule.controller('UserListController', ['$scope', function ($scope) {
-        $scope.phones = [
-            {'name': 'Nexus S',
-                'snippet': 'Fast just got faster with Nexus S.'},
-            {'name': 'Motorola XOOM™ with Wi-Fi',
-                'snippet': 'The Next, Next Generation tablet.'},
-            {'name': 'MOTOROLA XOOM™',
-                'snippet': 'The Next, Next Generation tablet.'}
-        ];
+    userModule.controller('UserListController', ['$scope', 'ngTableParams', 'Users', function ($scope, NgTableParams, Users) {
+        $scope.tableParams = new NgTableParams({
+            page: 1,            // show first page
+            count: 10           // count per page
+        }, {
+            total: 0,
+            getData: function ($defer) {
+                // ajax request to api
+                Users.query(function (data) {
+                    $defer.resolve(data);
+                });
+            }
+        });
     }]);
 });

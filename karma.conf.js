@@ -5,14 +5,22 @@
  */
 
 // Karma configuration
-module.exports = function(config) {
+module.exports = function (config) {
     config.set({
-        // Frameworks to use
-        frameworks: ['jasmine'],
+        frameworks: ['jasmine', 'requirejs'],
 
-        // List of files / patterns to load in the browser
         files: [
-            'test/web/**/*js'
+            {pattern: 'src/web/lib/**/*.js', included: false},
+            {pattern: 'src/web/js/*.js', included: false},
+            {pattern: 'src/web/js/**/*.js', included: false},
+            {pattern: 'src/web/js/**/*/*.js', included: false},
+            {pattern: 'test/web/**/*spec.js', included: false},
+            'test/web/test-main.js'
+        ],
+
+        // list of files to exclude
+        exclude: [
+            'src/web/js/main.js'
         ],
 
         // Test results reporter to use

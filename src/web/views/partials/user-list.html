@@ -1,4 +1,14 @@
-<p>This is the partial for view 1.</p>
-<p>
-    Getting version from the scope
-</p>
+<div loading-container="tableParams.settings().$loading">
+    <table ng-table="tableParams" show-filter="true" class="table">
+        <tbody>
+        <tr ng-repeat="user in $data">
+            <td data-title="'UserName'" sortable="userId">
+                {{user.userId}}
+            </td>
+            <td data-title="'Email'" sortable="email">
+                {{user.email}}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
