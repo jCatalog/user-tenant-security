@@ -14,12 +14,12 @@ var routes = function () {
         {
             method: ['POST'],
             path: '/login',
-            config: controller.auth.login
+            config: controller.user.login
         },
         {
             method: 'GET',
             path: '/logout',
-            config: controller.auth.logout
+            config: controller.user.logout
         },
         {
             method: 'GET',

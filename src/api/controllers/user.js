@@ -71,5 +71,47 @@ module.exports = {
                 return reply({error: null, message: 'Deleted successfully'});
             }
         });
+    },
+    login: {
+        handler: function (request, reply) {
+            if (request.auth.isAuthenticated) {
+                return reply.redirect('/');
+            }
+
+            var message = '';
+            var account = null;
+            if (!request.payload.username || !request.payload.password) {
+                return reply(Boom.badRequest('Missing username or password'));
+            }
+            else {
+                User.find({'userId': request.payload.username}).exec(function (err, user) {
+                    if (err) {
+                        return reply(Boom.badRequest(err));
+                    } else if (!user || user.password != request.payload.password) {
+                        var error = Boom.badRequest('Invalid username or password');
+                        return reply(error);
+                    } else {
+                        request.auth.session.set(user);
+                        return reply.redirect('/');
+                    }
+                });
+            }
+        },
+        auth: {
+            mode: 'try',
+            strategy: 'session'
+        },
+        plugins: {
+            'hapi-auth-cookie': {
+                redirectTo: false
+            }
+        }
+    },
+    logout: {
+        handler: function (request, reply) {
+            request.auth.session.clear();
+            return reply.redirect('/');
+        },
+        auth: 'session'
     }
 };

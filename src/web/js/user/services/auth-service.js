@@ -6,13 +6,13 @@ define(['user/user-module', 'userServices/session-service'], function (userModul
 
         authService.login = function (credentials) {
             console.log('Auth Service');
-//            return $http
-//                .post('/login', credentials)
-//                .then(function (res) {
-//                    SessionService.create(res.data.id, res.data.user.id,
-//                        res.data.user.role);
-//                    return res.data.user;
-//                });
+            return $http
+                .post('/login', credentials)
+                .then(function (res) {
+                    SessionService.create(res.data.id, res.data.user.id,
+                        res.data.user.role);
+                    return res.data.user;
+                });
         };
 
         authService.isAuthenticated = function () {
