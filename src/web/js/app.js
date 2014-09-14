@@ -1,7 +1,8 @@
 define([
     'angular',
     'angularRoute',
-    './user/controllers/user-list-controller'
+    'user/user-module',
+    'user/user-config'
 ], function (angular) {
     'use strict';
 

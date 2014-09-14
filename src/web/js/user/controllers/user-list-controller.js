@@ -1,6 +1,6 @@
-define(['user/user-module', 'userServices/user-list-service'], function (userModule) {
+define(['user/user-module', 'userServices/user-service'], function (userModule) {
     'use strict';
-    userModule.controller('UserListController', ['$scope', 'ngTableParams', 'Users', function ($scope, NgTableParams, Users) {
+    userModule.controller('UserListController', ['$scope', 'ngTableParams', 'UserService', function ($scope, NgTableParams, UserService) {
         $scope.tableParams = new NgTableParams({
             page: 1,            // show first page
             count: 10           // count per page
@@ -8,7 +8,7 @@ define(['user/user-module', 'userServices/user-list-service'], function (userMod
             total: 0,
             getData: function ($defer) {
                 // ajax request to api
-                Users.query(function (data) {
+                UserService.query(function (data) {
                     $defer.resolve(data);
                 });
             }

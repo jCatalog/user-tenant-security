@@ -7,11 +7,10 @@ define(['angular', 'app'], function(angular, app) {
             templateUrl: 'partials/user-list.html',
             controller: 'UserListController'
         });
-        $routeProvider.when('/signin', {
-            templateUrl: 'partials/signin.html',
-            controller: 'UserListController'
+        $routeProvider.when('/login', {
+            templateUrl: 'partials/login.html',
+            controller: 'LoginController'
         });
         $routeProvider.otherwise({redirectTo: '/'});
     }]);
-
 });

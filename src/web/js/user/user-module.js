@@ -3,7 +3,6 @@ define(['angular', 'angularResource', 'ngTable'], function (angular) {
 
     var user = angular.module('userModule', ['ngResource', 'ngTable'])
         .run([function () {
-
             console.log('user module running...');
         }]);
     return user;
