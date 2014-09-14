@@ -9,12 +9,13 @@ require.config({
         'angular': '../lib/angular/angular',
         'angularResource': '../lib/angular-resource/angular-resource',
         'angularRoute': '../lib/angular-route/angular-route',
-        'ngTable':'../lib/ng-table/ng-table',
+        'angularCookies': '../lib/angular-cookies/angular-cookies',
+        'ngTable': '../lib/ng-table/ng-table',
         'domReady': '../lib/requirejs-domready/domReady',
         'user': './user',
-        'userControllers':'./user/controllers',
-        'userServices':'./user/services',
-        'userDirectives':'./user/directives'
+        'userControllers': './user/controllers',
+        'userServices': './user/services',
+        'userDirectives': './user/directives'
     },
 
     /**
@@ -27,6 +28,10 @@ require.config({
         },
         'angularResource': {
             deps: ['angular']
+        },
+        'angularCookies': {
+            deps: ['angular'],
+            exports: 'angularCookies'
         },
         'angularRoute': {
             deps: ['angular']

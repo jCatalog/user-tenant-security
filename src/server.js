@@ -15,11 +15,20 @@ var serverOptions = {
     }
 };
 var server = new Hapi.Server(port, serverOptions);
-server.route(routes);
+
 
 if (!module.parent) {
-    server.start(function () {
-        console.log('Server started', server.info.uri);
+    server.pack.register(require('hapi-auth-cookie'), function (err) {
+        server.auth.strategy('session', 'cookie', {
+            password: 'secret',
+            cookie: 'sid-example',
+            redirectTo: '/',
+            isSecure: false
+        });
+        server.route(routes);
+        server.start(function () {
+            console.log('Server started', server.info.uri);
+        });
     });
 }
 

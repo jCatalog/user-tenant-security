@@ -12,10 +12,22 @@ var routes = function () {
 
     var routeTable = [
         {
+            method: ['POST'],
+            path: '/login',
+            config: controller.auth.login
+        },
+        {
+            method: 'GET',
+            path: '/logout',
+            config: controller.auth.logout
+        },
+        {
             method: 'GET',
             path: '/',
-            handler: function (request, reply) {
-                reply.view('index');
+            config: {
+                handler: function (request, reply) {
+                    reply.view('index');
+                }
             }
         },
         {

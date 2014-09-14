@@ -15,9 +15,9 @@ define(['user/user-module', 'userServices/session-service'], function (userModul
 //                });
         };
 
-//        authService.isAuthenticated = function () {
-//            return !!SessionService.userId;
-//        };
+        authService.isAuthenticated = function () {
+            return !!SessionService.userId;
+        };
 //
 //        authService.isAuthorized = function (authorizedRoles) {
 //            if (!angular.isArray(authorizedRoles)) {
