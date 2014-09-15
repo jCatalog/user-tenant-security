@@ -18,8 +18,6 @@ module.exports = {
     },
     create: function (request, reply) {
         var user = new User(request.payload);
-        user.displayName = user.firstName + ' ' + user.lastName;
-        user.created = new Date();
 
         // Save the user
         user.save(function (err, data) {
@@ -75,24 +73,28 @@ module.exports = {
     login: {
         handler: function (request, reply) {
             if (request.auth.isAuthenticated) {
-                return reply.redirect('/');
+                var account = {
+                    username: request.auth.credentials.username
+                };
+                return reply({error: null, user:account, message: 'Login successfully'});
             }
 
-            var message = '';
-            var account = null;
             if (!request.payload.username || !request.payload.password) {
                 return reply(Boom.badRequest('Missing username or password'));
             }
             else {
-                User.find({'userId': request.payload.username}).exec(function (err, user) {
+                User.findOne({'userId': request.payload.username}).exec(function (err, user) {
                     if (err) {
                         return reply(Boom.badRequest(err));
-                    } else if (!user || user.password != request.payload.password) {
+                    } else if (!user || user.password !== request.payload.password) {
                         var error = Boom.badRequest('Invalid username or password');
                         return reply(error);
                     } else {
-                        request.auth.session.set(user);
-                        return reply.redirect('/');
+                        var account = {
+                            username: user.userId
+                        };
+                        request.auth.session.set(account);
+                        return reply({error: null, user:account, message: 'Login successfully'});
                     }
                 });
             }

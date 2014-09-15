@@ -21,7 +21,7 @@ if (!module.parent) {
     server.pack.register(require('hapi-auth-cookie'), function (err) {
         server.auth.strategy('session', 'cookie', {
             password: 'secret',
-            cookie: 'sid-example',
+            cookie: 'usertenantsecurity',
             redirectTo: '/',
             isSecure: false
         });

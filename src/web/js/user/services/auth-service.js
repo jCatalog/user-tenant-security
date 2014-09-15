@@ -1,32 +1,19 @@
 define(['user/user-module', 'userServices/session-service'], function (userModule) {
     'use strict';
 
-    userModule.factory('AuthService', function ($http, SessionService) {
-        var authService = {};
-
-        authService.login = function (credentials) {
+    userModule.service('AuthService', function ($http, SessionService) {
+        this.login = function (credentials) {
             console.log('Auth Service');
             return $http
                 .post('/login', credentials)
                 .then(function (res) {
-                    SessionService.create(res.data.id, res.data.user.id,
-                        res.data.user.role);
+                    SessionService.create(res.data.user.username);
                     return res.data.user;
                 });
         };
 
-        authService.isAuthenticated = function () {
-            return !!SessionService.userId;
+        this.isAuthenticated = function () {
+            return !!SessionService.username;
         };
-//
-//        authService.isAuthorized = function (authorizedRoles) {
-//            if (!angular.isArray(authorizedRoles)) {
-//                authorizedRoles = [authorizedRoles];
-//            }
-//            return (authService.isAuthenticated() &&
-//                authorizedRoles.indexOf(SessionService.userRole) !== -1);
-//        };
-
-        return authService;
     });
 });
