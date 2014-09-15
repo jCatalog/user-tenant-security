@@ -8,6 +8,7 @@ require.config({
     paths: {
         'angular': '../lib/angular/angular',
         'angular-bootstrap': '../lib/angular-bootstrap/ui-bootstrap',
+        'angular-bootstrap-tpls': '../lib/angular-bootstrap/ui-bootstrap-tpls',
         'angularResource': '../lib/angular-resource/angular-resource',
         'angularRoute': '../lib/angular-route/angular-route',
         'angularHttpAuth': '../lib/angular-http-auth/src/http-auth-interceptor',

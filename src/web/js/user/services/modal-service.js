@@ -20,6 +20,7 @@ define(['user/user-module'], function (userModule) {
                         };
                     },
                     backdrop: false,
+                    size:'lg',
                     windowTemplateUrl: 'partials/modal-window.html',
                     resolve: {
                         items: function () {

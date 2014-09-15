@@ -1,6 +1,7 @@
 define([
     'angular',
     'angular-bootstrap',
+    'angular-bootstrap-tpls',
     'angularRoute',
     'angularHttpAuth',
     'user/user-module',
