@@ -18,8 +18,8 @@
     "requirejs": "~2.1.15",
     "requirejs-domready": "~2.0.1",
     "ng-table": "~0.3.3",
-    "angular-cookies": "~1.2.24",
-    "angular-http-auth": "~1.2.1"
+    "angular-http-auth": "~1.2.1",
+    "ng-table-export": "*"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.23"

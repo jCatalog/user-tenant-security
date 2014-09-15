@@ -15,7 +15,7 @@ module.exports = {
     },
     images: {
         handler: {
-            directory: { path: './src/web/static/img' }
+            directory: { path: './src/web/img' }
         },
         app: {
             name: 'images'
@@ -23,7 +23,7 @@ module.exports = {
     },
     css: {
         handler: {
-            directory: { path: './src/web/static/css' }
+            directory: { path: './src/web/css' }
         },
         app: {
             name: 'css'
@@ -31,7 +31,7 @@ module.exports = {
     },
     fonts: {
         handler: {
-            directory: { path: './src/web/static/fonts' }
+            directory: { path: './src/web/fonts' }
         },
         app: {
             name: 'fonts'

@@ -1,13 +1,14 @@
 <div loading-container="tableParams.settings().$loading">
-    <table ng-table="tableParams" show-filter="true" class="table">
-        <tbody>
-        <tr ng-repeat="user in $data">
-            <td data-title="'UserName'" sortable="userId">
-                {{user.userId}}
-            </td>
-            <td data-title="'Email'" sortable="email">
-                {{user.email}}
-            </td>
+    <a class="btn btn-primary" ng-mousedown="csv.generate()" ng-href="{{ csv.link() }}" download="{{getCSVFileName()}}">Export
+        to CSV</a>
+    <table ng-table="tableParams" show-filter="true" class="table" export-csv="csv">
+        <tbody ng-repeat="user in $data">
+        <tr id="tr{{user._id}}" ng-class-odd="'odd'" ng-class-even="'even'">
+            <td class="rowTd" data-title="'UserId'" sortable="'userId'">{{user.userId}}</td>
+            <td class="rowTd" data-title="'Firstname'" sortable="'firstName'">{{user.firstName}}</td>
+            <td class="rowTd" data-title="'Lastname'" >{{user.lastName}}</td>
+            <td class="rowTd" data-title="'Email'">{{user.email}}</td>
+            <td class="rowTd"><input type=button id="editRowBtn{{user._id}}" value="Edit" ng-click="showEditDialog(user._id)"></td>
         </tr>
         </tbody>
     </table>

@@ -7,10 +7,12 @@ require.config({
 
     paths: {
         'angular': '../lib/angular/angular',
+        'angular-bootstrap': '../lib/angular-bootstrap/ui-bootstrap',
         'angularResource': '../lib/angular-resource/angular-resource',
         'angularRoute': '../lib/angular-route/angular-route',
-        'angularHttpAuth':'../lib/angular-http-auth/src/http-auth-interceptor',
+        'angularHttpAuth': '../lib/angular-http-auth/src/http-auth-interceptor',
         'ngTable': '../lib/ng-table/ng-table',
+        'ng-table-export': '../lib/ng-table-export/ng-table-export',
         'domReady': '../lib/requirejs-domready/domReady',
         'user': './user',
         'userControllers': './user/controllers',
@@ -29,7 +31,7 @@ require.config({
         'angularResource': {
             deps: ['angular']
         },
-        'angularHttpAuth':{
+        'angularHttpAuth': {
             deps: ['angular']
         },
         'angularRoute': {
@@ -37,6 +39,12 @@ require.config({
         },
         'ngTable': {
             deps: ['angular']
+        },
+        'angular-bootstrap': {
+            deps: ['angular']
+        },
+        'ng-table-export': {
+            deps: ['ngTable']
         }
     },
 

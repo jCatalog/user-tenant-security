@@ -1,0 +1,23 @@
+{
+  "name": "ng-table-export",
+  "main": [
+    "ng-table-export.js"
+  ],
+  "ignore": [
+    "src"
+  ],
+  "dependencies": {
+    "angular": ">=1.2.0-rc.2"
+  },
+  "homepage": "https://github.com/esvit/ng-table-export",
+  "_release": "c9812f4d62",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "c9812f4d624d09231e466748845e288566e0851c"
+  },
+  "_source": "git://github.com/esvit/ng-table-export.git",
+  "_target": "*",
+  "_originalSource": "ng-table-export",
+  "_direct": true
+}

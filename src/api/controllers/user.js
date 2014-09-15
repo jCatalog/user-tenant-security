@@ -9,13 +9,27 @@ var User = require('../models/user');
 module.exports = {
     getAll: {
         handler: function (request, reply) {
-            User.find().sort('-created').exec(function (err, users) {
-                if (err) {
-                    var error = Boom.badRequest(err);
-                    return reply(error);
-                }
-                return reply(users).type('application/json');
-            });
+            var page = (request.query.page ? request.query.page - 1 : 0),
+                count = request.query.count || 10,
+                sorting = request.query.sorting || {'createdAt': 'desc'};
+
+            User.find()
+                .sort(sorting)
+                .limit(count)
+                .skip(page * count)
+                .exec(function (err, users) {
+                    if (err) {
+                        var error = Boom.badRequest(err);
+                        return reply(error);
+                    }
+                    User.count(function (err, total) {
+                        if (err) {
+                            var error = Boom.badRequest(err);
+                            return reply(error);
+                        }
+                        return reply({total: total, users: users}).type('application/json');
+                    });
+                });
         },
         auth: 'session'
     },
