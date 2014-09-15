@@ -12,6 +12,15 @@ var routes = function () {
 
     var routeTable = [
         {
+            method: 'GET',
+            path: '/',
+            config: {
+                handler: function (request, reply) {
+                    reply.view('index');
+                }
+            }
+        },
+        {
             method: ['POST'],
             path: '/login',
             config: controller.user.login
@@ -23,37 +32,28 @@ var routes = function () {
         },
         {
             method: 'GET',
-            path: '/',
-            config: {
-                handler: function (request, reply) {
-                    reply.view('index');
-                }
-            }
-        },
-        {
-            method: 'GET',
             path: '/users',
-            handler: controller.user.getAll
+            config: controller.user.getAll
         },
         {
             method: 'GET',
             path: '/users/{id}',
-            handler: controller.user.get
+            config: controller.user.get
         },
         {
             method: 'POST',
             path: '/users',
-            handler: controller.user.create
+            config: controller.user.create
         },
         {
             method: 'PUT',
             path: '/users/{id}',
-            handler: controller.user.update
+            config: controller.user.update
         },
         {
             method: 'DELETE',
             path: '/users/{id}',
-            handler: controller.user.delete
+            config: controller.user.delete
         },
         {
             method: 'GET',

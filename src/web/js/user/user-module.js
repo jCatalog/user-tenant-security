@@ -1,7 +1,7 @@
-define(['angular', 'angularResource', 'ngTable', 'angularCookies'], function (angular) {
+define(['angular', 'angularResource', 'ngTable'], function (angular) {
     'use strict';
 
-    var user = angular.module('userModule', ['ngResource', 'ngTable', 'ngCookies'])
+    var user = angular.module('userModule', ['ngResource', 'ngTable'])
         .run([function () {
             console.log('user module running...');
         }]);

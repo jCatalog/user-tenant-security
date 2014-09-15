@@ -9,7 +9,7 @@ require.config({
         'angular': '../lib/angular/angular',
         'angularResource': '../lib/angular-resource/angular-resource',
         'angularRoute': '../lib/angular-route/angular-route',
-        'angularCookies': '../lib/angular-cookies/angular-cookies',
+        'angularHttpAuth':'../lib/angular-http-auth/src/http-auth-interceptor',
         'ngTable': '../lib/ng-table/ng-table',
         'domReady': '../lib/requirejs-domready/domReady',
         'user': './user',
@@ -29,9 +29,8 @@ require.config({
         'angularResource': {
             deps: ['angular']
         },
-        'angularCookies': {
-            deps: ['angular'],
-            exports: 'angularCookies'
+        'angularHttpAuth':{
+            deps: ['angular']
         },
         'angularRoute': {
             deps: ['angular']

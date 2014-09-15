@@ -16,20 +16,27 @@ var serverOptions = {
 };
 var server = new Hapi.Server(port, serverOptions);
 
-
 if (!module.parent) {
     server.pack.register(require('hapi-auth-cookie'), function (err) {
-        server.auth.strategy('session', 'cookie', {
-            password: 'secret',
-            cookie: 'usertenantsecurity',
-            redirectTo: '/',
-            isSecure: false
-        });
-        server.route(routes);
-        server.start(function () {
-            console.log('Server started', server.info.uri);
-        });
-    });
+            server.auth.strategy('session', 'cookie', {
+                password: 'usertenantsecurity1290',
+                cookie: 'usertenantsecurity',
+                redirectTo: false,
+                isSecure: false
+            });
+
+            server.ext('onRequest', function (request, next) {
+                console.log(request.path, request.query);
+                next();
+            });
+
+            server.route(routes);
+            server.start(function () {
+                console.log('Server started', server.info.uri);
+            });
+        }
+    )
+    ;
 }
 
 module.exports = server;
