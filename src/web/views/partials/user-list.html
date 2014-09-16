@@ -8,7 +8,8 @@
             <td class="rowTd" data-title="'Firstname'" sortable="'firstName'">{{user.firstName}}</td>
             <td class="rowTd" data-title="'Lastname'" >{{user.lastName}}</td>
             <td class="rowTd" data-title="'Email'">{{user.email}}</td>
-            <td class="rowTd"><input type=button id="editRowBtn{{user._id}}" value="Edit" ng-click="showEditDialog(user._id)"></td>
+            <td class="rowTd"><input class="btn btn-primary btn-block" type=button id="editRowBtn{{user._id}}" value="Edit" ng-click="showEditDialog(user._id)"></td>
+            <td class="rowTd"><input class="btn btn-danger btn-block" type=button id="removeRowBtn{{user._id}}" value="Remove" ng-click="showConfirmDialog(user._id)"></td>
         </tr>
         </tbody>
     </table>

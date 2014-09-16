@@ -8,8 +8,7 @@ var mongoose = require('../settings/database').Mongoose,
 
 // schema
 var TenantSchema = new Schema({
-    statusId: {type: ObjectId},
-
+    tenantId: {type: String, unique: true},
     description: {type: String},
 
     validFrom: {type: Date},

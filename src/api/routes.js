@@ -21,6 +21,31 @@ var routes = function () {
             }
         },
         {
+            method: 'GET',
+            path: '/tenants',
+            config: controller.tenant.getAll
+        },
+        {
+            method: 'GET',
+            path: '/tenants/{id}',
+            config: controller.tenant.get
+        },
+        {
+            method: 'POST',
+            path: '/tenants',
+            config: controller.tenant.create
+        },
+        {
+            method: 'PUT',
+            path: '/tenants/{id}',
+            config: controller.tenant.update
+        },
+        {
+            method: 'DELETE',
+            path: '/tenants/{id}',
+            config: controller.tenant.delete
+        },
+        {
             method: ['POST'],
             path: '/login',
             config: controller.user.login

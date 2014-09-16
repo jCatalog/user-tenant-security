@@ -1,12 +1,16 @@
-define(['user/user-module', 'userServices/user-service', 'userServices/modal-service'], function (userModule) {
+define(['tenant/tenant-module', 'tenantServices/tenant-service', 'tenantServices/modal-service'], function (tenantModule) {
     'use strict';
-    userModule.controller('UserListController', ['$scope', '$timeout', 'ngTableParams', 'UserService', 'modalService', function ($scope, $timeout, NgTableParams, UserService, modalService) {
+    tenantModule.controller('TenantController', ['$scope', '$timeout', 'ngTableParams', 'TenantService', 'ModalService', function ($scope, $timeout, NgTableParams, TenantService, ModalService) {
         $scope.getCSVFileName =function(){
             return 'test_download.csv';
         };
 
-        $scope.showEditDialog = function(userId){
-            modalService.open();
+        $scope.showEditDialog = function(tenantId){
+            ModalService.form();
+        };
+
+        $scope.showConfirmDialog = function(tenantId){
+            ModalService.confirm();
         };
 
         $scope.tableParams = new NgTableParams({
@@ -21,7 +25,7 @@ define(['user/user-module', 'userServices/user-service', 'userServices/modal-ser
                         // update table params
                         params.total(data.total);
                         // set new data
-                        $defer.resolve(data.users);
+                        $defer.resolve(data.tenants);
                     }, 500);
                 });
             }

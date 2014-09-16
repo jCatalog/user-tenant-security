@@ -18,7 +18,11 @@ require.config({
         'user': './user',
         'userControllers': './user/controllers',
         'userServices': './user/services',
-        'userDirectives': './user/directives'
+        'userDirectives': './user/directives',
+        'tenant': './tenant',
+        'tenantControllers': './tenant/controllers',
+        'tenantServices': './tenant/services',
+        'tenantDirectives': './tenant/directives'
     },
 
     /**
