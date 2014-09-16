@@ -19,9 +19,6 @@ define(['user/user-module'], function (userModule) {
                             $modalInstance.dismiss('cancel');
                         };
                     },
-                    backdrop: false,
-                    size:'lg',
-                    windowTemplateUrl: 'partials/modal-window.html',
                     resolve: {
                         items: function () {
                             return ['item1', 'item2', 'item3'];

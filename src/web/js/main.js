@@ -46,6 +46,9 @@ require.config({
         },
         'ng-table-export': {
             deps: ['ngTable']
+        },
+        'angular-bootstrap-tpls': {
+            deps: ['angular']
         }
     },
 
