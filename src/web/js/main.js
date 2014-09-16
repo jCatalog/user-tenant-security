@@ -15,6 +15,8 @@ require.config({
         'ngTable': '../lib/ng-table/ng-table',
         'ng-table-export': '../lib/ng-table-export/ng-table-export',
         'domReady': '../lib/requirejs-domready/domReady',
+        'shell': './shell',
+        'shellServices': './shell/services',
         'user': './user',
         'userControllers': './user/controllers',
         'userServices': './user/services',

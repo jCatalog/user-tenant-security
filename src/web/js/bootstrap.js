@@ -5,7 +5,7 @@
 define([
     'require',
     'angular',
-    'app',
+    'app/app-module',
     'routes'
 ], function (require, ng) {
     'use strict';

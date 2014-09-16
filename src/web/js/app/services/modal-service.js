@@ -1,6 +1,6 @@
-define(['user/user-module'], function (userModule) {
+define(['user/shell-module'], function (shellModule) {
     'use strict';
-    userModule.service('ModalService', ['$modal',
+    shellModule.service('ModalService', ['$modal',
         function ($modal) {
             this.form = function (data) {
                 showModalForm('edit', data);
