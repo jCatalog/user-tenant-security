@@ -1,16 +1,16 @@
-define(['user/user-module', 'userServices/user-service', 'userServices/modal-service'], function (userModule) {
+define(['user/user-module', 'userServices/user-service', 'appServices/modal-service'], function (userModule) {
     'use strict';
-    userModule.controller('UserController', ['$scope', '$timeout', 'ngTableParams', 'UserService', 'modalService', function ($scope, $timeout, NgTableParams, UserService, modalService) {
+    userModule.controller('UserController', ['$scope', '$timeout', 'ngTableParams', 'UserService', 'ModalService', function ($scope, $timeout, NgTableParams, UserService, ModalService) {
         $scope.getCSVFileName =function(){
             return 'test_download.csv';
         };
 
         $scope.showEditDialog = function(userId){
-            modalService.form();
+            ModalService.form();
         };
 
         $scope.showConfirmDialog = function(userId){
-            modalService.confirm();
+            ModalService.confirm();
         };
 
         $scope.tableParams = new NgTableParams({

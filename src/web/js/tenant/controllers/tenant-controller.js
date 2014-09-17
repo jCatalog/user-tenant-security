@@ -1,4 +1,4 @@
-define(['tenant/tenant-module', 'tenantServices/tenant-service', 'tenantServices/modal-service'], function (tenantModule) {
+define(['tenant/tenant-module', 'tenantServices/tenant-service', 'appServices/modal-service'], function (tenantModule) {
     'use strict';
     tenantModule.controller('TenantController', ['$scope', '$timeout', 'ngTableParams', 'TenantService', 'ModalService', function ($scope, $timeout, NgTableParams, TenantService, ModalService) {
         $scope.getCSVFileName =function(){
@@ -20,7 +20,7 @@ define(['tenant/tenant-module', 'tenantServices/tenant-service', 'tenantServices
             total: 0,
             getData: function ($defer, params) {
                 // ajax request to api
-                UserService.query(params.url(),function (data) {
+                TenantService.query(params.url(),function (data) {
                     $timeout(function () {
                         // update table params
                         params.total(data.total);
