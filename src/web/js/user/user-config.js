@@ -1,6 +1,10 @@
 define(['user/user-module',
+    'userControllers/login-controller',
     'userControllers/user-controller',
-    'userControllers/login-controller'
+    'userControllers/user-list-controller',
+    'userControllers/user-create-controller',
+    'userControllers/user-detail-controller',
+    'userControllers/user-edit-controller'
 ], function (userModule) {
     'use strict';
     return userModule.config([function () {}]);

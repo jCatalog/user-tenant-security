@@ -1,7 +1,10 @@
 define([
     'angular',
     'angularRoute',
+    'angularUiRouter',
     'angularHttpAuth',
+    'core/core-module',
+    'core/core-config',
     'tenant/tenant-module',
     'tenant/tenant-config',
     'user/user-module',
@@ -9,7 +12,7 @@ define([
 ], function (angular) {
     'use strict';
 
-    return angular.module('app', ['appServiceModule', 'tenantModule', 'userModule', 'ngRoute', 'http-auth-interceptor']).run(['$rootScope', '$location', function ($rootScope, $location) {
+    return angular.module('app', ['coreModule', 'tenantModule', 'userModule', 'ngRoute', 'ui.router', 'http-auth-interceptor']).run(['$rootScope', '$location', function ($rootScope, $location) {
         $rootScope.$on('event:auth-loginRequired', function () {
             $location.path('/login');
             console.log('event:auth-login required  ...');

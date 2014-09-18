@@ -1,6 +1,6 @@
-define(['app/app-service-module'], function (appServiceModule) {
+define(['core/core-module'], function (coreModule) {
     'use strict';
-    appServiceModule.service('ModalService', ['$modal',
+    coreModule.service('ModalService', ['$modal',
         function ($modal) {
             this.form = function (data) {
                 showModalForm('edit', data);

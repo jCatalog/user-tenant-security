@@ -11,13 +11,14 @@ require.config({
         'angular-bootstrap-tpls': '../lib/angular-bootstrap/ui-bootstrap-tpls',
         'angularResource': '../lib/angular-resource/angular-resource',
         'angularRoute': '../lib/angular-route/angular-route',
+        'angularUiRouter': '../lib/angular-ui-router/release/angular-ui-router',
         'angularHttpAuth': '../lib/angular-http-auth/src/http-auth-interceptor',
         'ngTable': '../lib/ng-table/ng-table',
         'ng-table-export': '../lib/ng-table-export/ng-table-export',
         'domReady': '../lib/requirejs-domready/domReady',
-        'app': './app',
-        'appControllers': './app/controllers',
-        'appServices': './app/services',
+        'core': './core',
+        'coreControllers': './core/controllers',
+        'coreServices': './core/services',
         'user': './user',
         'userControllers': './user/controllers',
         'userServices': './user/services',
@@ -43,6 +44,9 @@ require.config({
             deps: ['angular']
         },
         'angularRoute': {
+            deps: ['angular']
+        },
+        'angularUiRouter': {
             deps: ['angular']
         },
         'ngTable': {
