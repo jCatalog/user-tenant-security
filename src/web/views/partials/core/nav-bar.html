@@ -1,14 +1,28 @@
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
-        <div class="navbar-header">
-            <p class="navbar-brand">User Tenant Security</p>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="/users">Users</a></li>
-                <li><a href="/tenants">Tenants</a></li>
-            </ul>
-        </div>
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tenants<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li ui-sref-active="active">
+                        <a ui-sref="tenant.list">Tenant List</a>
+                    </li>
+                    <li ui-sref-active="active">
+                        <a ui-sref="tenant.create">New Tenant</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Users<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li ui-sref-active="active">
+                        <a ui-sref="user.list">User List</a>
+                    </li>
+                    <li ui-sref-active="active">
+                        <a ui-sref="user.create">New User</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </div>
 </div>
