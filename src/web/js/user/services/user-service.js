@@ -6,7 +6,8 @@ define(['user/user-module'], function (userModule) {
             return $resource('users/:id', { id: '@_id'
             }, {
                 query: { method: 'GET', isArray: false },
-                update: { method: 'PUT' }
+                update: { method: 'PUT' },
+                delete: {method: 'DELETE'}
             });
         }
     ]);

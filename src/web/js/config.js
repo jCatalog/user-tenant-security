@@ -58,7 +58,7 @@ define(['angular','app'],
                 })
                 .state('login', {
                     url: '/login',
-                    templateUrl: 'partials/login.html',
+                    templateUrl: 'partials/core/login.html',
                     controller: 'LoginController'
                 });
         }]);

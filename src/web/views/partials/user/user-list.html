@@ -1,1 +1,16 @@
-<h1>User List</h1>
+<div loading-container="tableParams.settings().$loading">
+    <a class="btn btn-primary" ng-mousedown="csv.generate()" ng-href="{{ csv.link() }}" download="{{getCSVFileName()}}">Export
+        to CSV</a>
+    <table ng-table="tableParams" show-filter="true" class="table" export-csv="csv">
+        <tbody ng-repeat="user in $data">
+        <tr id="tr{{user._id}}" ng-class-odd="'odd'" ng-class-even="'even'">
+            <td class="rowTd" data-title="'UserId'" sortable="'userId'">{{user.userId}}</td>
+            <td class="rowTd" data-title="'Firstname'" sortable="'firstName'">{{user.firstName}}</td>
+            <td class="rowTd" data-title="'Lastname'" >{{user.lastName}}</td>
+            <td class="rowTd" data-title="'Email'">{{user.email}}</td>
+            <td class="rowTd"><input class="btn btn-primary btn-block" type=button id="editRowBtn{{user._id}}" value="Edit" ng-click="editUser(user._id)"></td>
+            <td class="rowTd"><input class="btn btn-danger btn-block" type=button id="removeRowBtn{{user._id}}" value="Remove" ng-click="deleteUser(user._id)"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
