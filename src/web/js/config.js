@@ -1,12 +1,37 @@
 'use strict';
 
-define(['angular','app'],
+define(['angular', 'app'],
     function (angular, app) {
         return app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
             $urlRouterProvider.otherwise('/tenant/list');
 
             $stateProvider
-                .state('tenant', {
+                .state('role', {
+                    url: '/role',
+                    templateUrl: '',
+                    controller: 'RoleController',
+                    abstract: true
+                }).state('role.list', {
+                    url: '/list',
+                    templateUrl: 'partials/role/role-list.html',
+                    controller: 'RoleListController',
+                    parent: 'role'
+                }).state('role.detail', {
+                    url: '/detail/:id',
+                    templateUrl: 'partials/role/role-detail.html',
+                    controller: 'RoleDetailController',
+                    parent: 'role'
+                }).state('role.create', {
+                    url: '/create',
+                    templateUrl: 'partials/role/role-create.html',
+                    controller: 'RoleCreateController',
+                    parent: 'role'
+                }).state('role.edit', {
+                    url: '/edit/:id',
+                    templateUrl: 'partials/role/role-edit.html',
+                    controller: 'RoleEditController',
+                    parent: 'role'
+                }).state('tenant', {
                     url: '/tenant',
                     templateUrl: '',
                     controller: 'TenantController',

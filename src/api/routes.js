@@ -46,6 +46,16 @@ var routes = function () {
             config: controller.tenant.delete
         },
         {
+            method: 'GET',
+            path: '/roles',
+            config: controller.role.getAll
+        },
+        {
+            method: 'POST',
+            path: '/roles',
+            config: controller.role.create
+        },
+        {
             method: ['POST'],
             path: '/login',
             config: controller.user.login

@@ -2,10 +2,10 @@
 
 var Hapi = require('hapi');
 var Path = require('path');
-
 var port = process.env.PORT || 3000;
 
 var routes = require('./api/routes');
+
 var serverOptions = {
     views: {
         engines: {

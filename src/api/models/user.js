@@ -16,7 +16,8 @@ var UserSchema = new Schema({
     createdBy: {type: ObjectId},
     updatedBy: {type: ObjectId},
     lastLogin: {type: Date},
-    firstLogin: {type: Date}
+    firstLogin: {type: Date},
+    roleId:{type: ObjectId}
 });
 
 // timestamps
