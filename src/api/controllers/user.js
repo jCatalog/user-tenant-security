@@ -1,9 +1,8 @@
 'use strict';
 
 var Boom = require('boom');
-var Bcrypt = require('bcryptjs');
-var salt = Bcrypt.genSaltSync(10);
 var User = require('../models/user');
+var securityProvider = require('../util/security-provider');
 
 //Expose the CRUD functionality
 module.exports = {
@@ -35,19 +34,25 @@ module.exports = {
     },
     create: {
         handler: function (request, reply) {
-            var user = new User(request.payload);
-
-            // Save the user
-            user.save(function (err, data) {
+            securityProvider.cryptPassword(request.payload.password, function (err, hash) {
                 if (err) {
                     var error = Boom.badRequest(err);
                     return reply(error);
-                } else {
-                    // Remove sensitive data before login
-                    user.password = undefined;
-                    user.salt = undefined;
-                    return reply(data[0]).type('application/json');
                 }
+
+                var user = new User(request.payload);
+                user.password = hash;
+                // Save the user
+                user.save(function (err, data) {
+                    if (err) {
+                        var error = Boom.badRequest(err);
+                        return reply(error);
+                    } else {
+                        // Remove sensitive data before login
+                        user.password = undefined;
+                        return reply(data[0]).type('application/json');
+                    }
+                });
             });
         },
         auth: 'session'
@@ -112,19 +117,20 @@ module.exports = {
                 return reply(Boom.badRequest('Missing username or password'));
             }
             else {
-                User.findOne({'userId': request.payload.username}).exec(function (err, user) {
+                User.findOne({'userId': request.payload.username}).select("+password").exec(function (err, user) {
                     if (err) {
                         return reply(Boom.badRequest(err));
-                    } else if (!user || user.password !== request.payload.password) {
-                        var error = Boom.badRequest('Invalid username or password');
-                        return reply(error);
-                    } else {
+                    }
+                    securityProvider.comparePassword(request.payload.password, user.password, function (err, isPasswordMatch) {
+                        if(err){
+                            return reply(Boom.badRequest('Invalid username or password'));
+                        }
                         var account = {
                             username: user.userId
                         };
                         request.auth.session.set(account);
                         return reply({error: null, user: account, message: 'Login successfully'});
-                    }
+                    });
                 });
             }
         },

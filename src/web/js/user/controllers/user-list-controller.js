@@ -1,7 +1,7 @@
-define(['user/user-module','userServices/user-service'], function (userModule) {
+define(['user/user-module', 'userServices/user-service'], function (userModule) {
     'use strict';
     userModule.controller('UserListController', ['$scope', '$timeout', 'ngTableParams', 'UserService', function ($scope, $timeout, NgTableParams, UserService) {
-        $scope.getCSVFileName =function(){
+        $scope.getCSVFileName = function () {
             return 'test_download.csv';
         };
 
@@ -12,7 +12,7 @@ define(['user/user-module','userServices/user-service'], function (userModule) {
             total: 0,
             getData: function ($defer, params) {
                 // ajax request to api
-                UserService.query(params.url(),function (data) {
+                UserService.query(params.url(), function (data) {
                     $timeout(function () {
                         // update table params
                         params.total(data.total);

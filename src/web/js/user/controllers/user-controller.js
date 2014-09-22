@@ -1,6 +1,6 @@
-define(['user/user-module', 'userServices/user-service'], function (userModule) {
+define(['user/user-module', 'userServices/user-service', 'coreServices/modal-service'], function (userModule) {
     'use strict';
-    userModule.controller('UserController', ['$scope', '$state', 'UserService', function ($scope, $state, UserService) {
+    userModule.controller('UserController', ['$scope', '$state', 'UserService', 'ModalService', function ($scope, $state, UserService, ModalService) {
         console.log('User Controller running........');
         $scope.editUser = function (userId) {
             console.log('Edit user');
@@ -8,9 +8,9 @@ define(['user/user-module', 'userServices/user-service'], function (userModule) 
         };
 
         $scope.deleteUser = function (userId) {
-            console.log('Delete user');
-            UserService.delete({id: userId}, function(data){
-                console.log('Deleted');
+            ModalService.showConfirmModal({title: 'Delete User', message: 'Do you really want to remove the user?'}, function(){
+                UserService.delete({id: userId}, function (data) {
+                });
             });
         };
     }]);

@@ -2,17 +2,9 @@ define(['core/core-module'], function (coreModule) {
     'use strict';
     coreModule.service('ModalService', ['$modal',
         function ($modal) {
-            this.form = function (data) {
-                showModalForm('edit', data);
-            };
-
-            this.confirm = function (data) {
-                showModalForm('confirm', data);
-            };
-
-            var showModalForm = function (templatename, data) {
+            this.showConfirmModal = function (data, okCallback, cancelCallback) {
                 $modal.open({
-                    templateUrl: 'partials/modal-template-' + templatename + '.html',
+                    templateUrl: 'partials/core/modal-template-confirm.html',
                     controller: function ($scope, $modalInstance, data) {
                         $scope.data = data;
 
@@ -31,7 +23,7 @@ define(['core/core-module'], function (coreModule) {
                             return data;
                         }
                     }
-                });
+                }).result.then(okCallback, cancelCallback);
             };
         }]);
 });

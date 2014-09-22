@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <title>User Tenant Security Provider</title>
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css"/>
-    <link rel="stylesheet" href="css/app.css" type="text/css"/>
+    <link rel="stylesheet" href="css/additional.css">
+    <link rel="stylesheet" href="css/bootstrap-jc-v8-theme.css">
 </head>
 <body ng-controller="ContainerController">
-    <div ng-include="'partials/core/nav-bar.html'"></div>
-    <div class="jumbotron container main-container" ui-view></div>
+    <div ui-view></div>
     <script src="lib/requirejs/require.js" data-main="js/main.js"></script>
 </body>
 </html>
