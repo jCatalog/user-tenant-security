@@ -6,6 +6,7 @@ define(['tenant/tenant-module'], function (tenantModule) {
             return $resource('tenants/:id', { id: '@_id'
             }, {
                 query: { method: 'GET', isArray: false },
+                save:   {method:'POST'},
                 update: { method: 'PUT' }
             });
         }

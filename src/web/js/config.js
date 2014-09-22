@@ -8,7 +8,7 @@ define(['angular', 'app'],
             $stateProvider
                 .state('role', {
                     url: '/role',
-                    templateUrl: '',
+                    templateUrl: 'partials/core/container.html',
                     controller: 'RoleController',
                     abstract: true
                 }).state('role.list', {
@@ -33,7 +33,7 @@ define(['angular', 'app'],
                     parent: 'role'
                 }).state('tenant', {
                     url: '/tenant',
-                    templateUrl: '',
+                    templateUrl: 'partials/core/container.html',
                     controller: 'TenantController',
                     abstract: true
                 }).state('tenant.list', {
@@ -58,7 +58,7 @@ define(['angular', 'app'],
                     parent: 'tenant'
                 }).state('user', {
                     url: '/user',
-                    templateUrl: '',
+                    templateUrl: 'partials/core/container.html',
                     controller: 'UserController'
                 }).state('user.list', {
                     url: '/list',
@@ -80,8 +80,7 @@ define(['angular', 'app'],
                     templateUrl: 'partials/user/user-edit.html',
                     controller: 'UserEditController',
                     parent: 'user'
-                })
-                .state('login', {
+                }).state('login', {
                     url: '/login',
                     templateUrl: 'partials/core/login.html',
                     controller: 'LoginController'

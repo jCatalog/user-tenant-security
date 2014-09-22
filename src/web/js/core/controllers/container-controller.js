@@ -1,6 +1,17 @@
-define(['core/core-module'], function (coreModule) {
+define(['core/core-module', 'coreServices/auth-service'], function (coreModule) {
     'use strict';
-    coreModule.controller('ContainerController', ['$scope', '$state', function ($scope, $state) {
-        console.log('Container Controller running........');
+    coreModule.controller('ContainerController', ['$scope', '$state', 'AuthService', function ($scope, $state, AuthService) {
+        $scope.logout = function () {
+            AuthService.logout().then(function (data) {
+                $state.go('login');
+            }, function () {
+                console.log('Error');
+            });
+        };
+
+        $scope.alerts = [];
+        $scope.closeAlert = function(index){
+            $scope.alerts.splice(index, 1);
+        };
     }]);
 });

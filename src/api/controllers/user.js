@@ -117,7 +117,7 @@ module.exports = {
                 return reply(Boom.badRequest('Missing username or password'));
             }
             else {
-                User.findOne({'userId': request.payload.username}).select("+password").exec(function (err, user) {
+                User.findOne({'userId': request.payload.username}).select('+password').exec(function (err, user) {
                     if (err) {
                         return reply(Boom.badRequest(err));
                     }
@@ -147,6 +147,7 @@ module.exports = {
     logout: {
         handler: function (request, reply) {
             request.auth.session.clear();
+            return reply({error: null, message: 'Logout successfully'});
         },
         auth: 'session'
     }

@@ -1,0 +1,3 @@
+<div ng-include src="'partials/core/nav.html'"></div>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+<div class="container" ui-view></div>

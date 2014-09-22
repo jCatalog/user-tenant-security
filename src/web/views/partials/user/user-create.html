@@ -1,1 +1,50 @@
-<div ng-include src="'partials/core/nav.html'"></div>
+<form class="form-horizontal" role="form" ng-submit="createUser(data)">
+    <section class="row">
+        <h2>
+            Create New User
+        </h2>
+
+        <div class="form-group">
+            <label for="userID" class="col-sm-3 control-label">UserId</label>
+
+            <div class="col-sm-9">
+                <input name="userID" class="form-control" placeholder="User-ID" id="userID" type="text"
+                       ng-model="data.userId">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="userpassword" class="col-sm-3 control-label">Password</label>
+
+            <div class="col-sm-9">
+                <input name="userpassword" class="form-control" id="userpassword" type="password"
+                       ng-model="data.password">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-9">
+                <div class="btn-group">
+                    <label class="btn btn-default" ng-class="{selected: bCreateNewTenant}" ng-model="radioModel" btn-radio="'Left'" ng-click="bCreateNewTenant=true">Create New
+                        Tenant</label>
+                    <label class="btn btn-default" ng-class="{selected: !bCreateNewTenant}" ng-model="radioModel" btn-radio="'Right'" ng-click="bCreateNewTenant=false">Use Existing
+                        Tenant</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">TenantId</label>
+
+            <div class="col-sm-9">
+                <select class="col-sm-12" ng-model="selectedTenant" ng-options="tenant.tenantId for tenant in tenants"
+                        ng-show="!bCreateNewTenant"></select>
+                <input name="tenantId" class="form-control" placeholder="User-ID" id="tenantId" type="text"
+                       ng-model="data.tenetId" ng-show="bCreateNewTenant">
+                </select>
+            </div>
+        </div>
+        <hr>
+        <div class="pull-right">
+            <input name="tenant_execute" value="Execute" class="btn btn-primary" type="submit">
+        </div>
+    </section>
+</form>

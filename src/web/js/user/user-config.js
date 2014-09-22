@@ -1,5 +1,4 @@
 define(['user/user-module',
-    'userControllers/login-controller',
     'userControllers/user-controller',
     'userControllers/user-list-controller',
     'userControllers/user-create-controller',

@@ -13,5 +13,13 @@ define(['user/user-module', 'userServices/user-service', 'coreServices/modal-ser
                 });
             });
         };
+
+        $scope.createNewUser = function(){
+            $state.go('user.create');
+        };
+
+        $scope.downloadUserCSVFile = function(){
+            console.log('Download CSV file');
+        };
     }]);
 });

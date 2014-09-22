@@ -1,25 +1,25 @@
-<div ng-include src="'partials/core/nav.html'"></div>
-<div class="container">
-    <div loading-container="tableParams.settings().$loading">
-        <a class="btn btn-primary" ng-mousedown="csv.generate()" ng-href="{{ csv.link() }}"
-           download="{{getCSVFileName()}}">Export
-            to CSV</a>
-        <table ng-table="tableParams" show-filter="true" class="table" export-csv="csv">
-            <tbody ng-repeat="user in $data">
-            <tr id="tr{{user._id}}" ng-class-odd="'odd'" ng-class-even="'even'">
-                <td class="rowTd" data-title="'UserId'" sortable="'userId'">{{user.userId}}</td>
-                <td class="rowTd" data-title="'Firstname'" sortable="'firstName'">{{user.firstName}}</td>
-                <td class="rowTd" data-title="'Lastname'">{{user.lastName}}</td>
-                <td class="rowTd" data-title="'Email'">{{user.email}}</td>
-                <td class="rowTd">
-                    <button class="btn btn-default" type="button" id="editRowBtn{{user._id}}"
-                            ng-click="editUser(user._id)"><span class="glyphicon glyphicon-edit"></span></button>
-                <td class="rowTd">
-                    <button class="btn btn-default" type="button" id="removeRowBtn{{user._id}}"
-                            ng-click="deleteUser(user._id)"><span class="glyphicon glyphicon-trash"></span></button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+<button class="btn btn-default" type="button" id="createNewUser"
+        ng-click="createNewUser()">Create New User</button>
+
+<button class="btn btn-default" type="button" id="downloadUserCSVFile"
+        ng-click="downloadUserCSVFile()"><span class="glyphicon glyphicon-download"></span></button>
+
+<div loading-container="tableParams.settings().$loading">
+    <table ng-table="tableParams" show-filter="true" class="table">
+        <tbody ng-repeat="user in $data">
+        <tr id="tr{{user._id}}" ng-class-odd="'odd'" ng-class-even="'even'">
+            <td class="rowTd" data-title="'UserId'" sortable="'userId'">{{user.userId}}</td>
+            <td class="rowTd" data-title="'Firstname'" sortable="'firstName'">{{user.firstName}}</td>
+            <td class="rowTd" data-title="'Lastname'">{{user.lastName}}</td>
+            <td class="rowTd" data-title="'Email'">{{user.email}}</td>
+            <td class="rowTd">
+                <button class="btn btn-default" type="button" id="editRowBtn{{user._id}}"
+                        ng-click="editUser(user._id)"><span class="glyphicon glyphicon-pencil"></span></button>
+            <td class="rowTd">
+                <button class="btn btn-default" type="button" id="removeRowBtn{{user._id}}"
+                        ng-click="deleteUser(user._id)"><span class="glyphicon glyphicon-trash"></span></button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>

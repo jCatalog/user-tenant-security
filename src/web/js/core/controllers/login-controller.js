@@ -1,6 +1,6 @@
-define(['user/user-module', 'userServices/auth-service'], function (userModule) {
+define(['core/core-module', 'coreServices/auth-service'], function (coreModule) {
     'use strict';
-    userModule.controller('LoginController', ['$scope', '$location', 'AuthService', function ($scope, $location, AuthService) {
+    coreModule.controller('LoginController', ['$scope', '$location', 'AuthService', function ($scope, $location, AuthService) {
         $scope.login = function (credentials) {
             AuthService.login(credentials).then(function (user) {
                 console.log('Login');
