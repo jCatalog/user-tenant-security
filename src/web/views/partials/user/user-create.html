@@ -13,6 +13,30 @@
             </div>
         </div>
         <div class="form-group">
+            <label for="firstName" class="col-sm-3 control-label">FirstName</label>
+
+            <div class="col-sm-9">
+                <input name="firstName" class="form-control" id="firstName" placeholder="Jhon" type="text"
+                       ng-model="data.firstName">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="lastName" class="col-sm-3 control-label">Last Name</label>
+
+            <div class="col-sm-9">
+                <input name="lastName" class="form-control" id="lastName" placeholder="Michael" type="text"
+                       ng-model="data.lastName">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="email" class="col-sm-3 control-label">Email Address</label>
+
+            <div class="col-sm-9">
+                <input name="email" class="form-control" id="email" placeholder="jhon@example.com" type="email"
+                       ng-model="data.email">
+            </div>
+        </div>
+        <div class="form-group">
             <label for="userpassword" class="col-sm-3 control-label">Password</label>
 
             <div class="col-sm-9">
@@ -37,7 +61,7 @@
             <div class="col-sm-9">
                 <select class="col-sm-12" ng-model="selectedTenant" ng-options="tenant.tenantId for tenant in tenants"
                         ng-show="!bCreateNewTenant"></select>
-                <input name="tenantId" class="form-control" placeholder="User-ID" id="tenantId" type="text"
+                <input name="tenantId" class="form-control" placeholder="Tenant-ID" id="tenantId" type="text"
                        ng-model="data.tenetId" ng-show="bCreateNewTenant">
                 </select>
             </div>

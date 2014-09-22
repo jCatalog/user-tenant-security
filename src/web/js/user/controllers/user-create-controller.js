@@ -16,6 +16,9 @@ define(['user/user-module', 'tenantServices/tenant-service', 'userServices/user-
             if (data) {
                 var user = {};
                 user.userId = data.userId;
+                user.firstName = data.firstName;
+                user.lastName = data.lastName;
+                user.email = data.email;
                 user.password = data.password;
                 if (!$scope.bCreateNewTenant) {
                     user.tenantId = $scope.selectedTenant.tenantId;
