@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # README #
 
 This README would normally document whatever steps are necessary to get your application up and running.
@@ -27,3 +28,9 @@ This README would normally document whatever steps are necessary to get your app
 
 * Repo owner or admin
 * Other community or team contact
+=======
+user-tenant-security
+====================
+
+Management of users, roles, tenants and security/ACL in Node.js/MongoDB/Mongoose with self service signup
+>>>>>>> 88dda6f1f92cf68ac7800b3f6954da35dd01a07d
