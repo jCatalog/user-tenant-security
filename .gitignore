@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 .idea
-node_modules
 public/lib
 =======
 # Logs
@@ -31,4 +29,3 @@ node_modules
 
 # Users Environment Variables
 .lock-wscript
->>>>>>> 88dda6f1f92cf68ac7800b3f6954da35dd01a07d
