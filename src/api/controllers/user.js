@@ -1,6 +1,8 @@
 'use strict';
 
 var Boom = require('boom');
+var Joi = require('joi');
+var _ = require('lodash');
 var User = require('../models/user');
 var securityProvider = require('../util/security-provider');
 
@@ -10,9 +12,16 @@ module.exports = {
         handler: function (request, reply) {
             var page = (request.query.page ? request.query.page - 1 : 0),
                 count = request.query.count || 10,
-                sorting = request.query.sorting || {'createdAt': 'desc'};
+                sorting = request.query.sorting || {'createdAt': 'desc'},
+                filter = {};
 
-            User.find()
+            if (request.query.filter) {
+                var filter = _.transform(request.query.filter, function (result, text, key) {
+                    result[key] = {$regex: '.*' + text + '.*'};
+                });
+            }
+
+            User.find(filter)
                 .sort(sorting)
                 .limit(count)
                 .skip(page * count)
@@ -55,7 +64,16 @@ module.exports = {
                 });
             });
         },
-        auth: 'session'
+        auth: 'session',
+        validate: {
+            payload: {
+                userId: Joi.string().min(3).max(20),
+                firstName: Joi.string().min(3).max(20),
+                lastName: Joi.string().min(3).max(20),
+                password: Joi.string().regex(/[a-zA-Z0-9]{3,30}/),
+                email: Joi.string().email()
+            }
+        }
     },
     get: {
         handler: function (request, reply) {
@@ -76,13 +94,14 @@ module.exports = {
     update: {
         handler: function (request, reply) {
             var update = request.payload;
+            update.updatedAt = new Date();
             User.findByIdAndUpdate(request.params.id, update).exec(function (err, user) {
                 if (err) {
                     var error = Boom.badRequest(err.message);
                     return reply(error);
                 }
                 else {
-                    return reply({error: null, data:user, message: 'Updated successfully'});
+                    return reply({error: null, data: user, message: 'Updated successfully'});
                 }
             });
         },
@@ -122,9 +141,13 @@ module.exports = {
                         return reply(Boom.badRequest(err));
                     }
                     securityProvider.comparePassword(request.payload.password, user.password, function (err, isPasswordMatch) {
-                        if(err){
+                        if (err) {
                             return reply(Boom.badRequest('Invalid username or password'));
                         }
+                        if (!user.firstLogin)
+                            user.firstLogin = new Date();
+                        user.lastLogin = new Date();
+                        user.save();
                         var account = {
                             username: user.userId
                         };

@@ -18,7 +18,7 @@ define(['tenant/tenant-module','tenantServices/tenant-service'], function (tenan
                         // update table params
                         params.total(data.total);
                         // set new data
-                        $defer.resolve(data.users);
+                        $defer.resolve(data.tenants);
                     }, 500);
                 });
             }
