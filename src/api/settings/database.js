@@ -13,6 +13,10 @@ dbInstance.once('open', function callback() {
     console.log('Connection with database succeeded.');
 });
 
+dbInstance.on('createDatabase', function callback(){
+   console.log('Database created');
+});
+
 module.exports = {
     Mongoose: Mongoose,
     dbInstance: dbInstance

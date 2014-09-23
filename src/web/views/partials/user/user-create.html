@@ -59,7 +59,7 @@
             <label class="col-sm-3 control-label">TenantId</label>
 
             <div class="col-sm-9">
-                <select class="col-sm-12" ng-model="selectedTenant" ng-options="tenant.tenantId for tenant in tenants"
+                <select class="form-control" ng-model="selectedTenant" ng-options="tenant.tenantId for tenant in tenants"
                         ng-show="!bCreateNewTenant"></select>
                 <input name="tenantId" class="form-control" placeholder="Tenant-ID" id="tenantId" type="text"
                        ng-model="data.tenetId" ng-show="bCreateNewTenant">
