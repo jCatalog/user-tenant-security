@@ -78,11 +78,11 @@ module.exports = {
             var update = request.payload;
             User.findByIdAndUpdate(request.params.id, update).exec(function (err, user) {
                 if (err) {
-                    var error = Boom.badRequest('No data found');
+                    var error = Boom.badRequest(err.message);
                     return reply(error);
                 }
                 else {
-                    return reply({error: null, message: 'Updated successfully'});
+                    return reply({error: null, data:user, message: 'Updated successfully'});
                 }
             });
         },

@@ -7,13 +7,6 @@ define(['user/user-module', 'userServices/user-service', 'coreServices/modal-ser
             $state.go('user.edit', { id: userId });
         };
 
-        $scope.deleteUser = function (userId) {
-            ModalService.showConfirmModal({title: 'Delete User', message: 'Do you really want to remove the user?'}, function(){
-                UserService.delete({id: userId}, function (data) {
-                });
-            });
-        };
-
         $scope.createNewUser = function(){
             $state.go('user.create');
         };
