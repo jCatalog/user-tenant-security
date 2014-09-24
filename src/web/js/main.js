@@ -12,6 +12,7 @@ require.config({
         'angularResource': '../lib/angular-resource/angular-resource',
         'angularRoute': '../lib/angular-route/angular-route',
         'angularUiRouter': '../lib/angular-ui-router/release/angular-ui-router',
+        'angularCookies': '../lib/angular-cookies/angular-cookies',
         'angularHttpAuth': '../lib/angular-http-auth/src/http-auth-interceptor',
         'ngTable': '../lib/ng-table/ng-table',
         'ng-table-export': '../lib/ng-table-export/ng-table-export',
@@ -40,6 +41,9 @@ require.config({
     shim: {
         'angular': {
             exports: 'angular'
+        },
+        'angularCookies': {
+            deps: ['angular']
         },
         'angularResource': {
             deps: ['angular']

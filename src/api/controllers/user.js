@@ -120,7 +120,9 @@ module.exports = {
         handler: function (request, reply) {
             if (request.auth.isAuthenticated) {
                 var account = {
-                    username: request.auth.credentials.username
+                    username: request.auth.credentials.username,
+                    firstName:request.auth.credentials.firstName,
+                    lastName:request.auth.credentials.lastName
                 };
                 return reply({error: null, user: account, message: 'Login successfully'});
             }
@@ -142,7 +144,9 @@ module.exports = {
                         user.lastLogin = new Date();
                         user.save();
                         var account = {
-                            username: user.userId
+                            username: user.userId,
+                            firstName:user.firstName,
+                            lastName:user.lastName
                         };
                         request.auth.session.set(account);
                         return reply({error: null, user: account, message: 'Login successfully'});
