@@ -1,10 +1,10 @@
 define(['core/core-module', 'coreServices/auth-service'], function (coreModule) {
     'use strict';
-    coreModule.controller('LoginController', ['$scope', '$location', 'AuthService', function ($scope, $location, AuthService) {
+    coreModule.controller('LoginController', ['$scope', '$state', 'AuthService', function ($scope, $state, AuthService) {
         $scope.login = function (credentials) {
             AuthService.login(credentials).then(function (user) {
                 console.log('Login');
-                $location.path('/');
+                $state.go('home');
             }, function () {
                 console.log('Error');
             });

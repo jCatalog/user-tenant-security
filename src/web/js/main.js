@@ -19,6 +19,7 @@ require.config({
         'core': './core',
         'coreControllers': './core/controllers',
         'coreServices': './core/services',
+        'coreDirectives': './core/directives',
         'role': './role',
         'roleControllers': './role/controllers',
         'roleServices': './role/services',

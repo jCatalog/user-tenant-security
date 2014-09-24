@@ -3,7 +3,7 @@
 define(['angular', 'app'],
     function (angular, app) {
         return app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
-            $urlRouterProvider.otherwise('/tenant/list');
+            $urlRouterProvider.otherwise('/404');
 
             $stateProvider
                 .state('role', {
@@ -80,10 +80,26 @@ define(['angular', 'app'],
                     templateUrl: 'partials/user/user-edit.html',
                     controller: 'UserEditController',
                     parent: 'user'
-                }).state('login', {
-                    url: '/login',
-                    templateUrl: 'partials/core/login.html',
+                }).state('signin', {
+                    url: '/signin',
+                    templateUrl: 'partials/core/signin.html',
                     controller: 'LoginController'
+                }).state('signup', {
+                    url: '/signup',
+                    templateUrl: 'partials/core/signup.html',
+                    controller: 'SignupFormController'
+                }).state('404', {
+                    url: '/404',
+                    templateUrl: 'partials/core/page_404.html',
+                    controller: ''
+                }).state('forgotpassword', {
+                    url: '/forgotpassword',
+                    templateUrl: 'partials/core/forgotpassword.html',
+                    controller: ''
+                }).state('home', {
+                    url: '/home',
+                    templateUrl: 'partials/core/home.html',
+                    controller: ''
                 });
         }]);
     });

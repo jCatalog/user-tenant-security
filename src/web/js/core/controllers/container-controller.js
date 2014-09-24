@@ -3,7 +3,7 @@ define(['core/core-module', 'coreServices/auth-service'], function (coreModule) 
     coreModule.controller('ContainerController', ['$scope', '$state', 'AuthService', function ($scope, $state, AuthService) {
         $scope.logout = function () {
             AuthService.logout().then(function (data) {
-                $state.go('login');
+                $state.go('signin');
             }, function () {
                 console.log('Error');
             });
@@ -12,6 +12,10 @@ define(['core/core-module', 'coreServices/auth-service'], function (coreModule) 
         $scope.alerts = [];
         $scope.closeAlert = function(index){
             $scope.alerts.splice(index, 1);
+        };
+
+        $scope.addAlert = function(alert){
+            $scope.alerts[0] = alert;
         };
     }]);
 });

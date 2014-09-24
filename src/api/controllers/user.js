@@ -12,16 +12,9 @@ module.exports = {
         handler: function (request, reply) {
             var page = (request.query.page ? request.query.page - 1 : 0),
                 count = request.query.count || 10,
-                sorting = request.query.sorting || {'createdAt': 'desc'},
-                filter = {};
+                sorting = request.query.sorting || {'createdAt': 'desc'};
 
-            if (request.query.filter) {
-                var filter = _.transform(request.query.filter, function (result, text, key) {
-                    result[key] = {$regex: '.*' + text + '.*'};
-                });
-            }
-
-            User.find(filter)
+            User.find()
                 .sort(sorting)
                 .limit(count)
                 .skip(page * count)
@@ -64,13 +57,13 @@ module.exports = {
                 });
             });
         },
-        auth: 'session',
         validate: {
             payload: {
                 userId: Joi.string().min(3).max(20),
                 firstName: Joi.string().min(3).max(20),
                 lastName: Joi.string().min(3).max(20),
                 password: Joi.string().regex(/[a-zA-Z0-9]{3,30}/),
+                passwordConfirm: Joi.ref('password'),
                 email: Joi.string().email()
             }
         }

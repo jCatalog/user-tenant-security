@@ -16,7 +16,7 @@ define([
 
     return angular.module('app', ['coreModule', 'tenantModule', 'roleModule', 'userModule', 'ngRoute', 'ui.router', 'http-auth-interceptor']).run(['$rootScope', '$location', function ($rootScope, $location) {
         $rootScope.$on('event:auth-loginRequired', function () {
-            $location.path('/login');
+            $location.path('/signin');
             console.log('event:auth-login required  ...');
         });
         console.log('app module running...');

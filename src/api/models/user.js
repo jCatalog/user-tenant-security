@@ -8,16 +8,16 @@ var mongoose = require('../settings/database').Mongoose,
 
 // schema
 var UserSchema = new Schema({
-    userId: {type: String, unique: true},
-    firstName: {type: String, trim: true},
-    lastName: {type: String, trim: true},
-    email: {type: String, lowercase: true, trim: true},
+    userId: {type: String, unique: true, min: 3, max: 20},
+    firstName: {type: String, trim: true, min: 3, max: 20},
+    lastName: {type: String, trim: true, min: 3, max: 20},
+    email: {type: String, lowercase: true, trim: true, min: 5, max: 50},
     password: {type: String, select: false},
     createdBy: {type: ObjectId},
     updatedBy: {type: ObjectId},
     lastLogin: {type: Date},
     firstLogin: {type: Date},
-    roleId:{type: ObjectId}
+    roleId: {type: ObjectId}
 });
 
 // timestamps

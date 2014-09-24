@@ -26,9 +26,9 @@ define(['user/user-module', 'tenantServices/tenant-service', 'userServices/user-
                     user.tenantId = data.tenantId;
                 }
                 UserService.save(user, function (data) {
-                    $scope.alerts.push({type: 'success', msg: data.userId + ' is created successfully' });
+                    $scope.addAlert({type: 'success', msg: data.userId + ' is created successfully' });
                 }, function (err) {
-                    $scope.alerts.push({type: 'danger', msg: 'User creation is failed for ' + err.data.message});
+                    $scope.addAlert({type: 'danger', msg: 'User creation is failed for ' + err.data.message});
                 });
             }
         };

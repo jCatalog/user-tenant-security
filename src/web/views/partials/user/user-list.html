@@ -5,9 +5,9 @@
 <button class="btn btn-default" type="button" id="downloadUserCSVFile"
         ng-click="downloadUserCSVFile()"><span class="glyphicon glyphicon-download"></span></button>
 
-<table ng-table="tableParams" show-filter="true" class="table">
+<table ng-table="tableParams" class="table">
     <tr ng-repeat="user in $data" id="tr{{user._id}}" ng-class-odd="'odd'" ng-class-even="'even'">
-        <td data-title="'UserId'" filter="{ 'userId': 'text' }">
+        <td data-title="'UserId'">
             {{user.userId}}
         </td>
         <td data-title="'First Name'">
