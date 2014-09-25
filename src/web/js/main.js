@@ -10,6 +10,7 @@ require.config({
         'angular-bootstrap': '../lib/angular-bootstrap/ui-bootstrap',
         'angular-bootstrap-tpls': '../lib/angular-bootstrap/ui-bootstrap-tpls',
         'angularResource': '../lib/angular-resource/angular-resource',
+        'angularAnimate': '../lib/angular-animate/angular-animate',
         'angularRoute': '../lib/angular-route/angular-route',
         'angularUiRouter': '../lib/angular-ui-router/release/angular-ui-router',
         'angularCookies': '../lib/angular-cookies/angular-cookies',
@@ -46,6 +47,9 @@ require.config({
             deps: ['angular']
         },
         'angularResource': {
+            deps: ['angular']
+        },
+        'angularAnimate': {
             deps: ['angular']
         },
         'angularHttpAuth': {

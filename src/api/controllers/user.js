@@ -64,7 +64,9 @@ module.exports = {
                 lastName: Joi.string().min(3).max(20),
                 password: Joi.string().regex(/[a-zA-Z0-9]{3,30}/),
                 passwordConfirm: Joi.ref('password'),
-                email: Joi.string().email()
+                email: Joi.string().email(),
+                tenantId:Joi.string().min(3).max(20),
+                tenantDesc:Joi.string()
             }
         }
     },

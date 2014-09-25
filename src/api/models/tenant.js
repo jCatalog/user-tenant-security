@@ -10,10 +10,6 @@ var mongoose = require('../settings/database').Mongoose,
 var TenantSchema = new Schema({
     tenantId: {type: String, unique: true},
     description: {type: String},
-
-    validFrom: {type: Date},
-    validTo: {type: Date},
-
     createdBy: {type: ObjectId},
     updatedBy: {type: ObjectId},
     users: [
