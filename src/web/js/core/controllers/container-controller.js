@@ -1,9 +1,11 @@
 define(['core/core-module', 'coreServices/auth-service'], function (coreModule) {
     'use strict';
     coreModule.controller('ContainerController', ['$scope', '$state', '$cookieStore', 'AuthService', function ($scope, $state, $cookieStore, AuthService) {
-        $scope.userModel = $cookieStore.get('UserTenantSecurityUserModel');
-        if (!$scope.userModel) {
+        var userModel = $cookieStore.get('UserTenantSecurityUserModel');
+        if (!userModel) {
             $state.go('signin');
+        } else {
+            $scope.userFullName = userModel.firstName + ' ' + userModel.lastName;
         }
 
         $scope.logout = function () {

@@ -1,6 +1,5 @@
 define(['core/core-module'], function (coreModule) {
     'use strict';
-
     coreModule.service('AuthService', function ($http) {
         this.login = function (credentials) {
             console.log('Auth Service');

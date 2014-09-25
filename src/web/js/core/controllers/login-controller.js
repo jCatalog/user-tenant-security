@@ -4,7 +4,7 @@ define(['core/core-module', 'coreServices/auth-service'], function (coreModule) 
         $scope.login = function (credentials) {
             AuthService.login(credentials).then(function (user) {
                 $cookieStore.put('UserTenantSecurityUserModel', user);
-                $scope.userModel = user;
+                $scope.userFullName = user.firstName + ' ' + user.lastName;
                 $state.go('home');
             }, function () {
                 console.log('Error');

@@ -12,7 +12,7 @@ var UserSchema = new Schema({
     firstName: {type: String, trim: true, min: 3, max: 20},
     lastName: {type: String, trim: true, min: 3, max: 20},
     email: {type: String, lowercase: true, trim: true, min: 5, max: 50},
-    password: {type: String, select: false},
+    password: {type: String, select: false, min: 5, max: 50},
     createdBy: {type: ObjectId},
     updatedBy: {type: ObjectId},
     lastLogin: {type: Date},

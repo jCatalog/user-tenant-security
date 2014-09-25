@@ -3,7 +3,7 @@
 define(['angular', 'app'],
     function (angular, app) {
         return app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
-            $urlRouterProvider.otherwise('/404');
+            $urlRouterProvider.otherwise('/');
 
             $stateProvider
                 .state('role', {
@@ -97,7 +97,7 @@ define(['angular', 'app'],
                     templateUrl: 'partials/core/forgotpassword.html',
                     controller: ''
                 }).state('home', {
-                    url: '/home',
+                    url: '/',
                     templateUrl: 'partials/core/home.html',
                     controller: ''
                 });
