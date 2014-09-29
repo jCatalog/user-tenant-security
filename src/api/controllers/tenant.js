@@ -1,7 +1,8 @@
 'use strict';
 
-var Boom = require('boom');
-var Tenant = require('../models/tenant');
+var Boom = require('boom'),
+    mongoose = require('mongoose'),
+    Tenant = mongoose.model('Tenant');
 
 //Expose the CRUD functionality
 module.exports = {

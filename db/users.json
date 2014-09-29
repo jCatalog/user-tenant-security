@@ -1,0 +1,9 @@
+[
+    {
+        "userId": "admin",
+        "firstName": "Admin",
+        "lastName": "Admin",
+        "email": "admin@jcatalog.com",
+        "password": "$2a$10$c5GOP.Pyog4EcwNaa7ogJOiNV8SvFy6Q2ODqk2KEo29jrCGZKj3CW"
+    }
+]

@@ -1,10 +1,12 @@
 'use strict';
 
-var Hapi = require('hapi');
-var Path = require('path');
-var dbInstance = require('./api/settings/database').db;
-var port = process.env.PORT || 3000;
+var Hapi = require('hapi'),
+    Path = require('path'),
+    mongoose = require('mongoose');
 
+var port = process.env.PORT || 3000;
+var model = require('./api/models')();
+var dbInstance = mongoose.connection;
 var routes = require('./api/routes');
 
 var serverOptions = {

@@ -1,15 +1,17 @@
 'user strict';
 
 // dependencies
-var db = require('../settings/database').db,
-    timestamps = require('mongoose-timestamp'),
-    Schema = require('mongoose').Schema,
+var mongoose = require('mongoose'),
+    timestamps = require('../plugins/mongoose/timestamp'),
+    Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
 // schema
 var RoleSchema = new Schema({
     roleId: {type: String, unique: true, min: 3, max: 20},
-    permissionList:[{type:ObjectId, ref: 'Permission'}],
+    permissionList: [
+        {type: ObjectId, ref: 'Permission'}
+    ],
     createdBy: {type: ObjectId},
     updatedBy: {type: ObjectId}
 });
@@ -18,4 +20,4 @@ var RoleSchema = new Schema({
 RoleSchema.plugin(timestamps);
 
 // export
-module.exports = db.model('Role', RoleSchema);
+module.exports = mongoose.model('Role', RoleSchema);

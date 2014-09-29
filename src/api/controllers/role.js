@@ -1,7 +1,7 @@
 'use strict';
 
-var Boom = require('boom');
-var dbInstance = require('../settings/database').dbInstance;
+var Boom = require('boom'),
+    mongoose= require('mongoose');
 
 //Expose the CRUD functionality
 module.exports = {

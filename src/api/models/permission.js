@@ -1,9 +1,9 @@
 'user strict';
 
 // dependencies
-var db = require('../settings/database').db,
-    timestamps = require('mongoose-timestamp'),
-    Schema = require('mongoose').Schema,
+var mongoose = require('mongoose'),
+    timestamps = require('../plugins/mongoose/timestamp'),
+    Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
 // schema
@@ -17,4 +17,4 @@ var PermissionSchema = new Schema({
 PermissionSchema.plugin(timestamps);
 
 // export
-module.exports = db.model('Permission', PermissionSchema);
+module.exports = mongoose.model('Permission', PermissionSchema);
