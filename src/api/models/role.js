@@ -2,7 +2,7 @@
 
 // dependencies
 var mongoose = require('mongoose'),
-    timestamps = require('../plugins/mongoose/timestamp'),
+    timestamps = require('mongoose-timestamp'),
     Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 

@@ -37,16 +37,23 @@ module.exports = {
     create: {
         handler: function (request, reply) {
             var user = new User(request.payload);
-            // Save the user
-            user.save(function (err, data) {
+            var tenant = new Tenant(request.payload);
+
+            tenant.save(function (err, tenantdata) {
                 if (err) {
                     var error = Boom.badRequest(err);
                     return reply(error);
-                } else {
-                    // Remove sensitive data before login
-                    user.password = undefined;
-                    return reply(data[0]).type('application/json');
                 }
+                user.tenantId = tenantdata._id;
+                // Save the user
+                user.save(function (err, data) {
+                    if (err) {
+                        var error = Boom.badRequest(err);
+                        return reply(error);
+                    } else {
+                        return reply(data[0]).type('application/json');
+                    }
+                });
             });
         },
         validate: {
