@@ -1,9 +1,9 @@
 'user strict';
 
 // dependencies
-var mongoose = require('../settings/database').Mongoose,
+var db = require('../settings/database').db,
     timestamps = require('mongoose-timestamp'),
-    Schema = mongoose.Schema,
+    Schema = require('mongoose').Schema,
     ObjectId = Schema.ObjectId;
 
 // schema
@@ -23,4 +23,4 @@ var UserSchema = new Schema({
 UserSchema.plugin(timestamps);
 
 // export
-module.exports = mongoose.model('User', UserSchema);
+module.exports = db.model('User', UserSchema);

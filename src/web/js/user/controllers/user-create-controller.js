@@ -1,6 +1,6 @@
 define(['user/user-module', 'tenantServices/tenant-service', 'userServices/user-service'], function (userModule) {
     'use strict';
-    userModule.controller('UserCreateController', ['$scope', 'TenantService', 'UserService', function ($scope, TenantService, UserService) {
+    userModule.controller('UserCreateController', ['$scope', '$state', 'TenantService', 'UserService', function ($scope, $state, TenantService, UserService) {
         console.log('User Create Controller running........');
         $scope.tenants = [];
         $scope.bCreateNewTenant = true;
@@ -11,6 +11,10 @@ define(['user/user-module', 'tenantServices/tenant-service', 'userServices/user-
                     $scope.selectedTenant = data.tenants[0];
             });
         })();
+
+        $scope.cancel = function () {
+            $state.go('user.list');
+        };
 
         $scope.createUser = function (data) {
             if (data) {

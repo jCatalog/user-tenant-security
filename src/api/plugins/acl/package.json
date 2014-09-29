@@ -1,0 +1,7 @@
+{
+    "name": "hapi-node-acl",
+    "version": "0.0.1",
+    "dependencies": {
+        "acl": "^0.4.4"
+    }
+}

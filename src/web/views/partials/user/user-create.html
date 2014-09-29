@@ -1,74 +1,83 @@
-<form class="form-horizontal" role="form" ng-submit="createUser(data)">
-    <section class="row">
-        <h2>
+<form name="createUserForm" class="form-horizontal form-validation">
+    <div class="panel panel-default">
+        <div class="panel-heading text-center font-bold">
             Create New User
-        </h2>
-
-        <div class="form-group">
-            <label for="userID" class="col-sm-3 control-label">UserId</label>
-
-            <div class="col-sm-9">
-                <input name="userID" class="form-control" placeholder="User-ID" id="userID" type="text"
-                       ng-model="data.userId">
-            </div>
         </div>
-        <div class="form-group">
-            <label for="firstName" class="col-sm-3 control-label">FirstName</label>
-
-            <div class="col-sm-9">
-                <input name="firstName" class="form-control" id="firstName" placeholder="Jhon" type="text"
-                       ng-model="data.firstName">
+        <div class="panel-body">
+            <div class="form-group">
+                <div collapse="!authError" class="m-t col-sm-8 col-sm-offset-2">
+                    <div class="text-danger wrapper text-center col-sm-12" ng-show="authError">
+                        {{authError}}
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label for="lastName" class="col-sm-3 control-label">Last Name</label>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Username</label>
 
-            <div class="col-sm-9">
-                <input name="lastName" class="form-control" id="lastName" placeholder="Michael" type="text"
-                       ng-model="data.lastName">
+                <div class="col-sm-9">
+                    <input placeholder="jhon" class="form-control" ng-model="user.userId"
+                           ng-pattern="/^[a-zA-Z0-9]{4,10}$/" required>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label for="email" class="col-sm-3 control-label">Email Address</label>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">First Name</label>
 
-            <div class="col-sm-9">
-                <input name="email" class="form-control" id="email" placeholder="jhon@example.com" type="email"
-                       ng-model="data.email">
+                <div class="col-sm-9">
+                    <input placeholder="Jhon" type="text" class="form-control"
+                           ng-model="user.firstName"
+                           ng-pattern="/^[a-zA-Z]{4,10}$/" required>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label for="userpassword" class="col-sm-3 control-label">Password</label>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Last Name</label>
 
-            <div class="col-sm-9">
-                <input name="userpassword" class="form-control" id="userpassword" type="password"
-                       ng-model="data.password">
+                <div class="col-sm-9">
+                    <input placeholder="Michael" type="text" class="form-control" ng-model="user.lastName"
+                           ng-pattern="/^[a-zA-Z]{4,10}$/" required>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-3"></div>
-            <div class="col-sm-9">
-                <div class="btn-group">
-                    <label class="btn btn-default" ng-class="{selected: bCreateNewTenant}" ng-model="radioModel" btn-radio="'Left'" ng-click="bCreateNewTenant=true">Create New
-                        Tenant</label>
-                    <label class="btn btn-default" ng-class="{selected: !bCreateNewTenant}" ng-model="radioModel" btn-radio="'Right'" ng-click="bCreateNewTenant=false">Use Existing
-                        Tenant</label>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Email</label>
+
+                <div class="col-sm-9">
+                    <input type="email" placeholder="jhon@example.com" class="form-control"
+                           ng-model="user.email"
+                           required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Password</label>
+
+                <div class="col-sm-9">
+                    <input type="password" class="form-control"
+                           ng-model="user.password" required
+                           data-ng-class="{'ng-invalid':signUpForm.confirmPassword.$error.match}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Confirm Password</label>
+
+                <div class="col-sm-9">
+                    <input type="password" class="form-control"
+                           ng-model="user.passwordConfirm" required data-match="user.password"
+                           name="confirmPassword">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Tenant Name</label>
+
+                <div class="col-sm-9">
+                    <select class="form-control" ng-model="selectedTenant"
+                            ng-options="tenant.tenantId for tenant in tenants" required></select>
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">TenantId</label>
-
-            <div class="col-sm-9">
-                <select class="form-control" ng-model="selectedTenant" ng-options="tenant.tenantId for tenant in tenants"
-                        ng-show="!bCreateNewTenant"></select>
-                <input name="tenantId" class="form-control" placeholder="Tenant-ID" id="tenantId" type="text"
-                       ng-model="data.tenetId" ng-show="bCreateNewTenant">
-                </select>
-            </div>
+        <div class="panel-footer text-right bg-light lter">
+            <button type="submit" class="btn btn-primary" ng-click="createUser(user)"
+                    ng-disabled='createUserForm.$invalid'>Submit
+            </button>
+            <button class="btn" ng-click="cancel()">Cancel
+            </button>
         </div>
-        <hr>
-        <div class="pull-right">
-            <input name="tenant_execute" value="Execute" class="btn btn-primary" type="submit">
-        </div>
-    </section>
+    </div>
 </form>
