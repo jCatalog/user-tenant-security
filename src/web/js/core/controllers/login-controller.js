@@ -6,8 +6,8 @@ define(['core/core-module', 'coreServices/auth-service'], function (coreModule) 
                 $cookieStore.put('UserTenantSecurityUserModel', user);
                 $scope.userFullName = user.firstName + ' ' + user.lastName;
                 $state.go('home');
-            }, function () {
-                console.log('Error');
+            }, function (err) {
+                $scope.authError = err.data.message;
             });
         };
     }]);

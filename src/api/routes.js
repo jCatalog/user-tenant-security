@@ -61,6 +61,11 @@ var routes = function () {
             config: controller.user.login
         },
         {
+            method: ['POST'],
+            path: '/signup',
+            config: controller.user.signup
+        },
+        {
             method: 'POST',
             path: '/logout',
             config: controller.user.logout

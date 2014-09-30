@@ -3,7 +3,6 @@ define(['user/user-module', 'tenantServices/tenant-service', 'userServices/user-
     userModule.controller('UserCreateController', ['$scope', '$state', 'TenantService', 'UserService', function ($scope, $state, TenantService, UserService) {
         console.log('User Create Controller running........');
         $scope.tenants = [];
-        $scope.bCreateNewTenant = true;
         (function () {
             TenantService.query({}, function (data) {
                 $scope.tenants = data.tenants;
@@ -24,11 +23,7 @@ define(['user/user-module', 'tenantServices/tenant-service', 'userServices/user-
                 user.lastName = data.lastName;
                 user.email = data.email;
                 user.password = data.password;
-                if (!$scope.bCreateNewTenant) {
-                    user.tenantId = $scope.selectedTenant.tenantId;
-                } else {
-                    user.tenantId = data.tenantId;
-                }
+                user.tenantId = $scope.selectedTenant._id;
                 UserService.save(user, function (data) {
                     $scope.addAlert({type: 'success', msg: data.userId + ' is created successfully' });
                 }, function (err) {

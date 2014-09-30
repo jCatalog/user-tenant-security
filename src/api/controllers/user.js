@@ -38,14 +38,12 @@ module.exports = {
         handler: function (request, reply) {
             var user = new User(request.payload);
             var tenant = new Tenant(request.payload);
-
-            tenant.save(function (err, tenantdata) {
+            Tenant.findById(request.payload.tenantId).exec(function (err, tenantData) {
                 if (err) {
                     var error = Boom.badRequest(err);
                     return reply(error);
                 }
-                user.tenantId = tenantdata._id;
-                // Save the user
+                user.tenantId = tenantData._id;
                 user.save(function (err, data) {
                     if (err) {
                         var error = Boom.badRequest(err);
@@ -54,6 +52,32 @@ module.exports = {
                         return reply(data[0]).type('application/json');
                     }
                 });
+            });
+        },
+        validate: {
+            payload: {
+                userId: Joi.string().min(3).max(20),
+                firstName: Joi.string().min(3).max(20),
+                lastName: Joi.string().min(3).max(20),
+                password: Joi.string().regex(/[a-zA-Z0-9]{3,30}/),
+                passwordConfirm: Joi.ref('password'),
+                email: Joi.string().email(),
+                tenantId: Joi.string()
+            }
+        },
+        auth: 'session'
+    },
+    signup: {
+        handler: function (request, reply) {
+            var user = new User(request.payload);
+            var tenant = new Tenant(request.payload);
+            user.createUser(tenant, function (err, data) {
+                if (err) {
+                    var error = Boom.badRequest(err);
+                    return reply(error);
+                } else {
+                    return reply(data[0]).type('application/json');
+                }
             });
         },
         validate: {
@@ -134,6 +158,9 @@ module.exports = {
                 User.findOne({'userId': request.payload.username}).select('+password').exec(function (err, user) {
                     if (err) {
                         return reply(Boom.badRequest(err));
+                    }
+                    if (!user) {
+                        return reply(Boom.badRequest('Invalid username or password'));
                     }
                     user.comparePassword(request.payload.password, function (err, isPasswordMatch) {
                         if (err) {
