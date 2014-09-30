@@ -3,8 +3,8 @@
 
 <table ng-table="tableParams" show-filter="true" class="table">
     <tr ng-repeat="tenant in $data" id="tr{{tenant._id}}" ng-class-odd="'odd'" ng-class-even="'even'">
-        <td data-title="'TenantId'" filter="{ 'tenant': 'text' }">
-            {{tenant.tenantId}}
+        <td data-title="'TenantName'" filter="{ 'tenant': 'text' }">
+            {{tenant.tenantName}}
         </td>
         <td data-title="'Created At'">
             {{tenant.createdAt}}

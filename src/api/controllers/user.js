@@ -37,14 +37,12 @@ module.exports = {
     create: {
         handler: function (request, reply) {
             var user = new User(request.payload);
-            var tenant = new Tenant(request.payload);
-            Tenant.findById(request.payload.tenantId).exec(function (err, tenantData) {
+            Tenant.findById(request.payload.tenantId).exec(function (err, tenant) {
                 if (err) {
                     var error = Boom.badRequest(err);
                     return reply(error);
                 }
-                user.tenantId = tenantData._id;
-                user.save(function (err, data) {
+                user.create(tenant, function (err, data) {
                     if (err) {
                         var error = Boom.badRequest(err);
                         return reply(error);
@@ -71,7 +69,7 @@ module.exports = {
         handler: function (request, reply) {
             var user = new User(request.payload);
             var tenant = new Tenant(request.payload);
-            user.createUser(tenant, function (err, data) {
+            user.create(tenant, function (err, data) {
                 if (err) {
                     var error = Boom.badRequest(err);
                     return reply(error);

@@ -11,7 +11,10 @@ var TenantSchema = new Schema({
     tenantName: {type: String, unique: true},
     description: {type: String},
     createdBy: {type: ObjectId},
-    updatedBy: {type: ObjectId}
+    updatedBy: {type: ObjectId},
+    users: [
+        {type: ObjectId, ref: 'User'}
+    ]
 });
 
 // timestamps

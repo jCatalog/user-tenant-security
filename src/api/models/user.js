@@ -19,30 +19,24 @@ var UserSchema = new Schema({
     updatedBy: {type: ObjectId},
     lastLogin: {type: Date},
     firstLogin: {type: Date},
-    isActive: {type: Boolean, default: false},
-    tenantId: {type: ObjectId, ref: 'Tenant'}
+    isActive: {type: Boolean, default: false}
 });
 
-UserSchema.methods.createUser = function (tenant, callback) {
-    var user = this;
-    if(!tenant){
+UserSchema.methods.create = function (tenant, callback) {
+    if (!tenant) {
         return callback('Invalid parameter');
     }
-    if(tenant){
-        tenant.save(function(err, data){
-            if(err) return callback(err);
-            user.tenantId = data._id;
-            user.save(function(err, userData){
-                if(err) {
-                    tenant.remove(function(err){
-
-                    });
-                    return callback(err);
-                }
-                callback(null, userData);
-            });
+    var schema = this;
+    schema.save(function (err, user) {
+        if (err) {
+            return callback(err);
+        }
+        tenant.users.push(user._id);
+        tenant.save(function (err, data) {
+            if (err) return callback(err);
+            return callback(null, data);
         });
-    }
+    });
 };
 
 UserSchema.pre('save', function (next) {
