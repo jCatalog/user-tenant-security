@@ -1,21 +1,39 @@
-<button class="btn btn-default" type="button" id="downloadTenantCSVFile"
-        ng-click="downloadTenantCSVFile()"><span class="glyphicon glyphicon-download"></span></button>
-
-<table ng-table="tableParams" show-filter="true" class="table">
-    <tr ng-repeat="tenant in $data" id="tr{{tenant._id}}" ng-class-odd="'odd'" ng-class-even="'even'">
-        <td data-title="'TenantName'" filter="{ 'tenant': 'text' }">
-            {{tenant.tenantName}}
-        </td>
-        <td data-title="'Created At'">
-            {{tenant.createdAt}}
-        </td>
-        <td>
-            <button class="btn btn-default" type="button" id="editRowBtn{{tenant._id}}"
-                    ng-click="editTenant(tenant._id)"><span class="glyphicon glyphicon-pencil"></span></button>
-        </td>
-        <td>
-            <button class="btn btn-default" type="button" id="removeRowBtn{{tenant._id}}"
-                    ng-click="deleteTenant(tenant._id)"><span class="glyphicon glyphicon-trash"></span></button>
-        </td>
-    </tr>
-</table>
+<div class="row">
+    <div class="col-md-12">
+        <button class="btn btn-default" type="button" id="createNewTenant"
+                ng-click="createNewTenant()">Create New Tenant
+        </button>
+        <button class="btn btn-default" type="button" id="downloadTenantCSVFile"
+                ng-click="downloadTenantCSVFile()"><span class="fa fa-download"></span></button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 table-col">
+        <table ng-table="tenantGrid" class="table ng-table-rowselected">
+            <tr ng-repeat="tenant in $data" id="tr{{tenant._id}}"
+                ng-click="select(tenant)" ng-class="{'selected' : tenant.$selected}">
+                <td data-title="'TenantName'">
+                    {{tenant.tenantName}}
+                </td>
+                <td data-title="'Created At'">
+                    {{tenant.createdAt}}
+                </td>
+                <td>
+                    <button class="btn btn-default" type="button" id="showTenantUsers{{tenant._id}}"
+                            ng-click="showTenantUsers(tenant._id)"><span class="fa fa-list-ul"></span>
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-default" type="button" id="editRowBtn{{tenant._id}}"
+                            ng-click="editTenant(tenant._id)"><span class="fa fa-pencil-square-o"></span>
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-default" type="button" id="removeRowBtn{{tenant._id}}"
+                            ng-click="deleteTenant(tenant._id)"><span class="fa fa-trash"></span>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

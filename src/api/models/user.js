@@ -23,6 +23,7 @@ var UserSchema = new Schema({
 });
 
 UserSchema.methods.create = function (tenant, callback) {
+    'use strict';
     if (!tenant) {
         return callback('Invalid parameter');
     }
@@ -40,6 +41,7 @@ UserSchema.methods.create = function (tenant, callback) {
 };
 
 UserSchema.pre('save', function (next) {
+    'use strict';
     var user = this;
 
     // only hash the password if it has been modified (or is new)
@@ -61,6 +63,7 @@ UserSchema.pre('save', function (next) {
 });
 
 UserSchema.methods.comparePassword = function (candidatePassword, cb) {
+    'use strict';
     bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
         if (err) return cb(err);
         cb(null, isMatch);

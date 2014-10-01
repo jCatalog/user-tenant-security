@@ -1,31 +1,38 @@
-<button class="btn btn-default" type="button" id="createNewUser"
-        ng-click="createNewUser()">Create New User
-</button>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <button class="btn btn-default" type="button" id="createNewUser"
+                ng-click="createNewUser()">Create New User
+        </button>
+        <button class="btn btn-default" type="button" id="downloadUserCSVFile"
+                ng-click="downloadUserCSVFile()"><span class="glyphicon glyphicon-download"></span></button>
+    </div>
+    <div class="table-responsive">
+        <table ng-table="tableParams" class="table ng-table-rowselected">
+            <tr ng-repeat="user in $data" id="tr{{user._id}}"
+                ng-click="select(user)" ng-class="{'selected' : user.$selected}">
+                <td data-title="'UserId'">
+                    {{user.userId}}
+                </td>
+                <td data-title="'First Name'">
+                    {{user.firstName}}
+                </td>
+                <td data-title="'First Name'">
+                    {{user.lastName}}
+                </td>
+                <td data-title="'Email'">
+                    {{user.email}}
+                </td>
+                <td>
+                    <button class="btn btn-default" type="button" id="editRowBtn{{user._id}}"
+                            ng-click="editUser(user._id)"><span class="glyphicon glyphicon-pencil"></span></button>
+                </td>
+                <td>
+                    <button class="btn btn-default" type="button" id="removeRowBtn{{user._id}}"
+                            ng-click="deleteUser(user._id)"><span class="glyphicon glyphicon-trash"></span></button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
 
-<button class="btn btn-default" type="button" id="downloadUserCSVFile"
-        ng-click="downloadUserCSVFile()"><span class="glyphicon glyphicon-download"></span></button>
 
-<table ng-table="tableParams" class="table">
-    <tr ng-repeat="user in $data" id="tr{{user._id}}" ng-class-odd="'odd'" ng-class-even="'even'">
-        <td data-title="'UserId'">
-            {{user.userId}}
-        </td>
-        <td data-title="'First Name'">
-            {{user.firstName}}
-        </td>
-        <td data-title="'First Name'">
-            {{user.lastName}}
-        </td>
-        <td data-title="'Email'">
-            {{user.email}}
-        </td>
-        <td>
-            <button class="btn btn-default" type="button" id="editRowBtn{{user._id}}"
-                    ng-click="editUser(user._id)"><span class="glyphicon glyphicon-pencil"></span></button>
-        </td>
-        <td>
-            <button class="btn btn-default" type="button" id="removeRowBtn{{user._id}}"
-                    ng-click="deleteUser(user._id)"><span class="glyphicon glyphicon-trash"></span></button>
-        </td>
-    </tr>
-</table>

@@ -5,14 +5,22 @@ define(['user/user-module', 'userServices/user-service', 'coreServices/modal-ser
             return 'test_download.csv';
         };
         $scope.deleteUser = function (userId) {
-            ModalService.showConfirmModal({title: 'Delete User', message: 'Do you really want to remove the user?'}, function(){
+            ModalService.showConfirmModal({title: 'Delete User', message: 'Do you really want to remove the user?'}, function () {
                 UserService.delete({id: userId}, function () {
                     $scope.alerts.push({type: 'success', msg: 'User is deleted successfully' });
                     $scope.tableParams.reload();
-                },function(err){
+                }, function (err) {
                     $scope.alerts.push({type: 'danger', msg: 'User deletion is failed for ' + err.data.message});
                 });
             });
+        };
+
+        var preSelection = null;
+        $scope.select = function (user) {
+            if (preSelection)
+                preSelection.$selected = false;
+            user.$selected = true;
+            preSelection= user;
         };
 
         $scope.tableParams = new NgTableParams({

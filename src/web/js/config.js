@@ -65,6 +65,11 @@ define(['angular', 'app'],
                     templateUrl: 'partials/user/user-list.html',
                     controller: 'UserListController',
                     parent: 'user'
+                }).state('user.list.grid', {
+                    url: '/:id',
+                    templateUrl: 'partials/user/user-list.html',
+                    controller: 'UserListController',
+                    parent: 'user.list'
                 }).state('user.detail', {
                     url: '/detail/:id',
                     templateUrl: 'partials/user/user-detail.html',
