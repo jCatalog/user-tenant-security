@@ -20,7 +20,7 @@ define(['user/user-module', 'userServices/user-service', 'coreServices/modal-ser
             ModalService.showConfirmModal({title: 'Delete User', message: 'Do you really want to remove the user?'}, function () {
                 UserService.delete({id: userId}, function () {
                     $scope.alerts.push({type: 'success', msg: 'User is deleted successfully' });
-                    $scope.tableParams.reload();
+                    $scope.userGrid.reload();
                 }, function (err) {
                     $scope.alerts.push({type: 'danger', msg: 'User deletion is failed for ' + err.data.message});
                 });

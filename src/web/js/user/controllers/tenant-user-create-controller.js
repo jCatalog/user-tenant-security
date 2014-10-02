@@ -3,16 +3,16 @@ define(['user/user-module', 'tenantServices/tenant-service', 'userServices/user-
     userModule.controller('TenantUserCreateController', ['$scope', '$state', '$stateParams', 'TenantService', 'UserService', function ($scope, $state, $stateParams, TenantService, UserService) {
         console.log('User Create Controller running........');
         $scope.tenants = [];
+        $scope.tenantId = $stateParams.id;
         (function () {
-            TenantService.query({}, function (data) {
-                $scope.tenants = data.tenants;
-                if (data.tenants)
-                    $scope.selectedTenant = data.tenants[0];
+            TenantService.get({id: $scope.tenantId}, function (data) {
+                $scope.tenants.push(data);
+                $scope.selectedTenant = data;
             });
         })();
 
         $scope.cancel = function () {
-            $state.go('user.tenant', {id: $stateParams.id});
+            $state.go('user.tenant', {id: $scope.tenantId});
         };
 
         $scope.createUser = function (data) {
