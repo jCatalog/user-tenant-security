@@ -19,6 +19,7 @@ var UserSchema = new Schema({
     updatedBy: {type: ObjectId},
     lastLogin: {type: Date},
     firstLogin: {type: Date},
+    tenantId: {type: ObjectId, ref: 'Tenant'},
     isActive: {type: Boolean, default: false}
 });
 
@@ -28,13 +29,17 @@ UserSchema.methods.create = function (tenant, callback) {
         return callback('Invalid parameter');
     }
     var schema = this;
+    schema.tenantId = tenant._id;
     schema.save(function (err, user) {
         if (err) {
             return callback(err);
         }
         tenant.users.push(user._id);
         tenant.save(function (err, data) {
-            if (err) return callback(err);
+            if (err) {
+                schema.remove(function(){});
+                return callback(err);
+            }
             return callback(null, data);
         });
     });

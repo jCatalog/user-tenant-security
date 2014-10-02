@@ -15,7 +15,7 @@ define(['tenant/tenant-module', 'tenantServices/tenant-service'], function (tena
         };
 
         $scope.showTenantUsers = function(tenantId){
-            $state.go('user.list.grid');
+            $state.go('user.tenant', { id: tenantId });
         };
 
         $scope.tenantGrid = new NgTableParams({

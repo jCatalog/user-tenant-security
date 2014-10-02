@@ -65,15 +65,20 @@ define(['angular', 'app'],
                     templateUrl: 'partials/user/user-list.html',
                     controller: 'UserListController',
                     parent: 'user'
-                }).state('user.list.grid', {
-                    url: '/:id',
+                }).state('user.tenant', {
+                    url: '/tenant/:id',
                     templateUrl: 'partials/user/user-list.html',
-                    controller: 'UserListController',
-                    parent: 'user.list'
-                }).state('user.detail', {
-                    url: '/detail/:id',
-                    templateUrl: 'partials/user/user-detail.html',
-                    controller: 'UserDetailController',
+                    controller: 'TenantUserListController',
+                    parent: 'user'
+                }).state('user.tenant.edit', {
+                    url: '/tenant/:tenantId/edit/:id',
+                    templateUrl: 'partials/user/user-edit.html',
+                    controller: 'TenantUserEditController',
+                    parent: 'user'
+                }).state('user.tenant.create', {
+                    url: '/tenant/:id/create',
+                    templateUrl: 'partials/user/user-create.html',
+                    controller: 'TenantUserCreateController',
                     parent: 'user'
                 }).state('user.create', {
                     url: '/create',

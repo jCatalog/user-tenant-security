@@ -1,15 +1,15 @@
 define(['user/user-module', 'userServices/user-service'], function (userModule) {
     'use strict';
-    userModule.controller('UserEditController', ['$scope', '$state', '$stateParams', 'UserService', function ($scope, $state, $stateParams, UserService) {
+    userModule.controller('TenantUserEditController', ['$scope', '$state', '$stateParams', 'UserService', function ($scope, $state, $stateParams, UserService) {
         $scope.user = {};
         $scope.userId = $stateParams.id;
+        $scope.tenantId = $stateParams.tenantId;
         $scope.cancel = function () {
-            $state.go('user.list');
+            $state.go('user.tenant', {id: $scope.tenantId});
         };
 
         (function () {
-            UserService.get({id: $scope.userId}, function (user) {
-                console.log(user);
+            UserService.get({id: $scope.userId, tenantId: $scope.tenantId}, function (user) {
                 $scope.user = user;
             });
         })();

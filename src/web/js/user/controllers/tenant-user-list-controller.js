@@ -1,16 +1,19 @@
 define(['user/user-module', 'userServices/user-service', 'coreServices/modal-service'], function (userModule) {
     'use strict';
-    userModule.controller('UserListController', ['$scope','$state', '$timeout', 'ngTableParams', 'UserService', 'ModalService', function ($scope, $state,$timeout, NgTableParams, UserService, ModalService) {
+    userModule.controller('TenantUserListController', ['$scope', '$state', '$stateParams', '$timeout', 'ngTableParams', 'UserService', 'ModalService', function ($scope, $state, $stateParams, $timeout, NgTableParams, UserService, ModalService) {
         $scope.getCSVFileName = function () {
             return 'test_download.csv';
         };
-
-        $scope.editUser = function (userId) {
-            $state.go('user.edit', { id: userId });
+        $scope.tenantId = $stateParams.id;
+        $scope.back = function () {
+            $state.go('tenant.list');
+        };
+        $scope.createNewUser = function () {
+            $state.go('user.tenant.create', {id: $scope.tenantId});
         };
 
-        $scope.createNewUser = function(){
-            $state.go('user.create');
+        $scope.editUser = function (userId) {
+            $state.go('user.tenant.edit', {tenantId: $scope.tenantId, id: userId});
         };
 
         $scope.deleteUser = function (userId) {
@@ -23,21 +26,13 @@ define(['user/user-module', 'userServices/user-service', 'coreServices/modal-ser
                 });
             });
         };
-
-        var preSelection = null;
-        $scope.select = function (user) {
-            if (preSelection)
-                preSelection.$selected = false;
-            user.$selected = true;
-            preSelection = user;
-        };
-
         $scope.userGrid = new NgTableParams({
             page: 1,            // show first page
             count: 10           // count per page
         }, {
             total: 0,
             getData: function ($defer, params) {
+                params.$params.filter = {'tenantId': $scope.tenantId};
                 // ajax request to api
                 UserService.query(params.url(), function (data) {
                     $timeout(function () {

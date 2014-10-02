@@ -1,6 +1,7 @@
 'use strict';
 
 var Boom = require('boom'),
+    _ = require('lodash'),
     Joi = require('joi'),
     mongoose = require('mongoose'),
     User = mongoose.model('User'),
@@ -12,9 +13,14 @@ module.exports = {
         handler: function (request, reply) {
             var page = (request.query.page ? request.query.page - 1 : 0),
                 count = request.query.count || 10,
-                sorting = request.query.sorting || {'createdAt': 'desc'};
+                sorting = request.query.sorting || {'createdAt': 'desc'},
+                filter = {};
 
-            User.find()
+            if (request.query.filter) {
+                filter = request.query.filter;
+            }
+
+            User.find(filter)
                 .sort(sorting)
                 .limit(count)
                 .skip(page * count)
