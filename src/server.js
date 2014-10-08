@@ -22,10 +22,6 @@ var server = new Hapi.Server(port, serverOptions);
 server.pack.register([
     {
         plugin: require('hapi-auth-cookie')
-    },
-    {
-        plugin: require('./api/plugins/acl'),
-        options: {db: dbInstance}
     }
 ], function (err) {
     server.auth.strategy('session', 'cookie', {

@@ -8,9 +8,7 @@ var mongoose = require('mongoose'),
 
 // schema
 var PermissionSchema = new Schema({
-    permissionId: {type: String, unique: true, min: 3, max: 20},
-    createdBy: {type: ObjectId},
-    updatedBy: {type: ObjectId}
+    permissionName: {type: String, unique: true, min: 3, max: 50}
 });
 
 // timestamps

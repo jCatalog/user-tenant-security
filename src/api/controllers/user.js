@@ -5,12 +5,18 @@ var Boom = require('boom'),
     Joi = require('joi'),
     mongoose = require('mongoose'),
     User = mongoose.model('User'),
-    Tenant = mongoose.model('Tenant');
+    Tenant = mongoose.model('Tenant'),
+    acl = require('../util/hapi-acl'),
+    Acl = new acl(new acl.mongoDbBanckend(mongoose.connection.db));
 
 //Expose the CRUD functionality
 module.exports = {
     getAll: {
         handler: function (request, reply) {
+            Acl.removeUserRoles('mislam', ['guest', 'admin'], function () {
+                    console.log('Perform action');
+                }
+            );
             var page = (request.query.page ? request.query.page - 1 : 0),
                 count = request.query.count || 10,
                 sorting = request.query.sorting || {'createdAt': 'desc'},
@@ -202,4 +208,5 @@ module.exports = {
         },
         auth: 'session'
     }
-};
+}
+;
