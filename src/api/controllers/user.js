@@ -32,7 +32,8 @@ module.exports = {
     getAll: {
         handler: function (request, reply) {
             var userId = request.auth.credentials.userId,
-                username = request.auth.credentials.username;
+                username = request.auth.credentials.username,
+                mailer = request.server.plugins.mailer;
 
             Acl.isAllowed(username, 'users', 'list', function (err, allowed) {
                 if (err || !allowed) {

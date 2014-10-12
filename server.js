@@ -37,6 +37,9 @@ var server = new Hapi.Server(port, serverOptions);
 server.pack.register([
     {
         plugin: require('hapi-auth-cookie')
+    },
+    {
+        plugin: require('./src/api/plugins/mailer')
     }
 ], function (err) {
     server.auth.strategy('session', 'cookie', {
