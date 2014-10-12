@@ -17,7 +17,7 @@ define(['user/user-module', 'userServices/user-service'], function (userModule) 
         $scope.updateUser = function (user) {
             UserService.update(user, function (result) {
                 $scope.user = result.data;
-                $scope.addAlert({type: 'success', msg: result.data.userId + ' is updated successfully' });
+                $scope.addAlert({type: 'success', msg: result.data.username + ' is updated successfully' });
             }, function (err) {
                 $scope.addAlert({type: 'danger', msg: 'User update is failed for ' + err.data.message});
             });

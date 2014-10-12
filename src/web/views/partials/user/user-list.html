@@ -15,13 +15,13 @@
         <table ng-table="userGrid" class="table">
             <tr ng-repeat="user in $data" id="tr{{user._id}}"
                 ng-click="select(user)" ng-class="{'selected' : user.$selected}">
-                <td data-title="'UserId'">
-                    {{user.userId}}
+                <td data-title="'Username'">
+                    {{user.username}}
                 </td>
                 <td data-title="'First Name'">
                     {{user.firstName}}
                 </td>
-                <td data-title="'First Name'">
+                <td data-title="'Last Name'">
                     {{user.lastName}}
                 </td>
                 <td data-title="'Email'">

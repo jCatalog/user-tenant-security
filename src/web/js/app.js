@@ -19,6 +19,9 @@ define([
             $state.go('signin');
             console.log('event:auth-login required  ...');
         });
-        console.log('app module running...');
+        $rootScope.$on('event:auth-forbidden', function () {
+            $state.go('home');
+            console.log('event:auth-forbidden  ...');
+        });
     }]);
 });

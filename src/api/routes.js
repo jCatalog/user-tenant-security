@@ -1,15 +1,23 @@
 'use strict';
 
+/**
+ * Define Dependencies
+ * @type {requireDirectory|exports}
+ */
 var requireDirectory = require('require-directory');
 
 /**
- *
+ * Return the route table for server
  * @returns {routeTable[]}
  */
 var routes = function () {
     // Load the controllers into the controller name space.
     var controller = requireDirectory(module, './controllers');
 
+    /**
+     * Define route table
+     * @type {*[]}
+     */
     var routeTable = [
         {
             method: 'GET',
@@ -49,11 +57,6 @@ var routes = function () {
             method: 'GET',
             path: '/roles',
             config: controller.role.getAll
-        },
-        {
-            method: 'POST',
-            path: '/roles',
-            config: controller.role.create
         },
         {
             method: ['POST'],
@@ -129,4 +132,5 @@ var routes = function () {
     return routeTable;
 };
 
+//exports
 module.exports = routes();

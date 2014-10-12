@@ -1,10 +1,24 @@
 'use strict';
 
+/**
+ * Define the dependencies
+ * @type {exports}
+ */
 var Boom = require('boom'),
     mongoose = require('mongoose'),
-    Tenant = mongoose.model('Tenant');
+    Tenant = mongoose.model('Tenant'),
+    Acl = require('../util/hapi-acl')(mongoose.connection.db);
 
-//Expose the CRUD functionality
+/**
+ * Expose the CRUD functionality for Tenant
+ * @type {{
+ * getAll: {handler: handler, auth: string},
+ * create: {handler: handler, auth: string},
+ * get: {handler: handler, auth: string},
+ * update: {handler: handler, auth: string},
+ * delete: {handler: handler, auth: string}
+ * }}
+ */
 module.exports = {
     getAll: {
         handler: function (request, reply) {

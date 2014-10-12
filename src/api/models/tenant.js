@@ -1,14 +1,20 @@
 'user strict';
 
-// dependencies
+/**
+ * Define Dependencies
+ * @type {exports}
+ */
 var mongoose = require('mongoose'),
     timestamps = require('mongoose-timestamp'),
     Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
-// schema
+/**
+ * Define Tenant Schema
+ * @type {Schema}
+ */
 var TenantSchema = new Schema({
-    tenantName: {type: String, unique: true},
+    tenantName: {type: String, required: true, unique: true},
     description: {type: String},
     createdBy: {type: ObjectId},
     updatedBy: {type: ObjectId},
@@ -17,7 +23,9 @@ var TenantSchema = new Schema({
     ]
 });
 
-// timestamps
+/**
+ * Enable timestamps plugin
+ */
 TenantSchema.plugin(timestamps);
 
 // export

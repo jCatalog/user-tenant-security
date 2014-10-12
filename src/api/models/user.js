@@ -1,6 +1,9 @@
 'user strict';
 
-// dependencies
+/**
+ * Define Dependencies
+ * @type {exports}
+ */
 var mongoose = require('mongoose'),
     bcrypt = require('bcryptjs'),
     timestamps = require('mongoose-timestamp'),
@@ -8,14 +11,17 @@ var mongoose = require('mongoose'),
     ObjectId = Schema.ObjectId,
     SALT_WORK_FACTOR = 10;
 
-// schema
+/**
+ * Define User Schema
+ * @type {Schema}
+ */
 var UserSchema = new Schema({
-    userId: {type: String, unique: true, required: true, min: 3, max: 20},
+    username: {type: String, unique: true, required: true, min: 3, max: 20},
     firstName: {type: String, trim: true, required: true, min: 3, max: 20},
     lastName: {type: String, trim: true, required: true, min: 3, max: 20},
     email: {type: String, lowercase: true, trim: true, required: true, min: 5, max: 50},
     password: {type: String, select: false, min: 5, required: true, max: 50},
-    createdBy: {type: ObjectId},
+    createdBy: {type: ObjectId, required: true},
     updatedBy: {type: ObjectId},
     lastLogin: {type: Date},
     firstLogin: {type: Date},
@@ -23,6 +29,12 @@ var UserSchema = new Schema({
     isActive: {type: Boolean, default: false}
 });
 
+/**
+ * Create method for User
+ * @param tenant
+ * @param callback
+ * @returns {*}
+ */
 UserSchema.methods.create = function (tenant, callback) {
     'use strict';
     if (!tenant) {
@@ -30,25 +42,31 @@ UserSchema.methods.create = function (tenant, callback) {
     }
     var schema = this;
     schema.tenantId = tenant._id;
+    schema.createdBy = this._id;
     schema.save(function (err, user) {
         if (err) {
             return callback(err);
         }
+        tenant.createdBy = user._id;
+        tenant.updatedBy = user._id;
         tenant.users.push(user._id);
         tenant.save(function (err, data) {
             if (err) {
                 schema.remove(function(){});
                 return callback(err);
             }
-            return callback(null, data);
+            return callback(null, user);
         });
     });
 };
 
+/**
+ * Enforce password encryption before saving a User information
+ */
 UserSchema.pre('save', function (next) {
     'use strict';
     var user = this;
-
+    user.updatedBy = user._id;
     // only hash the password if it has been modified (or is new)
     if (!user.isModified('password')) return next();
 
@@ -67,6 +85,11 @@ UserSchema.pre('save', function (next) {
     });
 });
 
+/**
+ * Password verification
+ * @param candidatePassword
+ * @param cb
+ */
 UserSchema.methods.comparePassword = function (candidatePassword, cb) {
     'use strict';
     bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
@@ -77,5 +100,7 @@ UserSchema.methods.comparePassword = function (candidatePassword, cb) {
 
 UserSchema.plugin(timestamps);
 
-// export
+/**
+ * Export User Model
+ */
 module.exports = mongoose.model('User', UserSchema);

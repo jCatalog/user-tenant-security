@@ -18,7 +18,7 @@ define(['user/user-module', 'tenantServices/tenant-service', 'userServices/user-
         $scope.createUser = function (data) {
             if (data) {
                 var user = {};
-                user.userId = data.userId;
+                user.username = data.username;
                 user.firstName = data.firstName;
                 user.lastName = data.lastName;
                 user.email = data.email;
