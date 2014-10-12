@@ -6,11 +6,11 @@
  */
 var Hapi = require('hapi'),
     Path = require('path'),
-    mongoose = require('mongoose');
+    config = require('./config');
 
-var port = process.env.PORT || 3000;
-var model = require('./api/models')();
-var routes = require('./api/routes');
+var db = require('./src/api/models/db')(config.get('/mongodb/url'));
+var port = config.get('/port/api');
+var routes = require('./src/api/routes');
 
 /**
  * Set server options
@@ -21,7 +21,7 @@ var serverOptions = {
         engines: {
             html: require('handlebars')
         },
-        path: Path.join(__dirname, './web/views')
+        path: Path.join(__dirname, './src/web/views')
     }
 };
 
@@ -56,7 +56,6 @@ server.pack.register([
      */
     server.start(function () {
         console.log('Server started', server.info.uri);
-
     });
 });
 

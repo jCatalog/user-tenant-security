@@ -3,7 +3,7 @@
 var Lab = require('lab');
 var acl = require('../../src/api/util/hapi-acl');
 var Mongoose = require('mongoose');
-var Config = require('../../src/api/config/env/all');
+var Config = require('.././env/all');
 
 var lab = exports.lab = Lab.script();
 var describe = lab.describe;

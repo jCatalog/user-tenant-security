@@ -6,7 +6,7 @@
  */
 var Boom = require('boom'),
     mongoose = require('mongoose'),
-    resource = require('../config/resource'),
+    resource = require('../settings/resource'),
     Acl = require('../util/hapi-acl')(mongoose.connection.db);
 
 /**
