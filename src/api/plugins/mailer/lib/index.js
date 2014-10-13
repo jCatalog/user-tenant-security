@@ -1,19 +1,17 @@
+'use strict';
+
 var Hoek = require('hoek');
 var fs = require('fs');
 var handlebars = require('handlebars');
 var nodemailer = require('nodemailer');
 var markdown = require('nodemailer-markdown').markdown;
-var config = require('../../../config');
 
-var transport = nodemailer.createTransport(config.get('/nodemailer'));
-    transport.use('compile', markdown({ useEmbeddedImages: true }));
-
-
+var internals = {};
+var transport = {};
+var config = {};
 var templateCache = {};
 
-
 var renderTemplate = function (signature, context, callback) {
-
     if (templateCache[signature]) {
         return callback(null, templateCache[signature](context));
     }
@@ -32,9 +30,7 @@ var renderTemplate = function (signature, context, callback) {
     });
 };
 
-
-var sendEmail = exports.sendEmail = function(options, template, context, callback) {
-
+internals.sendEmail = function (options, template, context, callback) {
     renderTemplate(template, context, function (err, content) {
 
         if (err) {
@@ -42,7 +38,7 @@ var sendEmail = exports.sendEmail = function(options, template, context, callbac
         }
 
         options = Hoek.applyToDefaults(options, {
-            from: config.get('/system/fromAddress'),
+            from: config.from,
             markdown: content
         });
 
@@ -52,14 +48,18 @@ var sendEmail = exports.sendEmail = function(options, template, context, callbac
 
 
 exports.register = function (plugin, options, next) {
+    config.mailer = options.mailer;
+    config.from = options.from;
 
-    plugin.expose('sendEmail', sendEmail);
-    plugin.expose('transport', transport);
+    transport = nodemailer.createTransport(config.mailer);
+    transport.use('compile', markdown({ useEmbeddedImages: true }));
 
+    plugin.expose('sendEmail', internals.sendEmail);
     next();
 };
 
 
 exports.register.attributes = {
-    name: 'mailer'
+    name: 'mailer',
+    version: '0.0.1'
 };

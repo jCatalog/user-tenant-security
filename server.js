@@ -39,7 +39,11 @@ server.pack.register([
         plugin: require('hapi-auth-cookie')
     },
     {
-        plugin: require('./src/api/plugins/mailer')
+        plugin: require('./src/api/plugins/mailer'),
+        options: {
+            mailer: config.get('/nodemailer'),
+            from: config.get('/system/fromAddress')
+        }
     }
 ], function (err) {
     server.auth.strategy('session', 'cookie', {
