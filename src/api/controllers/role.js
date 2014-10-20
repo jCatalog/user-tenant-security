@@ -6,8 +6,7 @@
  */
 var Boom = require('boom'),
     mongoose = require('mongoose'),
-    resource = require('../settings/resource'),
-    Acl = require('../util/hapi-acl')(mongoose.connection.db);
+    resource = require('../settings/resource')
 
 /**
  * Expose the CRUD functionality for Role
@@ -19,6 +18,7 @@ module.exports = {
      */
     getAll: {
         handler: function (request, reply) {
+            var Acl = request.server.plugins.acl;
             Acl.allow('admin', [resource.role.name, resource.tenant.name, resource.user.name], resource.role.action);
             Acl.allow('tenant-admin', resource.user.name, resource.user.action);
             Acl.allRoles(function (err, roles) {

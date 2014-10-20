@@ -39,10 +39,17 @@ server.pack.register([
         plugin: require('hapi-auth-cookie')
     },
     {
-        plugin: require('./src/api/plugins/mailer'),
+        plugin: require('./src/api/plugins/hapi-mailer'),
         options: {
             mailer: config.get('/nodemailer'),
             from: config.get('/system/fromAddress')
+        }
+    },
+    {
+        plugin: require('./src/api/plugins/hapi-acl'),
+        options: {
+            db: db,
+            prefix: 'hapi_acl_'
         }
     }
 ], function (err) {

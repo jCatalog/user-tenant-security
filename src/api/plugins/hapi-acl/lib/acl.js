@@ -450,98 +450,6 @@ Acl.prototype.permittedResources = function (roles, permissions, cb) {
     }).nodeify(cb);
 };
 
-/**
- clean ()
-
- Cleans all the keys with the given prefix from redis.
-
- Note: this operation is not reversible!.
- */
-/*
- Acl.prototype.clean = function(callback){
- var acl = this;
- this.redis.keys(this.prefix+'*', function(err, keys){
- if(keys.length){
- acl.redis.del(keys, function(err){
- callback(err);
- });
- }else{
- callback();
- }
- });
- };
- */
-
-/**
- Express Middleware
-
- */
-Acl.prototype.middleware = function (numPathComponents, userId, actions) {
-    contract(arguments)
-        .params()
-        .params('number')
-        .params('number', 'string|number|function')
-        .params('number', 'string|number|function', 'string|array')
-        .end();
-
-    var acl = this;
-
-    var HttpError = function (errorCode, msg) {
-        this.errorCode = errorCode;
-        this.msg = msg;
-
-        Error.captureStackTrace(this, arguments);
-        Error.call(this, msg);
-    };
-
-    return function (req, res, next) {
-        var _userId = userId,
-            resource,
-            url;
-
-        // call function to fetch userId
-        if (typeof userId === 'function') {
-            _userId = userId(req, res);
-        }
-        if (!userId) {
-            if ((req.session) && (req.session.userId)) {
-                _userId = req.session.userId;
-            } else {
-                next(new HttpError(401, 'User not authenticated'));
-                return;
-            }
-        }
-
-        url = req.url.split('?')[0];
-        if (!numPathComponents) {
-            resource = url;
-        } else {
-            resource = url.split('/').slice(0, numPathComponents + 1).join('/');
-        }
-
-        if (!actions) {
-            actions = req.method.toLowerCase();
-        }
-
-        acl.logger ? acl.logger.debug('Requesting ' + actions + ' on ' + resource + ' by user ' + _userId) : null;
-
-        acl.isAllowed(_userId, resource, actions, function (err, allowed) {
-            if (err) {
-                next(new Error('Error checking permissions to access resource'));
-            } else if (allowed === false) {
-                acl.logger ? acl.logger.debug('Not allowed ' + actions + ' on ' + resource + ' by user ' + _userId) : null;
-                acl.allowedPermissions(_userId, resource, function (err, obj) {
-                    acl.logger ? acl.logger.debug('Allowed permissions: ' + util.inspect(obj)) : null;
-                });
-                next(new HttpError(403, 'Insufficient permissions to access resource'));
-            } else {
-                acl.logger ? acl.logger.debug('Allowed ' + actions + ' on ' + resource + ' by user ' + _userId) : null;
-                next();
-            }
-        });
-    };
-};
-
 Acl.prototype.allRoles = function (cb) {
     var _this = this;
     var result = {};
@@ -599,36 +507,6 @@ Acl.prototype._allowEx = function (objs) {
 Acl.prototype._rolesParents = function (roles) {
     return this.backend.unionAsync('parents', roles);
 };
-
-//
-// Return all roles in the hierarchy including the given roles.
-//
-/*
- Acl.prototype._allRoles = function(roleNames, cb){
- var _this = this, roles;
-
- _this._rolesParents(roleNames, function(err, parents){
- roles = _.union(roleNames, parents);
- async.whilst(
- function (){
- return parents.length >0;
- },
- function (cb) {
- _this._rolesParents(parents, function(err, result){
- if(!err){
- roles = _.union(roles, parents);
- parents = result;
- }
- cb(err);
- });
- },
- function(err){
- cb(err, roles);
- }
- );
- });
- };
- */
 //
 // Return all roles in the hierarchy including the given roles.
 //
@@ -732,7 +610,6 @@ function makeArray(arr) {
 function allowsBucket(role) {
     return 'allows_' + role;
 }
-
 
 // -----------------------------------------------------------------------------------
 
