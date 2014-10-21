@@ -1,59 +1,14 @@
-/**
- ACL System inspired on Zend_ACL.
+'use strict';
 
- All functions accept strings, objects or arrays unless specified otherwise.
-
- '*' is used to express 'all'
-
- Database structure in Redis (using default prefix 'acl')
-
- Users:
-
- acl_roles_{userid} = set(roles)
-
- Roles:
-
- acl_roles = {roleNames} // Used to remove all the permissions associated to ONE resource.
-
- acl_parents_{roleName} = set(parents)
- acl_resources_{roleName} = set(resourceNames)
-
- Permissions:
-
- acl_allows_{resourceName}_{roleName} = set(permissions)
-
- Note: user ids, role names and resource names are all case sensitive.
-
- Roadmap:
- - Add support for locking resources. If a user has roles that gives him permissions to lock
- a resource, then he can get exclusive write operation on the locked resource.
- This lock should expire if the resource has not been accessed in some time.
- */
-"use strict";
-
+// Declare internals
 var _ = require('lodash'),
     util = require('util'),
     bluebird = require('bluebird'),
-    contract = require('./contract');
+    contract = require('./contract'),
+    mongodbBackend = require('./backend');
 
-contract.debug = true;
-
-var Acl = function (backend, logger) {
-    contract(arguments)
-        .params('object')
-        .params('object', 'object')
-        .end();
-
-    this.logger = logger;
-    this.backend = backend;
-
-    // Promisify async methods
-    backend.endAsync = bluebird.promisify(backend.end);
-    backend.getAsync = bluebird.promisify(backend.get);
-    backend.cleanAsync = bluebird.promisify(backend.clean);
-    backend.unionAsync = bluebird.promisify(backend.union);
-};
-
+var backend = {};
+var internals = {};
 /**
  addUserRoles( userId, roles, function(err) )
 
@@ -64,7 +19,7 @@ var Acl = function (backend, logger) {
  @param {Function} Callback called when finished.
  @return {Promise} Promise resolved when finished
  */
-Acl.prototype.addUserRoles = function (userId, roles, cb) {
+internals.addUserRoles = function (userId, roles, cb) {
     var promise = bluebird.defer();
 
     contract(arguments)
@@ -72,10 +27,10 @@ Acl.prototype.addUserRoles = function (userId, roles, cb) {
         .params('string|number', 'string|array')
         .end();
 
-    var transaction = this.backend.begin();
-    this.backend.add(transaction, 'meta', 'users', userId);
-    this.backend.add(transaction, 'users', userId, roles);
-    return this.backend.endAsync(transaction).nodeify(cb);
+    var transaction = backend.begin();
+    backend.add(transaction, 'meta', 'users', userId);
+    backend.add(transaction, 'users', userId, roles);
+    return backend.endAsync(transaction).nodeify(cb);
 };
 
 /**
@@ -88,15 +43,15 @@ Acl.prototype.addUserRoles = function (userId, roles, cb) {
  @param {Function} Callback called when finished.
  @return {Promise} Promise resolved when finished
  */
-Acl.prototype.removeUserRoles = function (userId, roles, cb) {
+internals.removeUserRoles = function (userId, roles, cb) {
     contract(arguments)
         .params('string|number', 'string|array', 'function')
         .params('string|number', 'string|array')
         .end();
 
-    var transaction = this.backend.begin();
-    this.backend.remove(transaction, 'users', userId, roles);
-    return this.backend.endAsync(transaction).nodeify(cb);
+    var transaction = backend.begin();
+    backend.remove(transaction, 'users', userId, roles);
+    return backend.endAsync(transaction).nodeify(cb);
 };
 
 /**
@@ -108,8 +63,8 @@ Acl.prototype.removeUserRoles = function (userId, roles, cb) {
  @param {Function} Callback called when finished.
  @return {Promise} Promise resolved with an array of user roles
  */
-Acl.prototype.userRoles = function (userId, cb) {
-    return this.backend.getAsync('users', userId).nodeify(cb);
+internals.userRoles = function (userId, cb) {
+    return backend.getAsync('users', userId).nodeify(cb);
 };
 
 /**
@@ -122,16 +77,16 @@ Acl.prototype.userRoles = function (userId, cb) {
  @param {Function} Callback called when finished.
  @return {Promise} Promise resolved when finished
  */
-Acl.prototype.addRoleParents = function (role, parents, cb) {
+internals.addRoleParents = function (role, parents, cb) {
     contract(arguments)
         .params('string|number', 'string|array', 'function')
         .params('string|number', 'string|array')
         .end();
 
-    var transaction = this.backend.begin();
-    this.backend.add(transaction, 'meta', 'roles', role);
-    this.backend.add(transaction, 'parents', role, parents);
-    return this.backend.endAsync(transaction).nodeify(cb);
+    var transaction = backend.begin();
+    backend.add(transaction, 'meta', 'roles', role);
+    backend.add(transaction, 'parents', role, parents);
+    return backend.endAsync(transaction).nodeify(cb);
 };
 
 /**
@@ -142,28 +97,27 @@ Acl.prototype.addRoleParents = function (role, parents, cb) {
  @param {String} Role to be removed
  @param {Function} Callback called when finished.
  */
-Acl.prototype.removeRole = function (role, cb) {
+internals.removeRole = function (role, cb) {
     contract(arguments)
         .params('string', 'function')
         .params('string').end();
 
-    var _this = this;
     // Note that this is not fully transactional.
-    return this.backend.getAsync('resources', role).then(function (resources) {
-        var transaction = _this.backend.begin();
+    return backend.getAsync('resources', role).then(function (resources) {
+        var transaction = backend.begin();
 
         resources.forEach(function (resource) {
             var bucket = allowsBucket(resource);
-            _this.backend.del(transaction, bucket, role);
+            backend.del(transaction, bucket, role);
         });
 
-        _this.backend.del(transaction, 'resources', role);
-        _this.backend.del(transaction, 'parents', role);
-        _this.backend.remove(transaction, 'meta', 'roles', role);
+        backend.del(transaction, 'resources', role);
+        backend.del(transaction, 'parents', role);
+        backend.remove(transaction, 'meta', 'roles', role);
 
         // `users` collection keeps the removed role
         // because we don't know what users have `role` assigned.
-        return _this.backend.endAsync(transaction);
+        return backend.endAsync(transaction);
     }).nodeify(cb);
 };
 
@@ -176,20 +130,19 @@ Acl.prototype.removeRole = function (role, cb) {
  @param {Function} Callback called when finished.
  @return {Promise} Promise resolved when finished
  */
-Acl.prototype.removeResource = function (resource, cb) {
+internals.removeResource = function (resource, cb) {
     contract(arguments)
         .params('string', 'function')
         .params('string')
         .end();
 
-    var _this = this;
-    return this.backend.getAsync('meta', 'roles').then(function (roles) {
-        var transaction = _this.backend.begin();
-        _this.backend.del(transaction, allowsBucket(resource), roles);
+    return backend.getAsync('meta', 'roles').then(function (roles) {
+        var transaction = backend.begin();
+        backend.del(transaction, allowsBucket(resource), roles);
         roles.forEach(function (role) {
-            _this.backend.remove(transaction, 'resources', role, resource);
-        })
-        return _this.backend.endAsync(transaction);
+            backend.remove(transaction, 'resources', role, resource);
+        });
+        return backend.endAsync(transaction);
     }).nodeify(cb)
 };
 
@@ -212,7 +165,7 @@ Acl.prototype.removeResource = function (resource, cb) {
   @param {Function} Callback called when finished.
  @return {Promise} Promise resolved when finished
  */
-Acl.prototype.allow = function (roles, resources, permissions, cb) {
+internals.allow = function (roles, resources, permissions, cb) {
     contract(arguments)
         .params('string|array', 'string|array', 'string|array', 'function')
         .params('string|array', 'string|array', 'string|array')
@@ -221,33 +174,32 @@ Acl.prototype.allow = function (roles, resources, permissions, cb) {
         .end();
 
     if ((arguments.length == 1) || ((arguments.length === 2) && _.isObject(roles) && _.isFunction(resources))) {
-        return this._allowEx(roles).nodeify(resources);
+        return internals._allowEx(roles).nodeify(resources);
     } else {
-        var _this = this;
 
         roles = makeArray(roles);
         resources = makeArray(resources);
 
-        var transaction = _this.backend.begin();
+        var transaction = backend.begin();
 
-        _this.backend.add(transaction, 'meta', 'roles', roles);
+        backend.add(transaction, 'meta', 'roles', roles);
 
         resources.forEach(function (resource) {
             roles.forEach(function (role) {
-                _this.backend.add(transaction, allowsBucket(resource), role, permissions);
+                backend.add(transaction, allowsBucket(resource), role, permissions);
             });
         });
 
         roles.forEach(function (role) {
-            _this.backend.add(transaction, 'resources', role, resources);
+            backend.add(transaction, 'resources', role, resources);
         });
 
-        return _this.backend.endAsync(transaction).nodeify(cb);
+        return backend.endAsync(transaction).nodeify(cb);
     }
 };
 
 
-Acl.prototype.removeAllow = function (role, resources, permissions, cb) {
+internals.removeAllow = function (role, resources, permissions, cb) {
     contract(arguments)
         .params('string', 'string|array', 'string|array', 'function')
         .params('string', 'string|array', 'string|array')
@@ -263,7 +215,7 @@ Acl.prototype.removeAllow = function (role, resources, permissions, cb) {
         permissions = null;
     }
 
-    return this.removePermissions(role, resources, permissions, cb);
+    return internals.removePermissions(role, resources, permissions, cb);
 }
 
 /**
@@ -277,34 +229,31 @@ Acl.prototype.removeAllow = function (role, resources, permissions, cb) {
  @param {String|Array}
  @param {String|Array}
  */
-Acl.prototype.removePermissions = function (role, resources, permissions, cb) {
-
-    var _this = this;
-
-    var transaction = _this.backend.begin();
+internals.removePermissions = function (role, resources, permissions, cb) {
+    var transaction = backend.begin();
     resources.forEach(function (resource) {
         var bucket = allowsBucket(resource);
         if (permissions) {
-            _this.backend.remove(transaction, bucket, role, permissions);
+            backend.remove(transaction, bucket, role, permissions);
         } else {
-            _this.backend.del(transaction, bucket, role);
-            _this.backend.remove(transaction, 'resources', role, resource);
+            backend.del(transaction, bucket, role);
+            backend.remove(transaction, 'resources', role, resource);
         }
     });
 
     // Remove resource from role if no rights for that role exists.
     // Not fully atomic...
-    return _this.backend.endAsync(transaction).then(function () {
-        var transaction = _this.backend.begin();
+    return backend.endAsync(transaction).then(function () {
+        var transaction = backend.begin();
         return bluebird.all(resources.map(function (resource) {
             var bucket = allowsBucket(resource);
-            return _this.backend.getAsync(bucket, role).then(function (permissions) {
+            return backend.getAsync(bucket, role).then(function (permissions) {
                 if (permissions.length == 0) {
-                    _this.backend.remove(transaction, 'resources', role, resource);
+                    backend.remove(transaction, 'resources', role, resource);
                 }
             });
         })).then(function () {
-            return _this.backend.endAsync(transaction);
+            return backend.endAsync(transaction);
         });
     }).nodeify(cb);
 };
@@ -322,19 +271,18 @@ Acl.prototype.removePermissions = function (role, resources, permissions, cb) {
  @param {String|Array} resource(s) to ask permissions for.
  @param {Function} Callback called when finished.
  */
-Acl.prototype.allowedPermissions = function (userId, resources, cb) {
+internals.allowedPermissions = function (userId, resources, cb) {
     contract(arguments)
         .params('string|number', 'string|array', 'function')
         .params('string|number', 'string|array')
         .end();
 
-    var _this = this;
     resources = makeArray(resources);
 
-    return _this.userRoles(userId).then(function (roles) {
+    return internals.userRoles(userId).then(function (roles) {
         var result = {};
         return bluebird.all(resources.map(function (resource) {
-            return _this._resourcePermissions(roles, resource).then(function (permissions) {
+            return internals._resourcePermissions(roles, resource).then(function (permissions) {
                 result[resource] = permissions;
             });
         })).then(function () {
@@ -354,17 +302,15 @@ Acl.prototype.allowedPermissions = function (userId, resources, cb) {
  @param {String|Array} asked permissions.
  @param {Function} Callback called wish the result.
  */
-Acl.prototype.isAllowed = function (userId, resource, permissions, cb) {
+internals.isAllowed = function (userId, resource, permissions, cb) {
     contract(arguments)
         .params('string|number', 'string', 'string|array', 'function')
         .params('string|number', 'string', 'string|array')
         .end();
 
-    var _this = this;
-
-    return this.backend.getAsync('users', userId).then(function (roles) {
+    return backend.getAsync('users', userId).then(function (roles) {
         if (roles.length) {
-            return _this.areAnyRolesAllowed(roles, resource, permissions);
+            return internals.areAnyRolesAllowed(roles, resource, permissions);
         } else {
             return false;
         }
@@ -381,7 +327,7 @@ Acl.prototype.isAllowed = function (userId, resource, permissions, cb) {
  @param {String|Array} asked permissions.
  @param {Function} Callback called with the result.
  */
-Acl.prototype.areAnyRolesAllowed = function (roles, resource, permissions, cb) {
+internals.areAnyRolesAllowed = function (roles, resource, permissions, cb) {
     contract(arguments)
         .params('string|array', 'string', 'string|array', 'function')
         .params('string|array', 'string', 'string|array')
@@ -393,7 +339,7 @@ Acl.prototype.areAnyRolesAllowed = function (roles, resource, permissions, cb) {
     if (roles.length === 0) {
         return bluebird.resolve(false).nodeify(cb);
     } else {
-        return this._checkPermissions(roles, resource, permissions).nodeify(cb);
+        return internals._checkPermissions(roles, resource, permissions).nodeify(cb);
     }
 };
 
@@ -410,7 +356,7 @@ Acl.prototype.areAnyRolesAllowed = function (roles, resource, permissions, cb) {
  @param {String[Array} Permissions
  @param {Function} Callback called wish the result.
  */
-Acl.prototype.whatResources = function (roles, permissions, cb) {
+internals.whatResources = function (roles, permissions, cb) {
     contract(arguments)
         .params('string|array')
         .params('string|array', 'string|array')
@@ -426,15 +372,14 @@ Acl.prototype.whatResources = function (roles, permissions, cb) {
         permissions = makeArray(permissions);
     }
 
-    return this.permittedResources(roles, permissions, cb);
+    return internals.permittedResources(roles, permissions, cb);
 };
 
-Acl.prototype.permittedResources = function (roles, permissions, cb) {
-    var _this = this;
+internals.permittedResources = function (roles, permissions, cb) {
     var result = _.isUndefined(permissions) ? {} : [];
-    return this._rolesResources(roles).then(function (resources) {
+    return internals._rolesResources(roles).then(function (resources) {
         return bluebird.all(resources.map(function (resource) {
-            return _this._resourcePermissions(roles, resource).then(function (p) {
+            return internals._resourcePermissions(roles, resource).then(function (p) {
                 if (permissions) {
                     var commonPermissions = _.intersection(permissions, p);
                     if (commonPermissions.length > 0) {
@@ -450,107 +395,14 @@ Acl.prototype.permittedResources = function (roles, permissions, cb) {
     }).nodeify(cb);
 };
 
-/**
- clean ()
-
- Cleans all the keys with the given prefix from redis.
-
- Note: this operation is not reversible!.
- */
-/*
- Acl.prototype.clean = function(callback){
- var acl = this;
- this.redis.keys(this.prefix+'*', function(err, keys){
- if(keys.length){
- acl.redis.del(keys, function(err){
- callback(err);
- });
- }else{
- callback();
- }
- });
- };
- */
-
-/**
- Express Middleware
-
- */
-Acl.prototype.middleware = function (numPathComponents, userId, actions) {
-    contract(arguments)
-        .params()
-        .params('number')
-        .params('number', 'string|number|function')
-        .params('number', 'string|number|function', 'string|array')
-        .end();
-
-    var acl = this;
-
-    var HttpError = function (errorCode, msg) {
-        this.errorCode = errorCode;
-        this.msg = msg;
-
-        Error.captureStackTrace(this, arguments);
-        Error.call(this, msg);
-    };
-
-    return function (req, res, next) {
-        var _userId = userId,
-            resource,
-            url;
-
-        // call function to fetch userId
-        if (typeof userId === 'function') {
-            _userId = userId(req, res);
-        }
-        if (!userId) {
-            if ((req.session) && (req.session.userId)) {
-                _userId = req.session.userId;
-            } else {
-                next(new HttpError(401, 'User not authenticated'));
-                return;
-            }
-        }
-
-        url = req.url.split('?')[0];
-        if (!numPathComponents) {
-            resource = url;
-        } else {
-            resource = url.split('/').slice(0, numPathComponents + 1).join('/');
-        }
-
-        if (!actions) {
-            actions = req.method.toLowerCase();
-        }
-
-        acl.logger ? acl.logger.debug('Requesting ' + actions + ' on ' + resource + ' by user ' + _userId) : null;
-
-        acl.isAllowed(_userId, resource, actions, function (err, allowed) {
-            if (err) {
-                next(new Error('Error checking permissions to access resource'));
-            } else if (allowed === false) {
-                acl.logger ? acl.logger.debug('Not allowed ' + actions + ' on ' + resource + ' by user ' + _userId) : null;
-                acl.allowedPermissions(_userId, resource, function (err, obj) {
-                    acl.logger ? acl.logger.debug('Allowed permissions: ' + util.inspect(obj)) : null;
-                });
-                next(new HttpError(403, 'Insufficient permissions to access resource'));
-            } else {
-                acl.logger ? acl.logger.debug('Allowed ' + actions + ' on ' + resource + ' by user ' + _userId) : null;
-                next();
-            }
-        });
-    };
-};
-
-Acl.prototype.allRoles = function (cb) {
-    var _this = this;
+internals.allRoles = function (cb) {
     var result = {};
-    return _this.backend.getAsync('meta', 'roles').then(function (roles) {
+    return backend.getAsync('meta', 'roles').then(function (roles) {
             return bluebird.all(roles.map(function (role) {
-                return _this._rolesResources(role).then(function (resources) {
+                return internals._rolesResources(role).then(function (resources) {
                     var roleResource = {};
                     return bluebird.all(resources.map(function (resource) {
-                        return _this._resourcePermissions(roles, resource).then(function (p) {
+                        return internals._resourcePermissions(roles, resource).then(function (p) {
                             roleResource[resource] = p;
                         });
                     })).then(function () {
@@ -573,8 +425,7 @@ Acl.prototype.allRoles = function (cb) {
 //
 // Same as allow but accepts a more compact input.
 //
-Acl.prototype._allowEx = function (objs) {
-    var _this = this;
+internals._allowEx = function (objs) {
     objs = makeArray(objs);
 
     var demuxed = [];
@@ -589,55 +440,23 @@ Acl.prototype._allowEx = function (objs) {
     });
 
     return bluebird.all(demuxed.map(function (obj) {
-        return _this.allow(obj.roles, obj.resources, obj.permissions);
+        return internals.allow(obj.roles, obj.resources, obj.permissions);
     }));
 };
 
 //
 // Returns the parents of the given roles
 //
-Acl.prototype._rolesParents = function (roles) {
-    return this.backend.unionAsync('parents', roles);
+internals._rolesParents = function (roles) {
+    return backend.unionAsync('parents', roles);
 };
-
 //
 // Return all roles in the hierarchy including the given roles.
 //
-/*
- Acl.prototype._allRoles = function(roleNames, cb){
- var _this = this, roles;
-
- _this._rolesParents(roleNames, function(err, parents){
- roles = _.union(roleNames, parents);
- async.whilst(
- function (){
- return parents.length >0;
- },
- function (cb) {
- _this._rolesParents(parents, function(err, result){
- if(!err){
- roles = _.union(roles, parents);
- parents = result;
- }
- cb(err);
- });
- },
- function(err){
- cb(err, roles);
- }
- );
- });
- };
- */
-//
-// Return all roles in the hierarchy including the given roles.
-//
-Acl.prototype._allRoles = function (roleNames) {
-    var _this = this, roles;
-
-    return this._rolesParents(roleNames).then(function (parents) {
+internals._allRoles = function (roleNames) {
+    return internals._rolesParents(roleNames).then(function (parents) {
         if (parents.length > 0) {
-            return _this._allRoles(parents).then(function (parentRoles) {
+            return internals._allRoles(parents).then(function (parentRoles) {
                 return _.union(roleNames, parentRoles);
             });
         } else {
@@ -649,16 +468,15 @@ Acl.prototype._allRoles = function (roleNames) {
 //
 // Returns an array with resources for the given roles.
 //
-Acl.prototype._rolesResources = function (roles) {
-    var _this = this;
+internals._rolesResources = function (roles) {
     roles = makeArray(roles);
 
-    return this._allRoles(roles).then(function (allRoles) {
+    return internals._allRoles(roles).then(function (allRoles) {
         var result = [];
 
         // check if bluebird.map simplifies this code
         return bluebird.all(allRoles.map(function (role) {
-            return _this.backend.getAsync('resources', role).then(function (resources) {
+            return backend.getAsync('resources', role).then(function (resources) {
                 result = result.concat(resources);
             });
         })).then(function () {
@@ -670,16 +488,14 @@ Acl.prototype._rolesResources = function (roles) {
 //
 // Returns the permissions for the given resource and set of roles
 //
-Acl.prototype._resourcePermissions = function (roles, resource) {
-    var _this = this;
-
+internals._resourcePermissions = function (roles, resource) {
     if (roles.length === 0) {
         return bluebird.resolve([]);
     } else {
-        return this.backend.unionAsync(allowsBucket(resource), roles).then(function (resourcePermissions) {
-            return _this._rolesParents(roles).then(function (parents) {
+        return backend.unionAsync(allowsBucket(resource), roles).then(function (resourcePermissions) {
+            return internals._rolesParents(roles).then(function (parents) {
                 if (parents && parents.length) {
-                    return _this._resourcePermissions(parents, resource).then(function (morePermissions) {
+                    return internals._resourcePermissions(parents, resource).then(function (morePermissions) {
                         return _.union(resourcePermissions, morePermissions);
                     });
                 } else {
@@ -693,10 +509,8 @@ Acl.prototype._resourcePermissions = function (roles, resource) {
 //
 // NOTE: This function will not handle circular dependencies and result in a crash.
 //
-Acl.prototype._checkPermissions = function (roles, resource, permissions) {
-    var _this = this;
-
-    return this.backend.unionAsync(allowsBucket(resource), roles).then(function (resourcePermissions) {
+internals._checkPermissions = function (roles, resource, permissions) {
+    return backend.unionAsync(allowsBucket(resource), roles).then(function (resourcePermissions) {
         if (resourcePermissions.indexOf('*') !== -1) {
             return true;
         } else {
@@ -707,9 +521,9 @@ Acl.prototype._checkPermissions = function (roles, resource, permissions) {
             if (permissions.length === 0) {
                 return true;
             } else {
-                return _this.backend.unionAsync('parents', roles).then(function (parents) {
+                return backend.unionAsync('parents', roles).then(function (parents) {
                     if (parents && parents.length) {
-                        return _this._checkPermissions(parents, resource, permissions);
+                        return internals._checkPermissions(parents, resource, permissions);
                     } else {
                         return false;
                     }
@@ -733,10 +547,39 @@ function allowsBucket(role) {
     return 'allows_' + role;
 }
 
-
 // -----------------------------------------------------------------------------------
 
+exports.register = function (plugin, options, next) {
+    var mongodb_backend = new mongodbBackend(options.db, options.prefix);
+    backend = mongodb_backend;
 
-exports = module.exports = Acl;
+    // Promisify async methods
+    mongodb_backend.endAsync = bluebird.promisify(mongodb_backend.end);
+    mongodb_backend.getAsync = bluebird.promisify(mongodb_backend.get);
+    mongodb_backend.cleanAsync = bluebird.promisify(mongodb_backend.clean);
+    mongodb_backend.unionAsync = bluebird.promisify(mongodb_backend.union);
+
+    plugin.expose('addUserRoles', internals.addUserRoles);
+    plugin.expose('removeUserRoles', internals.removeUserRoles);
+    plugin.expose('userRoles', internals.userRoles);
+    plugin.expose('addRoleParents', internals.addRoleParents);
+    plugin.expose('removeRole', internals.removeRole);
+    plugin.expose('removeResource', internals.removeResource);
+    plugin.expose('allow', internals.allow);
+    plugin.expose('removeAllow', internals.removeAllow);
+    plugin.expose('removePermissions', internals.removePermissions);
+    plugin.expose('allowedPermissions', internals.allowedPermissions);
+    plugin.expose('isAllowed', internals.isAllowed);
+    plugin.expose('areAnyRolesAllowed', internals.areAnyRolesAllowed);
+    plugin.expose('whatResources', internals.whatResources);
+    plugin.expose('permittedResources', internals.permittedResources);
+    plugin.expose('allRoles', internals.allRoles);
+    plugin.expose('whatResources', internals.whatResources);
+    next();
+};
 
 
+exports.register.attributes = {
+    name: 'acl',
+    version: '0.0.1'
+};

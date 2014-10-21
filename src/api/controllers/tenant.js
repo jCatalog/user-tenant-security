@@ -6,8 +6,7 @@
  */
 var Boom = require('boom'),
     mongoose = require('mongoose'),
-    Tenant = mongoose.model('Tenant'),
-    Acl = require('../util/hapi-acl')(mongoose.connection.db);
+    Tenant = mongoose.model('Tenant');
 
 /**
  * Expose the CRUD functionality for Tenant

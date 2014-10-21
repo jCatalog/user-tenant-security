@@ -9,8 +9,7 @@ var Boom = require('boom'),
     Joi = require('joi'),
     mongoose = require('mongoose'),
     User = mongoose.model('User'),
-    Tenant = mongoose.model('Tenant'),
-    Acl = require('../util/hapi-acl')(mongoose.connection.db);
+    Tenant = mongoose.model('Tenant');
 
 /**
  * Expose the CRUD functionality for User
@@ -32,7 +31,8 @@ module.exports = {
     getAll: {
         handler: function (request, reply) {
             var userId = request.auth.credentials.userId,
-                username = request.auth.credentials.username;
+                username = request.auth.credentials.username,
+                Acl = request.server.plugins.acl;
 
             Acl.isAllowed(username, 'users', 'list', function (err, allowed) {
                 if (err || !allowed) {
@@ -76,7 +76,8 @@ module.exports = {
     create: {
         handler: function (request, reply) {
             var userId = request.auth.credentials.userId,
-                username = request.auth.credentials.username;
+                username = request.auth.credentials.username,
+                Acl = request.server.plugins.acl;
             Acl.isAllowed(username, 'users', 'add', function (err, allowed) {
                 if (err || !allowed) {
                     var error = Boom.forbidden();
@@ -157,7 +158,8 @@ module.exports = {
     get: {
         handler: function (request, reply) {
             var userId = request.auth.credentials.userId,
-                username = request.auth.credentials.username;
+                username = request.auth.credentials.username,
+                Acl = request.server.plugins.acl;
             Acl.isAllowed(username, 'users', 'view', function (err, allowed) {
                 if (err || !allowed) {
                     var error = Boom.forbidden();
@@ -184,7 +186,8 @@ module.exports = {
     update: {
         handler: function (request, reply) {
             var userId = request.auth.credentials.userId,
-                username = request.auth.credentials.username;
+                username = request.auth.credentials.username,
+                Acl = request.server.plugins.acl;
             User.findById(request.params.id).exec(function (err1, user) {
                 if (err1) {
                     return reply(Boom.badRequest(err1.message));
@@ -214,7 +217,8 @@ module.exports = {
     delete: {
         handler: function (request, reply) {
             var userId = request.auth.credentials.userId,
-                username = request.auth.credentials.username;
+                username = request.auth.credentials.username,
+                Acl = request.server.plugins.acl;
             Acl.isAllowed(username, 'users', 'delete', function (err, allowed) {
                 if (err || !allowed) {
                     var error = Boom.forbidden();
