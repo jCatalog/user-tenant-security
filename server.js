@@ -48,7 +48,7 @@ server.pack.register([
     {
         plugin: require('./src/api/plugins/hapi-acl'),
         options: {
-            db: db,
+            db: db.db,
             prefix: 'hapi_acl_'
         }
     }
