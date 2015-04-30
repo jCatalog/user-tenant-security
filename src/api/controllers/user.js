@@ -125,6 +125,7 @@ module.exports = {
         handler: function (request, reply) {
             var user = new User(request.payload);
             var tenant = new Tenant(request.payload);
+            var Acl = request.server.plugins.acl;
             user.create(tenant, function (err, data) {
                 if (err) {
                     var error = Boom.badRequest(err);
