@@ -260,7 +260,7 @@ module.exports = {
                 return reply(Boom.badRequest('Missing username or password'));
             }
             else {
-                User.findOne({'username': request.payload.username}).select('+password').exec(function (err, user) {
+                User.findOne({'username': request.payload.username}, '+password').exec(function (err, user) {
                     if (err) {
                         return reply(Boom.badRequest(err));
                     }
