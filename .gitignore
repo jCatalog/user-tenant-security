@@ -29,3 +29,5 @@ node_modules
 
 # Users Environment Variables
 .lock-wscript
+#client side dependencies
+src/web/lib/
