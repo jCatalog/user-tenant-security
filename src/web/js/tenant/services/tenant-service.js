@@ -7,7 +7,7 @@ define(['tenant/tenant-module'], function (tenantModule) {
             }, {
                 query: { method: 'GET', isArray: false },
                 save:   {method:'POST'},
-                update: { method: 'PUT' }
+                update: { method: 'PUT'}
             });
         }
     ]);

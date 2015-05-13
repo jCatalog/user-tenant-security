@@ -56,7 +56,8 @@ define(['angular', 'app'],
                     templateUrl: 'partials/tenant/tenant-edit.html',
                     controller: 'TenantEditController',
                     parent: 'tenant'
-                }).state('user', {
+                })
+                .state('user', {
                     url: '/user',
                     templateUrl: 'partials/core/container.html',
                     controller: 'UserController'
@@ -65,12 +66,8 @@ define(['angular', 'app'],
                     templateUrl: 'partials/user/user-list.html',
                     controller: 'UserListController',
                     parent: 'user'
-                }).state('user.tenant', {
-                    url: '/tenant/:id',
-                    templateUrl: 'partials/user/user-list.html',
-                    controller: 'TenantUserListController',
-                    parent: 'user'
-                }).state('user.tenant.edit', {
+                })
+                .state('user.tenant.edit', {
                     url: '/tenant/:tenantId/edit/:id',
                     templateUrl: 'partials/user/user-edit.html',
                     controller: 'TenantUserEditController',

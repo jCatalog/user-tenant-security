@@ -14,9 +14,13 @@ define(['tenant/tenant-module', 'tenantServices/tenant-service'], function (tena
             preSelection= tenant;
         };
 
-        $scope.showTenantUsers = function(tenantId){
-            $state.go('user.tenant', { id: tenantId });
-        };
+        // $scope.showTenantUsers = function(tenantId){
+        //     //$state.go('user.tenant', { id: tenantId });
+        // };
+
+        $scope.showTenant = function(tenantId) {
+            $state.go('tenant.edit', { id: tenantId});
+        }
 
         $scope.tenantGrid = new NgTableParams({
             page: 1,            // show first page

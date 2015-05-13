@@ -19,20 +19,10 @@
                     {{tenant.createdAt}}
                 </td>
                 <td>
-                    <button class="btn btn-default" type="button" id="showTenantUsers{{tenant._id}}"
-                            ng-click="showTenantUsers(tenant._id)"><span class="fa fa-list-ul"></span>
+                    <button class="btn btn-default" type="button" id="showTenant{{tenant._id}}"
+                            ng-click="showTenant(tenant._id)"><span class="fa fa-list-ul"></span>
                     </button>
                 </td>
-                <!--<td>-->
-                    <!--<button class="btn btn-default" type="button" id="editRowBtn{{tenant._id}}"-->
-                            <!--ng-click="editTenant(tenant._id)"><span class="fa fa-pencil-square-o"></span>-->
-                    <!--</button>-->
-                <!--</td>-->
-                <!--<td>-->
-                    <!--<button class="btn btn-default" type="button" id="removeRowBtn{{tenant._id}}"-->
-                            <!--ng-click="deleteTenant(tenant._id)"><span class="fa fa-trash"></span>-->
-                    <!--</button>-->
-                <!--</td>-->
             </tr>
         </table>
     </div>

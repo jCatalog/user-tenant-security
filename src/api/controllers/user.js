@@ -9,8 +9,8 @@ var Boom = require('boom'),
     Joi = require('joi'),
     mongoose = require('mongoose'),
     User = mongoose.model('User'),
-    Tenant = mongoose.model('Tenant');
-
+    Tenant = mongoose.model('Tenant'),
+    resource = require('../settings/resource');
 /**
  * Expose the CRUD functionality for User
  *
@@ -33,40 +33,43 @@ module.exports = {
             var userId = request.auth.credentials.userId,
                 username = request.auth.credentials.username,
                 Acl = request.server.plugins.acl;
-
-            Acl.isAllowed(username, 'users', 'list', function (err, allowed) {
-                if (err || !allowed) {
-                    var error = Boom.forbidden();
-                    return reply(error);
-                }
-
-                var page = (request.query.page ? request.query.page - 1 : 0),
+                Acl.allow(username, 'admin', 'view');
+                Acl.isAllowed(username, 'admin', 'view', function(err, allowed) {
+                    if (err || !allowed) {
+                        var error = Boom.forbidden();
+                        return reply(error);
+                    }
+                    else
+                    {
+                        var page = (request.query.page ? request.query.page - 1 : 0),
                     count = request.query.count || 10,
                     sorting = request.query.sorting || {'createdAt': 'desc'},
                     filter = {};
 
-                if (request.query.filter) {
-                    filter = request.query.filter;
-                }
+                    if (request.query.filter) {
+                        filter = request.query.filter;
+                    }
 
-                User.find(filter)
-                    .sort(sorting)
-                    .limit(count)
-                    .skip(page * count)
-                    .exec(function (err, users) {
-                        if (err) {
-                            var error = Boom.badRequest(err);
-                            return reply(error);
-                        }
-                        User.count(function (err, total) {
+                    User.find(filter)
+                        .sort(sorting)
+                        .limit(count)
+                        .skip(page * count)
+                        .exec(function (err, users) {
                             if (err) {
                                 var error = Boom.badRequest(err);
                                 return reply(error);
                             }
-                            return reply({total: total, users: users}).type('application/json');
+                            User.count(function (err, total) {
+                                if (err) {
+                                    var error = Boom.badRequest(err);
+                                    return reply(error);
+                                }
+                                return reply({total: total, users: users}).type('application/json');
+                            });
                         });
-                    });
-            });
+                    }    
+                });
+            }
         },
         auth: 'session'
     },
@@ -78,6 +81,7 @@ module.exports = {
             var userId = request.auth.credentials.userId,
                 username = request.auth.credentials.username,
                 Acl = request.server.plugins.acl;
+            Acl.allow(username, 'users', 'add');
             Acl.isAllowed(username, 'users', 'add', function (err, allowed) {
                 if (err || !allowed) {
                     var error = Boom.forbidden();
@@ -161,11 +165,11 @@ module.exports = {
             var userId = request.auth.credentials.userId,
                 username = request.auth.credentials.username,
                 Acl = request.server.plugins.acl;
-            Acl.isAllowed(username, 'users', 'view', function (err, allowed) {
-                if (err || !allowed) {
-                    var error = Boom.forbidden();
-                    return reply(error);
-                }
+            // Acl.isAllowed(username, 'users', 'view', function (err, allowed) {
+            //     if (err || !allowed) {
+            //         var error = Boom.forbidden();
+            //         return reply(error);
+            //     }
                 User.findById(request.params.id).exec(function (err, user) {
                     if (err) throw err;
 
@@ -177,7 +181,7 @@ module.exports = {
                         return reply(user).type('application/json');
                     }
                 });
-            });
+            //});
         },
         auth: 'session'
     },

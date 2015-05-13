@@ -24,6 +24,5 @@
   },
   "_source": "git://github.com/esvit/ng-table.git",
   "_target": "~0.3.3",
-  "_originalSource": "ng-table",
-  "_direct": true
+  "_originalSource": "ng-table"
 }

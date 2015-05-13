@@ -1,0 +1,31 @@
+<div class="wrapper-md">
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-2">
+            <form name="tenantUpdateForm" class="form-validation">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <span class="h4">Update Tenant</span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label>TenantName</label>
+                            <input type="text" class="form-control" ng-model="tenant.tenantName"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input type="text" class="form-control" name="description" ng-model="tenant.description" required>
+                            <!-- <span ng-if="tenantUpdateForm.description.$error.required" style="color:red;">*Required</span> -->
+                        </div>
+                    	<footer class="panel-footer text-right bg-light lter">
+                        	<button type="submit" class="btn btn-primary" ng-click="updateTenant(tenant)"
+                                ng-disabled='tenantUpdateForm.$invalid'>Save
+                        	</button>
+                        	<a class="btn btn-default" ng-click="cancel()">Cancel</a>
+                    	</footer>
+                	</div>
+                </div>	
+            </form>
+        </div>
+    </div>
+</div>

@@ -24,8 +24,15 @@ module.exports = {
             var page = (request.query.page ? request.query.page - 1 : 0),
                 count = request.query.count || 10,
                 sorting = request.query.sorting || {'createdAt': 'desc'};
-
-            Tenant.find()
+                if(request.auth.credentials.username == 'admin')
+                {
+                    var query = {};
+                }
+                else
+                {
+                    var query = {'users': request.auth.credentials.userId};
+                }    
+            Tenant.find(query)
                 .sort(sorting)
                 .limit(count)
                 .skip(page * count)
@@ -79,16 +86,20 @@ module.exports = {
     },
     update: {
         handler: function (request, reply) {
-            var update = request.payload;
-            Tenant.findByIdAndUpdate(request.params.id, update).exec(function (err, tenant) {
-                if (err) {
+            var updateData = request.payload;
+            delete updateData.$promise;
+            delete updateData.$resolved;
+            Tenant.findByIdAndUpdate(request.params.id, updateData).exec(function (err, tenant) {
+                if(err)
+                {
                     var error = Boom.badRequest('No data found');
                     return reply(error);
                 }
-                else {
-                    return reply({error: null, message: 'Updated successfully'});
+                else
+                {
+                    return reply(tenant).type('application/json');
                 }
-            });
+            });  
         },
         auth: 'session'
     },

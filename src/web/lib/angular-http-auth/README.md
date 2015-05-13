@@ -30,6 +30,10 @@ $broadcast. This may be useful, for example if you need to pass through details 
 that was logged in. The `authService` will then retry all the requests previously failed due
 to HTTP 401 response.
 
+In the event that a requested resource returns an HTTP 403 response (i.e. the user is 
+authenticated but not authorized to access the resource), the user's request is discarded and 
+the `event:auth-forbidden` message is broadcasted from $rootScope.
+
 ###Typical use case:
 
 * somewhere (some service or controller) the: `$http(...).then(function(response) { do-something-with-response })` is invoked,
@@ -41,3 +45,9 @@ to HTTP 401 response.
 * your initial failed request will now be retried and when proper response is finally received,
 the `function(response) {do-something-with-response}` will fire,
 * your application will continue as nothing had happened.
+
+###Advanced use case:
+Same beginning as before but,
+* once your application figures out the authentication is OK, call: `authService.loginConfirmed([data], [updateConfigFunc])`,
+* your initial failed request will now be retried but you can supply additional data to observers who are listening for `event:auth-loginConfirmed`, and all your queued http requests will be recalculated by your `updateConfigFunc(httpConfig)` function. This is very usefull if you need to update the headers with new credentials and/or tokens from your successful login.
+

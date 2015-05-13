@@ -1,7 +1,7 @@
 {
   "author": "Witold Szczerba",
   "name": "angular-http-auth",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "homepage": "https://github.com/witoldsz/angular-http-auth",
   "repository": {
     "type": "git",
@@ -11,14 +11,13 @@
   "dependencies": {
     "angular": "^1.2"
   },
-  "_release": "1.2.1",
+  "_release": "1.2.2",
   "_resolution": {
     "type": "version",
-    "tag": "v1.2.1",
-    "commit": "8ef02783471d59833401d2efb7a2f55651690042"
+    "tag": "v1.2.2",
+    "commit": "79cf2bb55cf72e099d702536077d844e8a2014f6"
   },
   "_source": "git://github.com/witoldsz/angular-http-auth.git",
   "_target": "~1.2.1",
-  "_originalSource": "angular-http-auth",
-  "_direct": true
+  "_originalSource": "angular-http-auth"
 }

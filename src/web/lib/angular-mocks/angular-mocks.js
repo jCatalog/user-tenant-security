@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v1.2.23
+ * @license AngularJS v1.2.28
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -27,7 +27,7 @@ angular.mock = {};
  * cookies, etc...
  *
  * The api of this service is the same as that of the real {@link ng.$browser $browser}, except
- * that there are several helper methods available which can be used in test.
+ * that there are several helper methods available which can be used in tests.
  */
 angular.mock.$BrowserProvider = function() {
   this.$get = function() {
@@ -62,6 +62,8 @@ angular.mock.$Browser = function() {
 
     return listener;
   };
+
+  self.$$checkUrlChange = angular.noop;
 
   self.cookieHash = {};
   self.lastCookieHash = {};
@@ -238,9 +240,9 @@ angular.mock.$ExceptionHandlerProvider = function() {
    *
    * @param {string} mode Mode of operation, defaults to `rethrow`.
    *
-   *   - `rethrow`: If any errors are passed into the handler in test, it typically
+   *   - `rethrow`: If any errors are passed into the handler in tests, it typically
    *                means that there is a bug in the application or test, so this mock will
-   *                make these test fail.
+   *                make these tests fail.
    *   - `log`: Sometimes it is desirable to test that an error is thrown, for this case the `log`
    *            mode stores an array of errors in `$exceptionHandler.errors`, to allow later
    *            assertion of them. See {@link ngMock.$log#assertEmpty assertEmpty()} and
@@ -887,7 +889,7 @@ angular.mock.dump = function(object) {
  * *Note*: For fake HTTP backend implementation suitable for end-to-end testing or backend-less
  * development please see {@link ngMockE2E.$httpBackend e2e $httpBackend mock}.
  *
- * During unit testing, we want our unit test to run quickly and have no external dependencies so
+ * During unit testing, we want our unit tests to run quickly and have no external dependencies so
  * we don’t want to send [XHR](https://developer.mozilla.org/en/xmlhttprequest) or
  * [JSONP](http://en.wikipedia.org/wiki/JSONP) requests to a real server. All we really need is
  * to verify whether a certain request has been sent or not, or alternatively just let the
@@ -929,7 +931,7 @@ angular.mock.dump = function(object) {
  *   </tr>
  *   <tr>
  *     <th>Typical usage</th>
- *     <td>strict unit test</td>
+ *     <td>strict unit tests</td>
  *     <td>loose (black-box) unit testing</td>
  *   </tr>
  *   <tr>
@@ -968,7 +970,7 @@ angular.mock.dump = function(object) {
  * # Flushing HTTP requests
  *
  * The $httpBackend used in production always responds to requests asynchronously. If we preserved
- * this behavior in unit testing, we'd have to create async unit test, which are hard to write,
+ * this behavior in unit testing, we'd have to create async unit tests, which are hard to write,
  * to follow and to maintain. But neither can the testing mock respond synchronously; that would
  * change the execution of the code under test. For this reason, the mock $httpBackend has a
  * `flush()` method, which allows the test to explicitly flush pending requests. This preserves
@@ -1012,7 +1014,7 @@ angular.mock.dump = function(object) {
        beforeEach(inject(function($injector) {
          // Set up the mock http service responses
          $httpBackend = $injector.get('$httpBackend');
-         // backend definition common for all test
+         // backend definition common for all tests
          $httpBackend.when('GET', '/auth.py').respond({userId: 'userX'}, {'A-Token': 'xxx'});
 
          // Get hold of a scope (i.e. the root scope)
@@ -1191,7 +1193,7 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
    *   data string and returns true if the data is as expected.
    * @param {(Object|function(Object))=} headers HTTP headers or function that receives http header
    *   object and returns true if the headers match the current definition.
-   * @returns {requestHandler} Returns an object with `respond` method that controls how a matched
+   * @returns {requestHandler} Returns an object with a `respond` method that controls how a matched
    *   request is handled.
    *
    *  - respond –
@@ -1227,7 +1229,7 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
    *
    * @param {string|RegExp} url HTTP url.
    * @param {(Object|function(Object))=} headers HTTP headers.
-   * @returns {requestHandler} Returns an object with `respond` method that control how a matched
+   * @returns {requestHandler} Returns an object with a `respond` method that controls how a matched
    * request is handled.
    */
 
@@ -1239,7 +1241,7 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
    *
    * @param {string|RegExp} url HTTP url.
    * @param {(Object|function(Object))=} headers HTTP headers.
-   * @returns {requestHandler} Returns an object with `respond` method that control how a matched
+   * @returns {requestHandler} Returns an object with a `respond` method that controls how a matched
    * request is handled.
    */
 
@@ -1251,7 +1253,7 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
    *
    * @param {string|RegExp} url HTTP url.
    * @param {(Object|function(Object))=} headers HTTP headers.
-   * @returns {requestHandler} Returns an object with `respond` method that control how a matched
+   * @returns {requestHandler} Returns an object with a `respond` method that controls how a matched
    * request is handled.
    */
 
@@ -1265,7 +1267,7 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
    * @param {(string|RegExp|function(string))=} data HTTP request body or function that receives
    *   data string and returns true if the data is as expected.
    * @param {(Object|function(Object))=} headers HTTP headers.
-   * @returns {requestHandler} Returns an object with `respond` method that control how a matched
+   * @returns {requestHandler} Returns an object with a `respond` method that controls how a matched
    * request is handled.
    */
 
@@ -1279,7 +1281,21 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
    * @param {(string|RegExp|function(string))=} data HTTP request body or function that receives
    *   data string and returns true if the data is as expected.
    * @param {(Object|function(Object))=} headers HTTP headers.
-   * @returns {requestHandler} Returns an object with `respond` method that control how a matched
+   * @returns {requestHandler} Returns an object with a `respond` method that controls how a matched
+   * request is handled.
+   */
+
+  /**
+   * @ngdoc method
+   * @name $httpBackend#whenPATCH
+   * @description
+   * Creates a new backend definition for PATCH requests.  For more info see `when()`.
+   *
+   * @param {string|RegExp} url HTTP url.
+   * @param {(string|RegExp|function(string))=} data HTTP request body or function that receives
+   *   data string and returns true if the data is as expected.
+   * @param {(Object|function(Object))=} headers HTTP headers.
+   * @returns {requestHandler} Returns an object with a `respond` method that controls how a matched
    * request is handled.
    */
 
@@ -1290,7 +1306,7 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
    * Creates a new backend definition for JSONP requests. For more info see `when()`.
    *
    * @param {string|RegExp} url HTTP url.
-   * @returns {requestHandler} Returns an object with `respond` method that control how a matched
+   * @returns {requestHandler} Returns an object with a `respond` method that controls how a matched
    * request is handled.
    */
   createShortMethods('when');
@@ -1309,7 +1325,7 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
    *  is in JSON format.
    * @param {(Object|function(Object))=} headers HTTP headers or function that receives http header
    *   object and returns true if the headers match the current expectation.
-   * @returns {requestHandler} Returns an object with `respond` method that control how a matched
+   * @returns {requestHandler} Returns an object with a `respond` method that controls how a matched
    *  request is handled.
    *
    *  - respond –
@@ -1338,7 +1354,7 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
    *
    * @param {string|RegExp} url HTTP url.
    * @param {Object=} headers HTTP headers.
-   * @returns {requestHandler} Returns an object with `respond` method that control how a matched
+   * @returns {requestHandler} Returns an object with a `respond` method that controls how a matched
    * request is handled. See #expect for more info.
    */
 
@@ -1350,7 +1366,7 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
    *
    * @param {string|RegExp} url HTTP url.
    * @param {Object=} headers HTTP headers.
-   * @returns {requestHandler} Returns an object with `respond` method that control how a matched
+   * @returns {requestHandler} Returns an object with a `respond` method that controls how a matched
    *   request is handled.
    */
 
@@ -1362,7 +1378,7 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
    *
    * @param {string|RegExp} url HTTP url.
    * @param {Object=} headers HTTP headers.
-   * @returns {requestHandler} Returns an object with `respond` method that control how a matched
+   * @returns {requestHandler} Returns an object with a `respond` method that controls how a matched
    *   request is handled.
    */
 
@@ -1377,7 +1393,7 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
    *  receives data string and returns true if the data is as expected, or Object if request body
    *  is in JSON format.
    * @param {Object=} headers HTTP headers.
-   * @returns {requestHandler} Returns an object with `respond` method that control how a matched
+   * @returns {requestHandler} Returns an object with a `respond` method that controls how a matched
    *   request is handled.
    */
 
@@ -1392,7 +1408,7 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
    *  receives data string and returns true if the data is as expected, or Object if request body
    *  is in JSON format.
    * @param {Object=} headers HTTP headers.
-   * @returns {requestHandler} Returns an object with `respond` method that control how a matched
+   * @returns {requestHandler} Returns an object with a `respond` method that controls how a matched
    *   request is handled.
    */
 
@@ -1407,7 +1423,7 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
    *  receives data string and returns true if the data is as expected, or Object if request body
    *  is in JSON format.
    * @param {Object=} headers HTTP headers.
-   * @returns {requestHandler} Returns an object with `respond` method that control how a matched
+   * @returns {requestHandler} Returns an object with a `respond` method that controls how a matched
    *   request is handled.
    */
 
@@ -1418,7 +1434,7 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
    * Creates a new request expectation for JSONP requests. For more info see `expect()`.
    *
    * @param {string|RegExp} url HTTP url.
-   * @returns {requestHandler} Returns an object with `respond` method that control how a matched
+   * @returns {requestHandler} Returns an object with a `respond` method that controls how a matched
    *   request is handled.
    */
   createShortMethods('expect');
@@ -1511,7 +1527,7 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
 
 
   function createShortMethods(prefix) {
-    angular.forEach(['GET', 'DELETE', 'JSONP'], function(method) {
+    angular.forEach(['GET', 'DELETE', 'JSONP', 'HEAD'], function(method) {
      $httpBackend[prefix + method] = function(url, headers) {
        return $httpBackend[prefix](method, url, undefined, headers);
      };
@@ -1554,7 +1570,9 @@ function MockHttpExpectation(method, url, data, headers) {
     if (angular.isUndefined(data)) return true;
     if (data && angular.isFunction(data.test)) return data.test(d);
     if (data && angular.isFunction(data)) return data(d);
-    if (data && !angular.isString(data)) return angular.equals(data, angular.fromJson(d));
+    if (data && !angular.isString(data)) {
+      return angular.equals(angular.fromJson(angular.toJson(data)), angular.fromJson(d));
+    }
     return data == d;
   };
 
@@ -1727,7 +1745,7 @@ angular.mock.$RootElementProvider = function() {
  *
  * # ngMock
  *
- * The `ngMock` module provides support to inject and mock Angular services into unit test.
+ * The `ngMock` module provides support to inject and mock Angular services into unit tests.
  * In addition, ngMock also extends various core ng services such that they can be
  * inspected and controlled in a synchronous manner within test code.
  *
@@ -2003,7 +2021,7 @@ if(window.jasmine || window.mocha) {
    * @description
    *
    * *NOTE*: This function is also published on window for easy access.<br>
-   * *NOTE*: This function is declared ONLY WHEN running test with jasmine or mocha
+   * *NOTE*: This function is declared ONLY WHEN running tests with jasmine or mocha
    *
    * This function registers a module configuration code. It collects the configuration information
    * which will be used when the injector is created by {@link angular.mock.inject inject}.
@@ -2046,7 +2064,7 @@ if(window.jasmine || window.mocha) {
    * @description
    *
    * *NOTE*: This function is also published on window for easy access.<br>
-   * *NOTE*: This function is declared ONLY WHEN running test with jasmine or mocha
+   * *NOTE*: This function is declared ONLY WHEN running tests with jasmine or mocha
    *
    * The inject function wraps a function into an injectable function. The inject() creates new
    * instance of {@link auto.$injector $injector} per test, which is then used for
@@ -2076,7 +2094,7 @@ if(window.jasmine || window.mocha) {
    *   myService = _myService_;
    * }));
    *
-   * // Use myService in a series of test.
+   * // Use myService in a series of tests.
    * it('makes use of myService', function() {
    *   myService.doStuff();
    * });
@@ -2086,7 +2104,7 @@ if(window.jasmine || window.mocha) {
    * See also {@link angular.mock.module angular.mock.module}
    *
    * ## Example
-   * Example of what a typical jasmine test looks like with the inject method.
+   * Example of what a typical jasmine tests looks like with the inject method.
    * ```js
    *
    *   angular.module('myApplicationModule', [])

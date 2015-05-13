@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v1.2.23
+ * @license AngularJS v1.2.28
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -12,7 +12,7 @@
  *
  * # ngRoute
  *
- * The `ngRoute` module provides routing and deeplinking services and directives for angular app.
+ * The `ngRoute` module provides routing and deeplinking services and directives for angular apps.
  *
  * ## Example
  * See {@link ngRoute.$route#example $route} for an example of configuring and using `ngRoute`.
@@ -31,7 +31,7 @@ var ngRouteModule = angular.module('ngRoute', ['ng']).
  *
  * @description
  *
- * Used for configuring settings.
+ * Used for configuring routes.
  *
  * ## Example
  * See {@link ngRoute.$route#example $route} for an example of configuring and using `ngRoute`.
@@ -63,7 +63,7 @@ function $RouteProvider(){
    *        when the route matches.
    *    * `path` can contain optional named groups with a question mark: e.g.`:name?`.
    *
-   *    For example, settings like `/color/:color/largecode/:largecode*\/edit` will match
+   *    For example, routes like `/color/:color/largecode/:largecode*\/edit` will match
    *    `/color/brown/largecode/code/with/slashes/edit` and extract:
    *
    *    * `color: brown`
@@ -135,7 +135,7 @@ function $RouteProvider(){
    *      If the option is set to `false` and url in the browser changes, then
    *      `$routeUpdate` event is broadcasted on the root scope.
    *
-   *    - `[caseInsensitiveMatch=false]` - {boolean=} - match settings without being case sensitive
+   *    - `[caseInsensitiveMatch=false]` - {boolean=} - match routes without being case sensitive
    *
    *      If the option is set to `true`, then the particular route can be matched without being
    *      case sensitive
@@ -252,15 +252,15 @@ function $RouteProvider(){
      *     - `$scope` - The current route scope.
      *     - `$template` - The current route template HTML.
      *
-     * @property {Object} settings Object with all route configuration Objects as its properties.
+     * @property {Object} routes Object with all route configuration Objects as its properties.
      *
      * @description
-     * `$route` is used for deep-linking URLs to controllers and partials (HTML partials).
+     * `$route` is used for deep-linking URLs to controllers and views (HTML partials).
      * It watches `$location.url()` and tries to map the path to an existing route definition.
      *
      * Requires the {@link ngRoute `ngRoute`} module to be installed.
      *
-     * You can define settings through {@link ngRoute.$routeProvider $routeProvider}'s API.
+     * You can define routes through {@link ngRoute.$routeProvider $routeProvider}'s API.
      *
      * The `$route` service is typically used in conjunction with the
      * {@link ngRoute.directive:ngView `ngView`} directive and the
@@ -270,11 +270,8 @@ function $RouteProvider(){
      * This example shows how changing the URL hash causes the `$route` to match a route against the
      * URL, and the `ngView` pulls in the partial.
      *
-     * Note that this example is using {@link ng.directive:script inlined templates}
-     * to get it working on jsfiddle as well.
-     *
      * <example name="$route-service" module="ngRouteExample"
-     *          deps="angular-routes.js" fixBase="true">
+     *          deps="angular-route.js" fixBase="true">
      *   <file name="index.html">
      *     <div ng-controller="MainController">
      *       Choose:
@@ -326,7 +323,7 @@ function $RouteProvider(){
      *          $scope.params = $routeParams;
      *      })
      *
-     *     .settings(function($routeProvider, $locationProvider) {
+     *     .config(function($routeProvider, $locationProvider) {
      *       $routeProvider
      *        .when('/Book/:bookId', {
      *         templateUrl: 'book.html',
@@ -585,7 +582,7 @@ function $RouteProvider(){
         if (i === 0) {
           result.push(segment);
         } else {
-          var segmentMatch = segment.match(/(\w+)(.*)/);
+          var segmentMatch = segment.match(/(\w+)(?:[?*])?(.*)/);
           var key = segmentMatch[1];
           result.push(params[key]);
           result.push(segmentMatch[2] || '');
@@ -674,7 +671,7 @@ ngRouteModule.directive('ngView', ngViewFillContentFactory);
  *                    as an expression yields a truthy value.
  * @example
     <example name="ngView-directive" module="ngViewExample"
-             deps="angular-routes.js;angular-animate.js"
+             deps="angular-route.js;angular-animate.js"
              animations="true" fixBase="true">
       <file name="index.html">
         <div ng-controller="MainCtrl as main">
@@ -757,7 +754,7 @@ ngRouteModule.directive('ngView', ngViewFillContentFactory);
 
       <file name="script.js">
         angular.module('ngViewExample', ['ngRoute', 'ngAnimate'])
-          .settings(['$routeProvider', '$locationProvider',
+          .config(['$routeProvider', '$locationProvider',
             function($routeProvider, $locationProvider) {
               $routeProvider
                 .when('/Book/:bookId', {
@@ -771,7 +768,6 @@ ngRouteModule.directive('ngView', ngViewFillContentFactory);
                   controllerAs: 'chapter'
                 });
 
-              // configure html5 to get links working on jsfiddle
               $locationProvider.html5Mode(true);
           }])
           .controller('MainCtrl', ['$route', '$routeParams', '$location',

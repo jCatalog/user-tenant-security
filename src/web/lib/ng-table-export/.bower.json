@@ -18,6 +18,5 @@
   },
   "_source": "git://github.com/esvit/ng-table-export.git",
   "_target": "*",
-  "_originalSource": "ng-table-export",
-  "_direct": true
+  "_originalSource": "ng-table-export"
 }
