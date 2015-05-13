@@ -33,21 +33,22 @@ module.exports = {
             var userId = request.auth.credentials.userId,
                 username = request.auth.credentials.username,
                 Acl = request.server.plugins.acl;
-                Acl.allow(username, 'admin', 'view');
-                Acl.isAllowed(username, 'admin', 'view', function(err, allowed) {
+                Acl.allow(username, 'users', 'view');
+                Acl.isAllowed(username, 'users', 'view', function (err, allowed) {
                     if (err || !allowed) {
                         var error = Boom.forbidden();
                         return reply(error);
                     }
                     else
                     {
+                        console.log("else");
                         var page = (request.query.page ? request.query.page - 1 : 0),
                             count = request.query.count || 10,
                             sorting = request.query.sorting || {'createdAt': 'desc'},
                             filter = {};
-                            if (request.query.filter) {
-                                filter = request.query.filter;
-                            }
+                        if (request.query.filter) {
+                            filter = request.query.filter;
+                        }
 
                         User.find(filter)
                             .sort(sorting)
@@ -164,23 +165,26 @@ module.exports = {
             var userId = request.auth.credentials.userId,
                 username = request.auth.credentials.username,
                 Acl = request.server.plugins.acl;
-            // Acl.isAllowed(username, 'users', 'view', function (err, allowed) {
-            //     if (err || !allowed) {
-            //         var error = Boom.forbidden();
-            //         return reply(error);
-            //     }
-                User.findById(request.params.id).exec(function (err, user) {
-                    if (err) throw err;
+            Acl.isAllowed(username, 'users', 'view', function (err, allowed) {
+                if (err || !allowed) {
+                    var error = Boom.forbidden();
+                    return reply(error);
+                }
+                else
+                {    
+                    User.findById(request.params.id).exec(function (err, user) {
+                        if (err) throw err;
 
-                    if (user === null) {
-                        var error = Boom.badRequest('No doc found in');
-                        return reply(error);
-                    }
-                    else {
-                        return reply(user).type('application/json');
-                    }
-                });
-            //});
+                        if (user === null) {
+                            var error = Boom.badRequest('No doc found in');
+                            return reply(error);
+                        }
+                        else {
+                            return reply(user).type('application/json');
+                        }
+                    });
+                }    
+            });
         },
         auth: 'session'
     },
@@ -191,14 +195,17 @@ module.exports = {
         handler: function (request, reply) {
             var userId = request.auth.credentials.userId,
                 username = request.auth.credentials.username,
+                updateData = request.payload,
                 Acl = request.server.plugins.acl;
+                delete updateData.$promise;
+                delete updateData.$resolved;
             User.findById(request.params.id).exec(function (err1, user) {
                 if (err1) {
                     return reply(Boom.badRequest(err1.message));
                 }
                 Acl.isAllowed(username, 'users', 'edit', function (err2, allowed) {
                     if (user.createdBy == userId || allowed) {
-                        user.update(request.payload).exec(function (err3) {
+                        user.update(updateData).exec(function (err3) {
                             if (err3) {
                                 return reply(Boom.badRequest(err3.message));
                             }
@@ -220,25 +227,28 @@ module.exports = {
      */
     delete: {
         handler: function (request, reply) {
+            console.log("----delete----");
             var userId = request.auth.credentials.userId,
                 username = request.auth.credentials.username,
                 Acl = request.server.plugins.acl;
+            Acl.allow(username, 'users', 'delete');    
             Acl.isAllowed(username, 'users', 'delete', function (err, allowed) {
+                console.log("allowed",allowed);
                 if (err || !allowed) {
                     var error = Boom.forbidden();
                     return reply(error);
                 }
-                User.findByIdAndRemove(request.params.id).exec(function (err, user) {
-                    if (err) {
-                        return reply(Boom.badRequest(err));
-                    } else if (!user) {
-                        var error = Boom.notFound('No data found');
-                        return reply(error);
-                    }
-                    else {
-                        return reply({error: null, message: 'Deleted successfully'});
-                    }
-                });
+                // User.findByIdAndRemove(request.params.id).exec(function (err, user) {
+                //     if (err) {
+                //         return reply(Boom.badRequest(err));
+                //     } else if (!user) {
+                //         var error = Boom.notFound('No data found');
+                //         return reply(error);
+                //     }
+                //     else {
+                //         return reply({error: null, message: 'Deleted successfully'});
+                //     }
+                // });
             });
         },
         auth: 'session'
