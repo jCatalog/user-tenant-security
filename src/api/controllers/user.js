@@ -42,34 +42,33 @@ module.exports = {
                     else
                     {
                         var page = (request.query.page ? request.query.page - 1 : 0),
-                    count = request.query.count || 10,
-                    sorting = request.query.sorting || {'createdAt': 'desc'},
-                    filter = {};
-
-                    if (request.query.filter) {
-                        filter = request.query.filter;
-                    }
-
-                    User.find(filter)
-                        .sort(sorting)
-                        .limit(count)
-                        .skip(page * count)
-                        .exec(function (err, users) {
-                            if (err) {
-                                var error = Boom.badRequest(err);
-                                return reply(error);
+                            count = request.query.count || 10,
+                            sorting = request.query.sorting || {'createdAt': 'desc'},
+                            filter = {};
+                            if (request.query.filter) {
+                                filter = request.query.filter;
                             }
-                            User.count(function (err, total) {
+
+                        User.find(filter)
+                            .sort(sorting)
+                            .limit(count)
+                            .skip(page * count)
+                            .exec(function (err, users) {
                                 if (err) {
                                     var error = Boom.badRequest(err);
                                     return reply(error);
                                 }
-                                return reply({total: total, users: users}).type('application/json');
-                            });
+                                User.count(function (err, total) {
+                                    if (err) {
+                                        var error = Boom.badRequest(err);
+                                        return reply(error);
+                                    }
+                                    return reply({total: total, users: users}).type('application/json');
+                                });
                         });
-                    }    
-                });
-            }
+                    }        
+                });    
+                
         },
         auth: 'session'
     },
