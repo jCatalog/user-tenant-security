@@ -7,7 +7,6 @@ var promptly = require('promptly');
 var mongoose = require('mongoose');
 var handlebars = require('handlebars');
 var requireDirectory = require('require-directory');
-
 if (process.env.NODE_ENV === 'test') {
     var configTemplatePath = path.resolve(__dirname, 'config.example.js');
     var configPath = path.resolve(__dirname, 'config.js');

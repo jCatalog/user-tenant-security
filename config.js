@@ -39,7 +39,7 @@ var config = {
         secure: true,
         auth: {
             user: 'admin@jcatalog.com',
-            pass: '123456'
+            pass: ''
         }
     },
     system: {

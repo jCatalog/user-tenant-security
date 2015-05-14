@@ -1,16 +1,20 @@
 define(['core/core-module', 'coreServices/auth-service'], function (coreModule) {
     'use strict';
-    coreModule.controller('ContainerController', ['$scope', '$state', '$cookieStore', 'AuthService', function ($scope, $state, $cookieStore, AuthService) {
+    coreModule.controller('ContainerController', ['$scope', '$state', '$cookieStore', 'AuthService', '$location', function ($scope, $state, $cookieStore, AuthService, $location) {
         var userModel = $cookieStore.get('UserTenantSecurityUserModel');
-        if (!userModel) {
-            $state.go('signin');
-        } else {
+        if(!userModel || userModel === 'undefined')
+        {
+            $location.path('/signin')
+        }
+        else
+        {
             $scope.userFullName = userModel.firstName + ' ' + userModel.lastName;
         }
 
         $scope.logout = function () {
             AuthService.logout().then(function (data) {
-                $state.go('signin');
+                $cookieStore.remove('UserTenantSecurityUserModel');
+                $location.path('/signin')
             }, function () {
                 console.log('Error');
             });
@@ -24,5 +28,18 @@ define(['core/core-module', 'coreServices/auth-service'], function (coreModule) 
         $scope.addAlert = function (alert) {
             $scope.alerts[0] = alert;
         };
+
+        $scope.init = function()
+        {
+            var userModel = $cookieStore.get('UserTenantSecurityUserModel');
+            if(!userModel || userModel === 'undefined')
+            {
+                $location.path('/signin')
+            }
+            else
+            {
+                $scope.userFullName = userModel.firstName + ' ' + userModel.lastName;
+            }
+        }
     }]);
 });

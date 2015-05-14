@@ -33,43 +33,38 @@ module.exports = {
             var userId = request.auth.credentials.userId,
                 username = request.auth.credentials.username,
                 Acl = request.server.plugins.acl;
-                Acl.allow(username, 'users', 'view');
+                Acl.allow(username, ['users','admin'], resource.user.action);
                 Acl.isAllowed(username, 'users', 'view', function (err, allowed) {
                     if (err || !allowed) {
                         var error = Boom.forbidden();
                         return reply(error);
                     }
-                    else
-                    {
-                        console.log("else");
-                        var page = (request.query.page ? request.query.page - 1 : 0),
-                            count = request.query.count || 10,
-                            sorting = request.query.sorting || {'createdAt': 'desc'},
-                            filter = {};
-                        if (request.query.filter) {
-                            filter = request.query.filter;
-                        }
+                    var page = (request.query.page ? request.query.page - 1 : 0),
+                        count = request.query.count || 10,
+                        sorting = request.query.sorting || {'createdAt': 'desc'},
+                        filter = {};
+                    if (request.query.filter) {
+                        filter = request.query.filter;
+                    }
 
-                        User.find(filter)
-                            .sort(sorting)
-                            .limit(count)
-                            .skip(page * count)
-                            .exec(function (err, users) {
+                    User.find(filter)
+                        .sort(sorting)
+                        .limit(count)
+                        .skip(page * count)
+                        .exec(function (err, users) {
+                            if (err) {
+                                var error = Boom.badRequest(err);
+                                return reply(error);
+                            }
+                            User.count(function (err, total) {
                                 if (err) {
                                     var error = Boom.badRequest(err);
                                     return reply(error);
                                 }
-                                User.count(function (err, total) {
-                                    if (err) {
-                                        var error = Boom.badRequest(err);
-                                        return reply(error);
-                                    }
-                                    return reply({total: total, users: users}).type('application/json');
-                                });
+                                return reply({total: total, users: users}).type('application/json');
+                            });
                         });
-                    }        
-                });    
-                
+                });
         },
         auth: 'session'
     },
@@ -93,19 +88,22 @@ module.exports = {
                         var error = Boom.badRequest(err);
                         return reply(error);
                     }
-                    user.create(tenant, function (err, data) {
-                        if (err) {
-                            var error = Boom.badRequest(err);
-                            return reply(error);
-                        } else {
-                            Acl.addUserRoles(data.userId, 'member', function (err) {
-                                if (err) {
-                                    return reply(Boom.badRequest());
-                                }
-                                return reply(data[0]).type('application/json');
-                            });
-                        }
-                    });
+                    else
+                    {    
+                        user.create(tenant, function (err, data) {
+                            if (err) {
+                                var error = Boom.badRequest(err);
+                                return reply(error);
+                            } else {
+                                Acl.addUserRoles(data.userId, 'member', function (err) {
+                                    if (err) {
+                                        return reply(Boom.badRequest());
+                                    }
+                                    return reply(data[0]).type('application/json');
+                                });
+                            }
+                        });
+                    }    
                 });
             });
         },
@@ -183,7 +181,7 @@ module.exports = {
                             return reply(user).type('application/json');
                         }
                     });
-                }    
+                }
             });
         },
         auth: 'session'
@@ -227,28 +225,26 @@ module.exports = {
      */
     delete: {
         handler: function (request, reply) {
-            console.log("----delete----");
             var userId = request.auth.credentials.userId,
                 username = request.auth.credentials.username,
                 Acl = request.server.plugins.acl;
             Acl.allow(username, 'users', 'delete');    
             Acl.isAllowed(username, 'users', 'delete', function (err, allowed) {
-                console.log("allowed",allowed);
                 if (err || !allowed) {
                     var error = Boom.forbidden();
                     return reply(error);
                 }
-                // User.findByIdAndRemove(request.params.id).exec(function (err, user) {
-                //     if (err) {
-                //         return reply(Boom.badRequest(err));
-                //     } else if (!user) {
-                //         var error = Boom.notFound('No data found');
-                //         return reply(error);
-                //     }
-                //     else {
-                //         return reply({error: null, message: 'Deleted successfully'});
-                //     }
-                // });
+                User.findByIdAndRemove(request.params.id).exec(function (err, user) {
+                    if (err) {
+                        return reply(Boom.badRequest(err));
+                    } else if (!user) {
+                        var error = Boom.notFound('No data found');
+                        return reply(error);
+                    }
+                    else {
+                        return reply({error: null, message: 'Deleted successfully'});
+                    }
+                });
             });
         },
         auth: 'session'
