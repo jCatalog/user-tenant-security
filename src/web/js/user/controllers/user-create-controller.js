@@ -25,7 +25,7 @@ define(['user/user-module', 'tenantServices/tenant-service', 'userServices/user-
                 user.password = data.password;
                 user.tenantId = $scope.selectedTenant._id;
                 UserService.save(user, function (data) {
-                    $scope.addAlert({type: 'success', msg: data.userId + ' is created successfully' });
+                    $state.go('user.list');
                 }, function (err) {
                     $scope.addAlert({type: 'danger', msg: 'User creation is failed for ' + err.data.message});
                 });

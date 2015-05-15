@@ -8,7 +8,7 @@ define(['user/user-module', 'userServices/user-service'], function (userModule) 
 
         (function () {
                 var userModel = $cookieStore.get('UserTenantSecurityUserModel');
-                UserService.get({id: userModel._id}, function (user) {
+                UserService.get({id: userModel.userId}, function (user) {
                 $scope.user = user;
             });
         })();
@@ -16,7 +16,13 @@ define(['user/user-module', 'userServices/user-service'], function (userModule) 
         $scope.updateProfile = function (user) {
             UserService.update(user, function (result) {
                 $scope.user = result.data;
-                $cookieStore.put('UserTenantSecurityUserModel', user);
+                var cookieData = {
+                    firstName: result.data.firstName,
+                    lastName: result.data.lastName,
+                    userId: result.data._id,
+                    username: result.data.username
+                };
+                $cookieStore.put('UserTenantSecurityUserModel', cookieData);
                 $scope.userFullName = user.firstName + ' ' + user.lastName;
                 //$scope.addAlert({type: 'success', msg: result.data.username + ' is updated successfully' });
                 $location.path('/');

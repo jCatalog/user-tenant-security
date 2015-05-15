@@ -35,14 +35,15 @@ module.exports = {
                 Acl = request.server.plugins.acl;
                 Acl.allow(username, 'users', resource.user.action);
                 Acl.isAllowed(username, 'users', 'view', function (err, allowed) {
-                    if (err || !allowed) {
-                        var error = Boom.forbidden();
-                        return reply(error);
-                    }
+                    // if (err || !allowed) {
+                    //     var error = Boom.forbidden();
+                    //     return reply(error);
+                    // }
                     var page = (request.query.page ? request.query.page - 1 : 0),
                         count = request.query.count || 10,
                         sorting = request.query.sorting || {'createdAt': 'desc'},
                         filter = {};
+                        filter.createdBy = userId;
                     if (request.query.filter) {
                         filter = request.query.filter;
                     }
@@ -78,10 +79,12 @@ module.exports = {
                 Acl = request.server.plugins.acl;
             Acl.allow(username, 'users', 'add');
             Acl.isAllowed(username, 'users', 'add', function (err, allowed) {
-                if (err || !allowed) {
-                    var error = Boom.forbidden();
-                    return reply(error);
-                }
+                // if (err || !allowed) {
+                //     var error = Boom.forbidden();
+                //     return reply(error);
+                // }
+                request.payload.createdBy = userId;
+                request.payload.updatedBy = userId;
                 var user = new User(request.payload);
                 Tenant.findById(request.payload.tenantId).exec(function (err, tenant) {
                     if (err) {
@@ -90,16 +93,20 @@ module.exports = {
                     }
                     else
                     {    
-                        user.create(tenant, function (err, data) {
-                            if (err) {
+                        user.create(tenant, 'create', function (err, data) {
+                            if(err)
+                            {
                                 var error = Boom.badRequest(err);
                                 return reply(error);
-                            } else {
+                            } 
+                            else
+                            {
                                 Acl.addUserRoles(data.userId, 'member', function (err) {
-                                    if (err) {
+                                    if(err)
+                                    {
                                         return reply(Boom.badRequest());
                                     }
-                                    return reply(data[0]).type('application/json');
+                                    return reply(data).type('application/json');
                                 });
                             }
                         });
@@ -128,7 +135,7 @@ module.exports = {
             var user = new User(request.payload);
             var tenant = new Tenant(request.payload);
             var Acl = request.server.plugins.acl;
-            user.create(tenant, function (err, data) {
+            user.create(tenant, 'signup', function (err, data) {
                 if (err) {
                     var error = Boom.badRequest(err);
                     return reply(error);
@@ -156,7 +163,7 @@ module.exports = {
         }
     },
     /**
-     * Get a specific User
+     * Get Users created by a particular user
      */
     get: {
         handler: function (request, reply) {
@@ -164,10 +171,10 @@ module.exports = {
                 username = request.auth.credentials.username,
                 Acl = request.server.plugins.acl;
             Acl.isAllowed(username, 'users', 'view', function (err, allowed) {
-                if (err || !allowed) {
-                    var error = Boom.forbidden();
-                    return reply(error);
-                }
+                // if (err || !allowed) {
+                //     var error = Boom.forbidden();
+                //     return reply(error);
+                // }
                 User.findById(request.params.id).exec(function (err, user) {
                     if (err) throw err;
 
@@ -229,10 +236,10 @@ module.exports = {
                 Acl = request.server.plugins.acl;
             Acl.allow(username, 'users', 'delete');    
             Acl.isAllowed(username, 'users', 'delete', function (err, allowed) {
-                if (err || !allowed) {
-                    var error = Boom.forbidden();
-                    return reply(error);
-                }
+                // if (err || !allowed) {
+                //     var error = Boom.forbidden();
+                //     return reply(error);
+                // }
                 User.findByIdAndRemove(request.params.id).exec(function (err, user) {
                     if (err) {
                         return reply(Boom.badRequest(err));

@@ -21,6 +21,7 @@ define(['core/core-module', 'coreServices/auth-service'], function (coreModule) 
         };
 
         $scope.viewAccount = function() {
+            var userModel = $cookieStore.get('UserTenantSecurityUserModel');
             $state.go('user.profile', { param: userModel.username });
         };
 

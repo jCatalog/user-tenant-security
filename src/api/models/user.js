@@ -22,7 +22,7 @@ var UserSchema = new Schema({
     email: {type: String, lowercase: true, trim: true, required: true, min: 5, max: 50},
     password: {type: String, select: false, min: 5, required: true, max: 50},
     createdBy: {type: ObjectId, required: true},
-    updatedBy: {type: ObjectId},
+    updatedBy: {type: ObjectId, required: true},
     lastLogin: {type: Date},
     firstLogin: {type: Date},
     tenantId: {type: ObjectId, ref: 'Tenant'},
@@ -35,20 +35,22 @@ var UserSchema = new Schema({
  * @param callback
  * @returns {*}
  */
-UserSchema.methods.create = function (tenant, callback) {
+UserSchema.methods.create = function (tenant, task, callback) {
     'use strict';
     if (!tenant) {
         return callback('Invalid parameter');
     }
     var schema = this;
     schema.tenantId = tenant._id;
-    schema.createdBy = this._id;
     schema.save(function (err, user) {
         if (err) {
             return callback(err);
         }
-        tenant.createdBy = user._id;
-        tenant.updatedBy = user._id;
+        if(task == 'signup')
+        {    
+            tenant.createdBy = user._id;
+            tenant.updatedBy = user._id;
+        }    
         tenant.users.push(user._id);
         tenant.save(function (err, data) {
             if (err) {
@@ -66,7 +68,7 @@ UserSchema.methods.create = function (tenant, callback) {
 UserSchema.pre('save', function (next) {
     'use strict';
     var user = this;
-    user.updatedBy = user._id;
+    //user.updatedBy = user._id;
     // only hash the password if it has been modified (or is new)
     if (!user.isModified('password')) return next();
 
