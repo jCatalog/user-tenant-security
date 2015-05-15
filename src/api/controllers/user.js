@@ -33,12 +33,13 @@ module.exports = {
             var userId = request.auth.credentials.userId,
                 username = request.auth.credentials.username,
                 Acl = request.server.plugins.acl;
-                Acl.allow(username, ['users','admin'], resource.user.action);
+                Acl.allow(username, 'users', resource.user.action);
                 Acl.isAllowed(username, 'users', 'view', function (err, allowed) {
-                    if (err || !allowed) {
-                        var error = Boom.forbidden();
-                        return reply(error);
-                    }
+                    console.log("allowed",allowed);
+                    // if (err || !allowed) {
+                    //     var error = Boom.forbidden();
+                    //     return reply(error);
+                    // }
                     var page = (request.query.page ? request.query.page - 1 : 0),
                         count = request.query.count || 10,
                         sorting = request.query.sorting || {'createdAt': 'desc'},
@@ -168,20 +169,17 @@ module.exports = {
                     var error = Boom.forbidden();
                     return reply(error);
                 }
-                else
-                {    
-                    User.findById(request.params.id).exec(function (err, user) {
-                        if (err) throw err;
+                User.findById(request.params.id).exec(function (err, user) {
+                    if (err) throw err;
 
-                        if (user === null) {
-                            var error = Boom.badRequest('No doc found in');
-                            return reply(error);
-                        }
-                        else {
-                            return reply(user).type('application/json');
-                        }
-                    });
-                }
+                    if (user === null) {
+                        var error = Boom.badRequest('No doc found in');
+                        return reply(error);
+                    }
+                    else {
+                        return reply(user).type('application/json');
+                    }
+                });
             });
         },
         auth: 'session'
@@ -202,15 +200,17 @@ module.exports = {
                     return reply(Boom.badRequest(err1.message));
                 }
                 Acl.isAllowed(username, 'users', 'edit', function (err2, allowed) {
-                    if (user.createdBy == userId || allowed) {
-                        user.update(updateData).exec(function (err3) {
+                    if (user.createdBy == userId || allowed)
+                    {
+                        User.findOneAndUpdate({_id:request.params.id}, updateData, function (err3, Result) {
                             if (err3) {
                                 return reply(Boom.badRequest(err3.message));
                             }
-                            return reply({error: null, data: user, message: 'Updated successfully'});
+                            return reply({error: null, data: Result, message: 'Updated successfully'});
                         });
                     }
-                    else {
+                    else
+                    {
                         return reply(Boom.forbidden());
                     }
                 });

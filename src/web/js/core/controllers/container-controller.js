@@ -20,6 +20,10 @@ define(['core/core-module', 'coreServices/auth-service'], function (coreModule) 
             });
         };
 
+        $scope.viewAccount = function() {
+            $state.go('user.profile', { param: userModel.username });
+        };
+
         $scope.alerts = [];
         $scope.closeAlert = function (index) {
             $scope.alerts.splice(index, 1);

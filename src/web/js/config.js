@@ -87,7 +87,14 @@ define(['angular', 'app'],
                     templateUrl: 'partials/user/user-edit.html',
                     controller: 'UserEditController',
                     parent: 'user'
-                }).state('signin', {
+                })
+                .state('user.profile', {
+                    url: '/profile/:param',
+                    templateUrl: 'partials/user/user-profile.html',
+                    controller: 'UserProfileController',
+                    parent: 'user'
+                })
+                .state('signin', {
                     url: '/signin',
                     templateUrl: 'partials/core/signin.html',
                     controller: 'LoginController'

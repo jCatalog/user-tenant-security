@@ -5,7 +5,8 @@ define(['user/user-module',
     'userControllers/user-create-controller',
     'userControllers/tenant-user-create-controller',
     'userControllers/tenant-user-edit-controller',
-    'userControllers/user-edit-controller'
+    'userControllers/user-edit-controller',
+    'userControllers/user-profile-controller'
 ], function (userModule) {
     'use strict';
     return userModule.config([function () {}]);

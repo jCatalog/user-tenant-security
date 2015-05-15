@@ -9,7 +9,6 @@ define(['user/user-module', 'userServices/user-service'], function (userModule) 
 
         (function () {
             UserService.get({id: $scope.userId}, function (user) {
-                console.log(user);
                 $scope.user = user;
             });
         })();
