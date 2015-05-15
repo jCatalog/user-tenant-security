@@ -35,11 +35,10 @@ module.exports = {
                 Acl = request.server.plugins.acl;
                 Acl.allow(username, 'users', resource.user.action);
                 Acl.isAllowed(username, 'users', 'view', function (err, allowed) {
-                    console.log("allowed",allowed);
-                    // if (err || !allowed) {
-                    //     var error = Boom.forbidden();
-                    //     return reply(error);
-                    // }
+                    if (err || !allowed) {
+                        var error = Boom.forbidden();
+                        return reply(error);
+                    }
                     var page = (request.query.page ? request.query.page - 1 : 0),
                         count = request.query.count || 10,
                         sorting = request.query.sorting || {'createdAt': 'desc'},
