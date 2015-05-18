@@ -25,14 +25,6 @@ define(['core/core-module', 'coreServices/auth-service'], function (coreModule) 
             $state.go('user.profile', { param: userModel.username });
         };
 
-        $scope.alerts = [];
-        $scope.closeAlert = function (index) {
-            $scope.alerts.splice(index, 1);
-        };
-
-        $scope.addAlert = function (alert) {
-            $scope.alerts[0] = alert;
-        };
 
         $scope.init = function()
         {

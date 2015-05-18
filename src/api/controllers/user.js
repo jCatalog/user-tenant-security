@@ -206,19 +206,19 @@ module.exports = {
                     return reply(Boom.badRequest(err1.message));
                 }
                 Acl.isAllowed(username, 'users', 'edit', function (err2, allowed) {
-                    if (user.createdBy == userId || allowed)
-                    {
+                    // if (user.createdBy == userId || allowed)
+                    // {
                         User.findOneAndUpdate({_id:request.params.id}, updateData, function (err3, Result) {
                             if (err3) {
                                 return reply(Boom.badRequest(err3.message));
                             }
                             return reply({error: null, data: Result, message: 'Updated successfully'});
                         });
-                    }
-                    else
-                    {
-                        return reply(Boom.forbidden());
-                    }
+                    // }
+                    // else
+                    // {
+                    //     return reply(Boom.forbidden());
+                    // }
                 });
 
             });

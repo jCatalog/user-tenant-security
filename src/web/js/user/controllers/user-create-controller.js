@@ -1,6 +1,6 @@
 define(['user/user-module', 'tenantServices/tenant-service', 'userServices/user-service'], function (userModule) {
     'use strict';
-    userModule.controller('UserCreateController', ['$scope', '$state', 'TenantService', 'UserService', function ($scope, $state, TenantService, UserService) {
+    userModule.controller('UserCreateController', ['$scope', '$state', 'TenantService', 'UserService', 'growl', function ($scope, $state, TenantService, UserService, growl) {
         console.log('User Create Controller running........');
         $scope.tenants = [];
         (function () {
@@ -25,9 +25,10 @@ define(['user/user-module', 'tenantServices/tenant-service', 'userServices/user-
                 user.password = data.password;
                 user.tenantId = $scope.selectedTenant._id;
                 UserService.save(user, function (data) {
+                    growl.addSuccessMessage('User Created Successfully')
                     $state.go('user.list');
                 }, function (err) {
-                    $scope.addAlert({type: 'danger', msg: 'User creation is failed for ' + err.data.message});
+                    growl.addErrorMessage('User creation is failed for ' + err.data.message)
                 });
             }
         };

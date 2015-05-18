@@ -10,11 +10,12 @@ require.config({
         'angular-bootstrap': '../lib/angular-bootstrap/ui-bootstrap',
         'angular-bootstrap-tpls': '../lib/angular-bootstrap/ui-bootstrap-tpls',
         'angularResource': '../lib/angular-resource/angular-resource',
-        'angularAnimate': '../lib/angular-animate/angular-animate',
         'angularRoute': '../lib/angular-route/angular-route',
         'angularUiRouter': '../lib/angular-ui-router/release/angular-ui-router',
         'angularCookies': '../lib/angular-cookies/angular-cookies',
         'angularHttpAuth': '../lib/angular-http-auth/src/http-auth-interceptor',
+        'angularSanitize': '../lib/angular-sanitize/angular-sanitize',
+        'angularGrowl': '../lib/angular-growl-v2/build/angular-growl',
         'ngTable': '../lib/ng-table/ng-table',
         'ng-table-export': '../lib/ng-table-export/ng-table-export',
         'domReady': '../lib/requirejs-domready/domReady',
@@ -49,15 +50,21 @@ require.config({
         'angularResource': {
             deps: ['angular']
         },
-        'angularAnimate': {
-            deps: ['angular']
-        },
         'angularHttpAuth': {
             deps: ['angular']
         },
         'angularRoute': {
             deps: ['angular']
         },
+        'angularAnimate': {
+            deps: ['angular']
+        },
+        //  'angularSanitize': {
+        //    deps: ['angular']
+        // },
+        // 'angularGrowl': {
+        //     deps: ['angular']
+        // },
         'angularUiRouter': {
             deps: ['angular']
         },

@@ -1,6 +1,6 @@
 define(['user/user-module', 'userServices/user-service', 'coreServices/modal-service'], function (userModule) {
     'use strict';
-    userModule.controller('TenantUserListController', ['$scope', '$state', '$stateParams', '$timeout', 'ngTableParams', 'UserService', 'ModalService', function ($scope, $state, $stateParams, $timeout, NgTableParams, UserService, ModalService) {
+    userModule.controller('TenantUserListController', ['$scope', '$state', '$stateParams', '$timeout', 'ngTableParams', 'UserService', 'ModalService', 'growl', function ($scope, $state, $stateParams, $timeout, NgTableParams, UserService, ModalService, growl) {
         $scope.getCSVFileName = function () {
             return 'test_download.csv';
         };
@@ -19,10 +19,10 @@ define(['user/user-module', 'userServices/user-service', 'coreServices/modal-ser
         $scope.deleteUser = function (userId) {
             ModalService.showConfirmModal({title: 'Delete User', message: 'Do you really want to remove the user?'}, function () {
                 UserService.delete({id: userId}, function () {
-                    $scope.alerts.push({type: 'success', msg: 'User is deleted successfully' });
+                    growl.addSuccessMessage('User is deleted successfully');
                     $scope.userGrid.reload();
                 }, function (err) {
-                    $scope.alerts.push({type: 'danger', msg: 'User deletion is failed for ' + err.data.message});
+                    growl.addErrorMessage('User deletion is failed for ' + err.data.message);
                 });
             });
         };

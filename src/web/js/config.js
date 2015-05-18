@@ -4,7 +4,6 @@ define(['angular', 'app'],
     function (angular, app) {
         return app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
             $urlRouterProvider.otherwise('/');
-
             $stateProvider
                 .state('role', {
                     url: '/role',

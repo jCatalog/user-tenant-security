@@ -1,7 +1,7 @@
 define(['tenant/tenant-module'], function (tenantModule) {
     'use strict';
-    tenantModule.controller('TenantEditController', ['$scope', 'TenantService', '$stateParams', '$location',
-    	function ($scope, TenantService, $stateParams, $location) {
+    tenantModule.controller('TenantEditController', ['$scope', 'TenantService', '$stateParams', '$location', 'growl',
+    	function ($scope, TenantService, $stateParams, $location, growl) {
     		(function () {
 	            TenantService.get({id: $stateParams.id}, function (tenant) {
 	                $scope.tenant = tenant;
@@ -20,6 +20,7 @@ define(['tenant/tenant-module'], function (tenantModule) {
 	        	TenantService.update(tenant, function (result) {
 	        		if(result)
 	        		{
+	        			growl.addSuccessMessage('Tenant Updated Succesfully');
 	        			$location.path('/tenant/list')
 	        		}	
 	        	});	

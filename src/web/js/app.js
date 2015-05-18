@@ -14,7 +14,8 @@ define([
 ], function (angular) {
     'use strict';
 
-    return angular.module('app', ['coreModule', 'tenantModule', 'roleModule', 'userModule', 'ngRoute', 'ui.router', 'http-auth-interceptor']).run(['$rootScope', '$state', function ($rootScope, $state) {
+    return angular.module('app', ['coreModule', 'tenantModule', 'roleModule', 'userModule', 'ngRoute', 'ui.router', 'http-auth-interceptor'])
+    .run(['$rootScope', '$state', function ($rootScope, $state) {
         $rootScope.$on('event:auth-loginRequired', function () {
             $state.go('signin');
             console.log('event:auth-login required  ...');

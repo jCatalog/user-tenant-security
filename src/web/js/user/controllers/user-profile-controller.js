@@ -1,6 +1,6 @@
 define(['user/user-module', 'userServices/user-service'], function (userModule) {
     'use strict';
-    userModule.controller('UserProfileController', ['$scope', '$state', '$stateParams', 'UserService', '$cookieStore', '$location', function ($scope, $state, $stateParams, UserService, $cookieStore, $location) {
+    userModule.controller('UserProfileController', ['$scope', '$state', '$stateParams', 'UserService', '$cookieStore', '$location', 'growl', function ($scope, $state, $stateParams, UserService, $cookieStore, $location, growl) {
 
         $scope.cancel = function () {
             $location.path('/');
@@ -24,10 +24,10 @@ define(['user/user-module', 'userServices/user-service'], function (userModule) 
                 };
                 $cookieStore.put('UserTenantSecurityUserModel', cookieData);
                 $scope.userFullName = user.firstName + ' ' + user.lastName;
-                //$scope.addAlert({type: 'success', msg: result.data.username + ' is updated successfully' });
+                growl.addSuccessMessage(result.data.username + ' is updated successfully');
                 $location.path('/');
             }, function (err) {
-                $scope.addAlert({type: 'danger', msg: 'User update is failed for ' + err.data.message});
+                growl.addErrorMessage('User update is failed for ' + err.data.message);
             });
         };
     }]);

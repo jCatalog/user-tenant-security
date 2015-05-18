@@ -1,6 +1,6 @@
 define(['user/user-module', 'userServices/user-service'], function (userModule) {
     'use strict';
-    userModule.controller('TenantUserEditController', ['$scope', '$state', '$stateParams', 'UserService', function ($scope, $state, $stateParams, UserService) {
+    userModule.controller('TenantUserEditController', ['$scope', '$state', '$stateParams', 'UserService', 'growl', function ($scope, $state, $stateParams, UserService, growl) {
         $scope.user = {};
         $scope.userId = $stateParams.id;
         $scope.tenantId = $stateParams.tenantId;
@@ -17,9 +17,9 @@ define(['user/user-module', 'userServices/user-service'], function (userModule) 
         $scope.updateUser = function (user) {
             UserService.update(user, function (result) {
                 $scope.user = result.data;
-                $scope.addAlert({type: 'success', msg: result.data.userId + ' is updated successfully' });
+                growl.addSuccessMessage(result.data.userId + ' is updated successfully')
             }, function (err) {
-                $scope.addAlert({type: 'danger', msg: 'User update is failed for ' + err.data.message});
+                growl.addErrorMessage('User update is failed for ' + err.data.message);
             });
         };
     }]);

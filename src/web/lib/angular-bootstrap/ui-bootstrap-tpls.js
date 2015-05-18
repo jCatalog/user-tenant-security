@@ -3884,8 +3884,7 @@ angular.module("template/alert/alert.html", []).run(["$templateCache", function(
     "        <span class=\"sr-only\">Close</span>\n" +
     "    </button>\n" +
     "    <div ng-transclude></div>\n" +
-    "</div>\n" +
-    "");
+    "</div>\n" );
 }]);
 
 angular.module("template/carousel/carousel.html", []).run(["$templateCache", function($templateCache) {
