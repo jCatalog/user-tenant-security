@@ -55,7 +55,7 @@ UserSchema.methods.create = function (tenant, task, callback) {
         {    
             tenant.createdBy = user._id;
             tenant.updatedBy = user._id;
-        }    
+        } 
         tenant.users.push(user._id);
         tenant.save(function (err, data) {
             if (err) {

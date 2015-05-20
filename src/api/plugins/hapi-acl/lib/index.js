@@ -339,6 +339,7 @@ internals.areAnyRolesAllowed = function (roles, resource, permissions, cb) {
     if (roles.length === 0) {
         return bluebird.resolve(false).nodeify(cb);
     } else {
+
         return internals._checkPermissions(roles, resource, permissions).nodeify(cb);
     }
 };
@@ -510,6 +511,7 @@ internals._resourcePermissions = function (roles, resource) {
 // NOTE: This function will not handle circular dependencies and result in a crash.
 //
 internals._checkPermissions = function (roles, resource, permissions) {
+
     return backend.unionAsync(allowsBucket(resource), roles).then(function (resourcePermissions) {
         if (resourcePermissions.indexOf('*') !== -1) {
             return true;
@@ -517,7 +519,6 @@ internals._checkPermissions = function (roles, resource, permissions) {
             permissions = permissions.filter(function (p) {
                 return resourcePermissions.indexOf(p) === -1;
             });
-
             if (permissions.length === 0) {
                 return true;
             } else {

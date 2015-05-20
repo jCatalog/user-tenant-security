@@ -15,7 +15,7 @@ var mongoose = require('mongoose'),
  */
 var TenantSchema = new Schema({
     tenantName: {type: String, required: true, unique: true},
-    description: {type: String},
+    description: {type: String, required: true},
     createdBy: {type: ObjectId},
     updatedBy: {type: ObjectId},
     users: [

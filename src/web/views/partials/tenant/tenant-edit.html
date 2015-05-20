@@ -15,13 +15,12 @@
                         <div class="form-group">
                             <label>Description</label>
                             <input type="text" class="form-control" name="description" ng-model="tenant.description" required>
-                            <!-- <span ng-if="tenantUpdateForm.description.$error.required" style="color:red;">*Required</span> -->
                         </div>
                     	<footer class="panel-footer text-right bg-light lter">
                         	<button type="submit" class="btn btn-primary" ng-click="updateTenant(tenant)"
                                 ng-disabled='tenantUpdateForm.$invalid'>Save
                         	</button>
-                        	<a class="btn btn-default" ng-click="cancel()">Cancel</a>
+                        	<a class="btn btn-default" ng-click="cancel(tenantUpdateForm.$dirty)">Cancel</a>
                     	</footer>
                 	</div>
                 </div>	

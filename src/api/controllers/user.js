@@ -34,12 +34,13 @@ module.exports = {
             var userId = request.auth.credentials.userId,
                 username = request.auth.credentials.username,
                 Acl = request.server.plugins.acl;
-            Acl.allow(username, 'users', resource.user.action);
+            //Acl.allow(username, 'users', resource.user.action);
             Acl.isAllowed(username, 'users', 'list', function (err, allowed) {
-                if (err || !allowed) {
-                    var error = Boom.forbidden();
-                    return reply(error);
-                }
+                console.log("allowed",allowed);
+                // if (err || !allowed) {
+                //     var error = Boom.forbidden();
+                //     return reply(error);
+                // }
                 var page = (request.query.page ? request.query.page - 1 : 0),
                     count = request.query.count || 10,
                     sorting = request.query.sorting || {'createdAt': 'desc'},
@@ -80,10 +81,10 @@ module.exports = {
                 Acl = request.server.plugins.acl;
             Acl.allow(username, 'users', 'add');
             Acl.isAllowed(username, 'users', 'add', function (err, allowed) {
-                if (err || !allowed) {
-                    var error = Boom.forbidden();
-                    return reply(error);
-                }
+                // if (err || !allowed) {
+                //     var error = Boom.forbidden();
+                //     return reply(error);
+                // }
                 request.payload.createdBy = userId;
                 request.payload.updatedBy = userId;
                 var user = new User(request.payload);
@@ -142,15 +143,10 @@ module.exports = {
                     return reply(error);
                 } else {
                     Acl.addUserRoles(user.username, 'tenant-admin', function (err) {
-                        if(!err)
-                        {    
-                            Acl.addUserRoles(user.username, 'users', function (err) {
-                                if (err) {
-                                    return reply(Boom.badRequest());
-                                }
-                                return reply(user).type('application/json');
-                            })
-                        }        
+                        if (err) {
+                            return reply(Boom.badRequest());
+                        }
+                        return reply(user).type('application/json');
                     });
                 }
             });
@@ -164,7 +160,7 @@ module.exports = {
                 passwordConfirm: Joi.ref('password'),
                 email: Joi.string().email(),
                 tenantName: Joi.string().min(3).max(20),
-                tenantDesc: Joi.string()
+                description: Joi.string()
             }
         }
     },
@@ -177,10 +173,10 @@ module.exports = {
                 username = request.auth.credentials.username,
                 Acl = request.server.plugins.acl;
             Acl.isAllowed(username, 'users', 'view', function (err, allowed) {
-                if (err || !allowed) {
-                    var error = Boom.forbidden();
-                    return reply(error);
-                }
+                // if (err || !allowed) {
+                //     var error = Boom.forbidden();
+                //     return reply(error);
+                // }
                 User.findById(request.params.id).exec(function (err, user) {
                     if (err) throw err;
 

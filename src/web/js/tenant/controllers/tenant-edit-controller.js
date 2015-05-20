@@ -8,11 +8,18 @@ define(['tenant/tenant-module'], function (tenantModule) {
 	            });
 	        })();
 
-	        $scope.cancel = function()
+	        $scope.cancel = function(dirty)
 	        {
-	        	 TenantService.get({id: $stateParams.id}, function (tenant) {
-	                $scope.tenant = tenant;
-	            });
+	        	if(dirty)
+	        	{	
+		        	TenantService.get({id: $stateParams.id}, function (tenant) {
+		                $scope.tenant = tenant;
+		            });
+		        }
+		        else
+		        {
+		        	$location.path('/tenant/list');
+		        }    
 	        };
 
 	        $scope.updateTenant = function(tenant)
@@ -21,7 +28,7 @@ define(['tenant/tenant-module'], function (tenantModule) {
 	        		if(result)
 	        		{
 	        			growl.addSuccessMessage('Tenant Updated Succesfully');
-	        			$location.path('/tenant/list')
+	        			$location.path('/tenant/list');
 	        		}	
 	        	});	
 	        };
