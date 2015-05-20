@@ -11,6 +11,7 @@ var Boom = require('boom'),
     User = mongoose.model('User'),
     Tenant = mongoose.model('Tenant'),
     resource = require('../settings/resource');
+
 /**
  * Expose the CRUD functionality for User
  *
@@ -33,39 +34,39 @@ module.exports = {
             var userId = request.auth.credentials.userId,
                 username = request.auth.credentials.username,
                 Acl = request.server.plugins.acl;
-                Acl.allow(username, 'users', resource.user.action);
-                Acl.isAllowed(username, 'users', 'view', function (err, allowed) {
-                    // if (err || !allowed) {
-                    //     var error = Boom.forbidden();
-                    //     return reply(error);
-                    // }
-                    var page = (request.query.page ? request.query.page - 1 : 0),
-                        count = request.query.count || 10,
-                        sorting = request.query.sorting || {'createdAt': 'desc'},
-                        filter = {};
-                        filter.createdBy = userId;
-                    if (request.query.filter) {
-                        filter = request.query.filter;
-                    }
+            Acl.allow(username, 'users', resource.user.action);
+            Acl.isAllowed(username, 'users', 'list', function (err, allowed) {
+                if (err || !allowed) {
+                    var error = Boom.forbidden();
+                    return reply(error);
+                }
+                var page = (request.query.page ? request.query.page - 1 : 0),
+                    count = request.query.count || 10,
+                    sorting = request.query.sorting || {'createdAt': 'desc'},
+                    filter = {};
+                    filter.createdBy = userId;
+                if (request.query.filter) {
+                    filter = request.query.filter;
+                }
 
-                    User.find(filter)
-                        .sort(sorting)
-                        .limit(count)
-                        .skip(page * count)
-                        .exec(function (err, users) {
+                User.find(filter)
+                    .sort(sorting)
+                    .limit(count)
+                    .skip(page * count)
+                    .exec(function (err, users) {
+                        if (err) {
+                            var error = Boom.badRequest(err);
+                            return reply(error);
+                        }
+                        User.count(function (err, total) {
                             if (err) {
                                 var error = Boom.badRequest(err);
                                 return reply(error);
                             }
-                            User.count(function (err, total) {
-                                if (err) {
-                                    var error = Boom.badRequest(err);
-                                    return reply(error);
-                                }
-                                return reply({total: total, users: users}).type('application/json');
-                            });
+                            return reply({total: total, users: users}).type('application/json');
                         });
-                });
+                    });
+            });
         },
         auth: 'session'
     },
@@ -79,10 +80,10 @@ module.exports = {
                 Acl = request.server.plugins.acl;
             Acl.allow(username, 'users', 'add');
             Acl.isAllowed(username, 'users', 'add', function (err, allowed) {
-                // if (err || !allowed) {
-                //     var error = Boom.forbidden();
-                //     return reply(error);
-                // }
+                if (err || !allowed) {
+                    var error = Boom.forbidden();
+                    return reply(error);
+                }
                 request.payload.createdBy = userId;
                 request.payload.updatedBy = userId;
                 var user = new User(request.payload);
@@ -141,10 +142,15 @@ module.exports = {
                     return reply(error);
                 } else {
                     Acl.addUserRoles(user.username, 'tenant-admin', function (err) {
-                        if (err) {
-                            return reply(Boom.badRequest());
-                        }
-                        return reply(user).type('application/json');
+                        if(!err)
+                        {    
+                            Acl.addUserRoles(user.username, 'users', function (err) {
+                                if (err) {
+                                    return reply(Boom.badRequest());
+                                }
+                                return reply(user).type('application/json');
+                            })
+                        }        
                     });
                 }
             });
@@ -171,10 +177,10 @@ module.exports = {
                 username = request.auth.credentials.username,
                 Acl = request.server.plugins.acl;
             Acl.isAllowed(username, 'users', 'view', function (err, allowed) {
-                // if (err || !allowed) {
-                //     var error = Boom.forbidden();
-                //     return reply(error);
-                // }
+                if (err || !allowed) {
+                    var error = Boom.forbidden();
+                    return reply(error);
+                }
                 User.findById(request.params.id).exec(function (err, user) {
                     if (err) throw err;
 
@@ -206,19 +212,19 @@ module.exports = {
                     return reply(Boom.badRequest(err1.message));
                 }
                 Acl.isAllowed(username, 'users', 'edit', function (err2, allowed) {
-                    // if (user.createdBy == userId || allowed)
-                    // {
+                    if (user.createdBy == userId || allowed)
+                    {
                         User.findOneAndUpdate({_id:request.params.id}, updateData, function (err3, Result) {
                             if (err3) {
                                 return reply(Boom.badRequest(err3.message));
                             }
                             return reply({error: null, data: Result, message: 'Updated successfully'});
                         });
-                    // }
-                    // else
-                    // {
-                    //     return reply(Boom.forbidden());
-                    // }
+                    }
+                    else
+                    {
+                        return reply(Boom.forbidden());
+                    }
                 });
 
             });
@@ -236,10 +242,10 @@ module.exports = {
                 Acl = request.server.plugins.acl;
             Acl.allow(username, 'users', 'delete');    
             Acl.isAllowed(username, 'users', 'delete', function (err, allowed) {
-                // if (err || !allowed) {
-                //     var error = Boom.forbidden();
-                //     return reply(error);
-                // }
+                if (err || !allowed) {
+                    var error = Boom.forbidden();
+                    return reply(error);
+                }
                 User.findByIdAndRemove(request.params.id).exec(function (err, user) {
                     if (err) {
                         return reply(Boom.badRequest(err));

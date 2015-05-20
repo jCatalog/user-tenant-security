@@ -42,6 +42,11 @@ UserSchema.methods.create = function (tenant, task, callback) {
     }
     var schema = this;
     schema.tenantId = tenant._id;
+    if(task == 'signup')
+    {
+       schema.createdBy = schema._id;
+       schema.updatedBy = schema._id;
+    }    
     schema.save(function (err, user) {
         if (err) {
             return callback(err);

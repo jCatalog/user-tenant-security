@@ -7,6 +7,7 @@ var promptly = require('promptly');
 var mongoose = require('mongoose');
 var handlebars = require('handlebars');
 var requireDirectory = require('require-directory');
+
 if (process.env.NODE_ENV === 'test') {
     var configTemplatePath = path.resolve(__dirname, 'config.example.js');
     var configPath = path.resolve(__dirname, 'config.js');
@@ -139,7 +140,7 @@ async.auto({
                         description: 'Admin Tenant'
                     };
                     tenant = new Tenant(tenant);
-                    user.create(tenant, function(err, data){
+                    user.create(tenant, 'signup', function(err, data){
                         if (err) {
                             return done(err);
                         }
@@ -160,7 +161,6 @@ async.auto({
     function (err, results) {
         if (err) {
             console.error('Setup failed.');
-            console.error(err);
             return process.exit(1);
         }
 
